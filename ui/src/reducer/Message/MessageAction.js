@@ -1,0 +1,3 @@
+export const UPDATE_MESSAGE = "UPDATE_MESSAGE";
+export const UPDATE_MODAL_OPEN = "UPDATE_MODAL_OPEN";
+export const BULK_UPDATE = "BULD_UPDATE";
