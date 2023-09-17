@@ -2,14 +2,16 @@
   "name": "ssiapp",
   "version": "1.0.0",
   "description": "An node-based application for Shared Services",
-  "main": "api_server.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon api_server.js"
+    "start": "nodemon server.js",
+    "debug": "nodemon server.js"
   },
-  "author": "Ali A. Kooshesh",
+  "author": "Ali A. Kooshesh, Trenton Jones, Cody Grimes, Huiran Lin",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.5.0",
     "bcrypt": "^5.1.0",
     "csrf": "^3.0.6",
     "dateformat": "^3.0.3",
@@ -24,7 +26,8 @@
     "koa-jwt": "^4.0.4",
     "koa-router": "^7.3.0",
     "lodash": "^4.17.4",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "sequelize": "^6.33.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

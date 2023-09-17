@@ -1,12 +1,19 @@
+require('./loadEnvVariable.js')
 const Koa = require('koa');
 const app = new Koa();
 const bodyParser = require('koa-bodyparser');
 const http = require('http');
+// const connect = require('./database/mySQLconnectOnce.js')
+const connection = require('./database/mySQLconnect')
 
-const envpath = __dirname + '/' + '.env';
+// const envpath = __dirname + '/' + '.env';
+// // Load environment variables (or .env if local environment)
+// require('dotenv').config({ path: envpath });
 
-// Load environment variables (or .env if local environment)
-require('dotenv').config({ path: envpath });
+
+console.log("env", process.env.DB_HOST)
+
+const database = process.env.DB_HOST
 
 app.use(bodyParser());
 require('./app/Middleware/CORS.js')(app);
@@ -29,12 +36,27 @@ app.use(async (ctx, next) => {
   });
 });
 
-// require('./config/courses_routes.js')(app);
 require('./routes/index.js')(app);
 
-console.log(process.env.APP_PORT);
-
 const httpsServer = require('./config/ssl/ssl.js')(app.callback());
-httpsServer.listen(process.env.APP_PORT, () =>
-  console.log(`Listening on HTTPS port ${process.env.APP_PORT}`)
-);
+
+const startServer = () => {
+  try {
+    connection.connect((err) => {
+      if (err) {
+        console.log(err)
+      } else {
+        connection.destroy()
+        httpsServer.listen(process.env.APP_PORT, () =>
+          console.log(`Listening on HTTPS port ${process.env.APP_PORT}`)
+        )
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    console.log("Connection to the database failed. Exiting without starting server")
+  }
+}
+
+startServer()
+
