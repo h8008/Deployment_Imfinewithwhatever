@@ -41,11 +41,11 @@ const signup = async (ctx) => {
     console.log("user signup called");
     console.log(ctx.request.body);
     let params = ctx.request.body;
-    let res = await helperQuery({
-      ...FIND_USER,
-      params: params.email,
-    });
-    // console.log('response body', ctx.body);
+    // let res = await helperQuery({
+    //   ...FIND_USER,
+    //   params: params.email,
+    // });
+    let res = await FIND_USER.query(params)
     if (res.length > 0) {
       ctx.body = {
         user: res,
@@ -74,10 +74,12 @@ const login = async (ctx) => {
     console.log(ctx.request.body);
     let params = ctx.request.body;
 
-    const res = await query({
-      ...FIND_USER,
-      params: params.email,
-    });
+    // const res = await query({
+    //   ...FIND_USER,
+    //   params: params.email,
+    // });
+
+    const res = FIND_USER.query(params)
 
     if (res.length > 0) {
       bcrypt.compare(params.password, res[0].password, function (err, result) {
@@ -147,10 +149,12 @@ const updateRestaurantPreference = async (ctx) => {
 const getRestaurantPreference = async (ctx) => {
   try {
     const params = ctx.params;
-    const res = await query({
-      ...GET_RESTAURANT_PREFERENCE(params),
-      // params: Object.values(params),
-    });
+    // const res = await query({
+    //   ...GET_RESTAURANT_PREFERENCE(params),
+    //   // params: Object.values(params),
+    // });
+    const res = await GET_RESTAURANT_PREFERENCE(params)
+
     if (res.length > 0) {
       ctx.body = {
         data: res[0].food_prefs,
@@ -178,9 +182,11 @@ const getAllRestaurantPreferencesForUser = async (ctx) => {
 
   try {
     const params = ctx.params;
-    const res = await query({
-      ...GET_ALL_RESTAURANT_PREFERENCES(params),
-    });
+    // const res = await query({
+    //   ...GET_ALL_RESTAURANT_PREFERENCES(params),
+    // });
+    const res = GET_ALL_RESTAURANT_PREFERENCES(params)
+
     if (res.length > 0) {
       ctx.body = {
         data: res,

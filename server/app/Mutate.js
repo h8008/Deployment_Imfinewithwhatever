@@ -18,7 +18,7 @@ const mutateDB = (mutation, name, params) => {
         }
         return resolve({ res: res, status: 200 });
       }
-    );
+    );  
   });
 };
 
