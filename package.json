@@ -6,8 +6,9 @@
   "scripts": {
     "install": "cd ui && npm i && cd ../server && npm i",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug-server": "nodemon server/server.js",
-    "start-server": "nodemon server/server.js"
+    "debug-server": "set NODE_ENV=development && cd server && npm run debug",
+    "start-server": "set NODE_ENV=development && cd server && npm run start",
+    "start-production-server": "set NODE_ENV=production && cd server && npm run start"
   },
   "eslintConfig": {
     "extends": [

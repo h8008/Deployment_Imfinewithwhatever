@@ -9,7 +9,7 @@ const MONGODB_URI = () => {
   const development = dev();
   development ? console.log("Connecting to local database") : console.log("Connecting to cloud database");
 
-  return development ? process.env.MONGODB_URI : process.env.MONGODB_ATLAS_URI;
+  return development ? process.env.MONGODB_LOCAL_URI : process.env.MONGODB_URI;
 };
 
 const getConnectOptions = () => {

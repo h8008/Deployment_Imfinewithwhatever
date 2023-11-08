@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const getDevEnvironment = require('../utils/GetDevEnvironment.js')
 
 function setAccessToken(ctx, user) {
   console.log("setAccessToken:: cookie = ", ctx.cookies.get("access_token"));
@@ -30,7 +31,7 @@ function setAccessToken(ctx, user) {
 
     // Don't allow the access_token to be sent if not going over
     // an encrypted connection
-    //            secure: process.env.APP_ENV !== 'local',
+    secure: getDevEnvironment() ? false : true,
 
     // Expire the cookie after a short period, slightly before the
     // access_token is expired
