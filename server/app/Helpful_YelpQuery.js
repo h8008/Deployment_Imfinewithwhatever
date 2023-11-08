@@ -4,20 +4,9 @@
 const headers = {
   Authorization: `Bearer ${process.env.API_KEY}`,
 };
-const endpoint = "https://api.yelp.com/v3/businesses/search";
+const endpoint = 'https://api.yelp.com/v3/businesses/search';
 
 const query = async ({ query, name, params }) => {
-  // return new Promise(async (resolve, reject) => {
-  //   const queryRes = await queryDB(query, params);
-  //   if (queryRes.status === 200) {
-  //     return resolve(queryRes.res);
-  //   }
-  //   console.log(`Conneciton error in query: ${name}`);
-  //   return reject(queryRes.res);
-  // }).catch((err) => {
-  //   console.log(`Database connection error in ${name}`, err);
-  //   return { res: [], status: 500 };
-  // });
   return new Promise(async (resolve, reject) => {
     const queryRes = await axios
       .get(endpoint, { params, headers })
