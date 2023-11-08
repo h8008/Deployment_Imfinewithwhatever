@@ -5,9 +5,9 @@ const userRouter = require("./UserRoutes.js");
 const userReviewRouter = require("./UserReviewsRoutes.js");
 const yelpRouter = require("./YelpAPIRoutes.js");
 
-const router = require("koa-router")({
-  prefix: "/api",
-});
+// const router = require("koa-router")({
+//   prefix: "/",
+// });
 
 router.get("/", function (ctx) {
   console.log("router.get(/)");
