@@ -11,9 +11,6 @@ const {
 } = require('../Mutations/userMutations');
 const setAccessToken = require('../../config/setAccessToken');
 
-const { query, helperQuery } = require('../Query');
-const { mutate } = require('../Mutate');
-
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -40,11 +37,7 @@ const signup = async (ctx) => {
     console.log('user signup called');
     console.log(ctx.request.body);
     let params = ctx.request.body;
-    // let res = await helperQuery({
-    //   ...FIND_USER,
-    //   params: params.email,
-    // });
-    let res = await FIND_USER.query(params);
+    let res = await FIND_USER(params);
     if (res.length > 0) {
       ctx.body = {
         user: res,
@@ -54,7 +47,7 @@ const signup = async (ctx) => {
     }
     const hashedPassword = await hash(params.password);
     params = Object.values({ ...params, password: hashedPassword });
-    res = await mutate({ ...SIGNUP, params: [...params] });
+    res = await SIGNUP(params);
     if (res) {
       ctx.body = {
         message: SUCCESSFULLY_CREATED_USER,
@@ -182,11 +175,6 @@ const getAllRestaurantPreferencesForUser = async (ctx) => {
       error
     );
   }
-};
-
-const udpateLikeRestaurant = async (ctx) => {
-  const params = ctx.params;
-  const res = await mutate({});
 };
 
 module.exports = {
