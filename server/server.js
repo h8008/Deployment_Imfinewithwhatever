@@ -17,12 +17,12 @@ router(app)
 catchJWTErrors(app)
 httpsServer(app.callback())
 
-const startServer = () => {
-    connectDB();
-    app.listen(port, () => console.log(`Listening on HTTPS port ${port}`))
-}
+connectDB();
 
-startServer()
+mongoose.connection.once("open", ()=> {
+    console.log("Connected to MongoDB")
+    app.listen(port, () => console.log(`Listening on HTTPS port ${port}`))
+});
 
 module.exports = app
 
