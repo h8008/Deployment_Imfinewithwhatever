@@ -18,7 +18,6 @@ import GridItem from "../../ui_components/GridItem";
 
 import styled from "@emotion/styled";
 
-import attributes from "../../config";
 import API from "../../API_Interface";
 
 import { UserContext } from "../../providers/UserProvider";
