@@ -25,5 +25,5 @@ mongoose.connection.once("open", ()=> {
     app.listen(port, () => console.log(`Listening on HTTPS port ${port}`))
 });
 
-// module.exports = app
+module.exports = app
 
