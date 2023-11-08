@@ -6,6 +6,7 @@ const cors = require('./app/Middleware/CORS.js')
 const router = require('./routes/index.js')
 const httpsServer = require('./config/ssl/ssl.js');
 const catchJWTErrors = require('./app/Middleware/CatchJWTErrors.js');
+const mongoose = require('mongoose')
 
 const app = new Koa();
 const port = process.env.APP_PORT

@@ -1,7 +1,7 @@
 // Custom error catch for koa-jwt so that we can log the specific error message
 // when attempting to read and parse the access_token
 
-export default function(app) {
+module.exports = function(app) {
     app.use(async (ctx, next) => {
         return next().catch((err) => {
         if (err.status === 401) {

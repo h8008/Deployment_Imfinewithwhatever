@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose")
 
 const dev = () => {
   const dev = process.env.NODE_ENV == null ? "" : process.env.NODE_ENV;
@@ -29,4 +29,4 @@ const connect = async () => {
   }
 };
 
-export default connect;
+module.exports = connect;
