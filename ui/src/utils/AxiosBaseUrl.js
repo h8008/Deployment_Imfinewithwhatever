@@ -1,8 +1,10 @@
 import dev from './GetDevEnvironmnent';
 
+console.log('development? ', dev());
+
 const axiosBaseUrl = () =>
   dev()
-    ? `https://localhost:8443/`
+    ? `http://localhost:8443/`
     : `https://deployment-imfinewithwhatever-server.vercel.app/`;
 
 export default axiosBaseUrl;
