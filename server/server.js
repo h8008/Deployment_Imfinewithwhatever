@@ -15,7 +15,7 @@ app.use(bodyParser());
 cors(app)
 router(app)
 catchJWTErrors(app)
-httpsServer(app.callback())
+// httpsServer(app.callback())
 
 connectDB();
 
@@ -24,5 +24,5 @@ mongoose.connection.once("open", ()=> {
     app.listen(port, () => console.log(`Listening on HTTPS port ${port}`))
 });
 
-module.exports = app
+// module.exports = app
 
