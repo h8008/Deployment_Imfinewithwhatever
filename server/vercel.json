@@ -6,7 +6,10 @@
         "use": "@vercel/node"
       }
     ],
-    "redirects": [
-      { "source": "/(.*)", "destination": "/api" }
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/"
+      }
     ]
   }
