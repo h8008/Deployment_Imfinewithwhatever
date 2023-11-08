@@ -1,31 +1,31 @@
-const SIGNUP = {
-  name: "signup",
-  mutation: `INSERT INTO users VALUES (?)`,
-};
+const { User, UserPreference, UserReview, RestaurantBlacklist } = require('../../database/models')
 
-const ADD_RESTAURANT_PREFERENCE = {
-  name: "add_restaurant_preference",
-  mutation: `INSERT INTO user_preferences VALUES (?)`,
-};
+const SIGNUP = async ({ email, user_fName, user_lName, password }) => (
+  await User.create({
+    email,
+    user_fName,
+    user_lName,
+    password
+  })
+)
 
-const UPDATE_RESTAURANT_PREFERENCE = ({
-  preference,
-  like,
-  email,
-  restaurantID,
-}) => ({
-  name: "update_restaurant_preference",
-  mutation: `UPDATE 
-            user_preferences 
-            SET 
-            food_prefs = "${preference}"
-            
-            WHERE 
-            email = "${email}"
-            AND 
-            restaurantID = "${restaurantID}"
-            `,
-});
+const ADD_RESTAURANT_PREFERENCE = async ({ preference, like, email, restaurantID,}) => (
+  await UserPreference.create({
+    restaurant_id: restaurantID,
+    email,
+    food_prefs,
+    like
+  })
+)
+
+const UPDATE_RESTAURANT_PREFERENCE = async ({ preference, like, email, restaurantID }) => {
+  await UserPreference.updateOne({
+    food_prefs: preference
+  }).where({
+    email: email,
+    restaurant_id: restaurantID
+  })
+}
 
 module.exports = {
   SIGNUP,

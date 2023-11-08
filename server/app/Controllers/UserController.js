@@ -73,14 +73,7 @@ const login = async (ctx) => {
     console.log("user login called");
     console.log(ctx.request.body);
     let params = ctx.request.body;
-
-    // const res = await query({
-    //   ...FIND_USER,
-    //   params: params.email,
-    // });
-
-    const res = FIND_USER.query(params)
-
+    const res = await FIND_USER(params)
     if (res.length > 0) {
       bcrypt.compare(params.password, res[0].password, function (err, result) {
         console.log("result", result);
@@ -107,10 +100,7 @@ const login = async (ctx) => {
 const addRestaurantPreference = async (ctx) => {
   try {
     const params = ctx.request.body;
-    res = await mutate({
-      ...ADD_RESTAURANT_PREFERENCE,
-      params: params,
-    });
+    const res = await ADD_RESTAURANT_PREFERENCE(params)
     if (res) {
       ctx.body = {
         message: `PREFERENCE SAVED`,
@@ -126,9 +116,7 @@ const addRestaurantPreference = async (ctx) => {
 const updateRestaurantPreference = async (ctx) => {
   try {
     let params = ctx.request.body;
-    const res = await mutate({
-      ...UPDATE_RESTAURANT_PREFERENCE(params),
-    });
+    const res = await UPDATE_RESTAURANT_PREFERENCE(params)
     if (res) {
       ctx.body = {
         message: `Updated preference for the restaurant`,
@@ -149,12 +137,7 @@ const updateRestaurantPreference = async (ctx) => {
 const getRestaurantPreference = async (ctx) => {
   try {
     const params = ctx.params;
-    // const res = await query({
-    //   ...GET_RESTAURANT_PREFERENCE(params),
-    //   // params: Object.values(params),
-    // });
     const res = await GET_RESTAURANT_PREFERENCE(params)
-
     if (res.length > 0) {
       ctx.body = {
         data: res[0].food_prefs,
@@ -182,11 +165,7 @@ const getAllRestaurantPreferencesForUser = async (ctx) => {
 
   try {
     const params = ctx.params;
-    // const res = await query({
-    //   ...GET_ALL_RESTAURANT_PREFERENCES(params),
-    // });
-    const res = GET_ALL_RESTAURANT_PREFERENCES(params)
-
+    const res = await GET_ALL_RESTAURANT_PREFERENCES(params)
     if (res.length > 0) {
       ctx.body = {
         data: res,

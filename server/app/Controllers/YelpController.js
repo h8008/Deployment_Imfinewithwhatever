@@ -98,13 +98,6 @@ const getRestaurantById = async (ctx) => {
   }
 };
 
-// const storeRestaurants = async (ctx) => {
-//   try {
-//     const params = ctx.request.body
-//     let res await mutate({ ...STORE_RESTAURANTS, params: [...params]})
-//   }
-// }
-
 module.exports = {
   getRestaurantsByLocation,
   getRestaurantsByCuisine,

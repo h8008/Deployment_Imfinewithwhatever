@@ -12,10 +12,7 @@ const addReview = async (ctx) => {
   try {
     console.log("user_review add review called");
     let params = ctx.request.body;
-    let res = await mutate({
-      ...ADD_REVIEW,
-      params: params,
-    });
+    let res = await ADD_REVIEW(params)
     if (res) {
       ctx.body = {
         message: `REVIEW ADDED`,
@@ -32,9 +29,7 @@ const getReview = async (ctx) => {
   try {
     console.log("user_review get review called");
     let params = ctx.params;
-    let res = await query({
-      ...GET_REVIEW(params),
-    });
+    let res = await GET_REVIEW(params)
     if (res.length > 0) {
       ctx.body = {
         data: res[0].review,
@@ -56,9 +51,7 @@ const updateReview = async (ctx) => {
   try {
     console.log("user_review update review called");
     let params = ctx.request.body;
-    let res = await mutate({
-      ...UPDATE_REVIEW(params),
-    });
+    let res = await UPDATE_REVIEW(params)
     if (res) {
       ctx.body = {
         message: "Updated review for the restaurant",
@@ -75,9 +68,7 @@ const deleteReview = async (ctx) => {
   try {
     console.log("user_review delete review called");
     let params = ctx.request.body;
-    let res = await mutate({
-      ...DELETE_REVIEW(params),
-    });
+    let res = await DELETE_REVIEW(params)
     if (res) {
       ctx.body = {
         message: "Deleted review for the restaurant",
@@ -94,9 +85,7 @@ const getReviews = async (ctx) => {
   try {
     console.log("user_review get reviews called");
     let params = ctx.params;
-    let res = await query({
-      ...GET_REVIEWS(params),
-    });
+    let res = await GET_REVIEWS(params)
     if (res.length > 0) {
       ctx.body = {
         message: "Retrieved restaurant reviews for the user",

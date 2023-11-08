@@ -1,11 +1,10 @@
-const GET_REVIEWS = ({ email }) => ({
-  name: "GET_REVIEWS",
-  query: `SELECT * FROM user_reviews WHERE email = "${email}"`,
-});
+const { UserReview } = require('../../database/models')
 
-const GET_REVIEW = ({ restaurantID, email }) => ({
-  name: "GET_REVIEW",
-  query: `SELECT * FROM user_reviews WHERE restaurantID = "${restaurantID}" and email="${email}"`,
-});
+const GET_REVIEWS = ({ email }) => (UserReview.find().where('email').equals(email));
+
+const GET_REVIEW = ({ restaurantID, email }) => (UserReview.findOne({
+  restaurant_id: restaurantID,
+  email: email
+}))
 
 module.exports = { GET_REVIEWS, GET_REVIEW };

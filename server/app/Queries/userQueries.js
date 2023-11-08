@@ -29,17 +29,8 @@ const GET_RESTAURANT_PREFERENCE = ({ restaurantID, email }) => (UserPreference.f
 
 const GET_ALL_RESTAURANT_PREFERENCES = ({ email }) => (UserPreference.find().where('email').equals(email))
 
-
-const GET_REVIEW = ({ restaurantID, email }) => (UserReview.findOne({
-    restaurant_id: restaurantID,
-    email: email
-  }))
-
 module.exports = {
-  // loginQuery,
-  // signupQuery,
   FIND_USER,
   GET_RESTAURANT_PREFERENCE,
   GET_ALL_RESTAURANT_PREFERENCES,
-  GET_REVIEW
 };
