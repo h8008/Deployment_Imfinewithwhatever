@@ -5,23 +5,14 @@ import React, {
   useRef,
   useContext,
   createRef,
-} from "react";
-import { useTheme } from "@mui/material";
-import { RestaurantsContext } from "../../../providers/RestaurantsProvider";
-import { GameContext } from "../../../providers/GameProvider";
-import {
-  UPDATE_CUISINE,
-  UPDATE_RESTAURANTS,
-} from "../../../reducer/MainActions";
-import { useNavigate } from "react-router-dom";
-import { getRestaurantsByCuisines } from "../../../functions/Functions";
-import { MessageContext } from "../../../providers/MessageProvider";
-import { UPDATE_MESSAGE } from "../../../reducer/Message/MessageAction";
+} from 'react';
 
-import "./Wheel.css";
+import { GameContext } from '../../../providers/GameProvider';
+
+import './Wheel.css';
 
 const Wheel = (props) => {
-  const { gameState, gameDispatch } = useContext(GameContext);
+  const { gameState } = useContext(GameContext);
   // const items = gameState.restaurants.map((restaurant) => restaurant.name);
   const items = [...gameState.restaurants];
   const onGameEndCallback = gameState.onGameEndCallback;
@@ -58,8 +49,8 @@ class WheelComponent extends React.Component {
       // Generate a random index number to select an item
       const selectedItem = Math.floor(Math.random() * this.props.items.length);
 
-      console.log("selected item index in Wheel", selectedItem);
-      console.log("selected item in Wheel", this.props.items[selectedItem]);
+      console.log('selected item index in Wheel', selectedItem);
+      console.log('selected item in Wheel', this.props.items[selectedItem]);
 
       // Set the selected item index as the "selectedItem" state and increment the "counter" state
       this.setState({ selectedItem });
@@ -93,16 +84,16 @@ class WheelComponent extends React.Component {
 
     // Defining CSS variables for the wheel based on the number of items and the selected item index
     const wheelVars = {
-      "--nb-item": items.length,
-      "--selected-item": selectedItem,
+      '--nb-item': items.length,
+      '--selected-item': selectedItem,
     };
 
     // Defining a "spinning" class based on whether an item has been selected or not
-    const spinning = selectedItem !== null ? "spinning" : "";
+    const spinning = selectedItem !== null ? 'spinning' : '';
 
     // Returning the JSX markup for the wheel component
     return (
-      <div className="wheel-container">
+      <div className='wheel-container'>
         {/* /* Rendering the wheel  */}
         <div
           className={`wheel ${spinning}`}
@@ -112,9 +103,9 @@ class WheelComponent extends React.Component {
         >
           {items.map((item, index) => (
             <div
-              className="wheel-item"
+              className='wheel-item'
               key={index}
-              style={{ "--item-nb": index }}
+              style={{ '--item-nb': index }}
             >
               {item}
             </div>

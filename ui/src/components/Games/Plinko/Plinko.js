@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import { useTheme } from "@mui/material";
-import Matter, { World } from "matter-js";
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useTheme } from '@mui/material';
+import Matter, { World } from 'matter-js';
 
-import { RestaurantsContext } from "../../../providers/RestaurantsProvider";
-import { GameContext } from "../../../providers/GameProvider";
+import { RestaurantsContext } from '../../../providers/RestaurantsProvider';
+import { GameContext } from '../../../providers/GameProvider';
 import {
   UPDATE_CUISINE,
   UPDATE_RESTAURANTS,
-} from "../../../reducer/MainActions";
+} from '../../../reducer/MainActions';
 
-import { useNavigate } from "react-router-dom";
-import { getRestaurantsByCuisines } from "../../../functions/Functions";
-import { MessageContext } from "../../../providers/MessageProvider";
-import { UPDATE_MESSAGE } from "../../../reducer/Message/MessageAction";
+import { useNavigate } from 'react-router-dom';
+import { MessageContext } from '../../../providers/MessageProvider';
+import { UPDATE_MESSAGE } from '../../../reducer/Message/MessageAction';
 
 const worldWidth = 900;
 const worldHeight = 850;
@@ -77,7 +76,7 @@ const generateBars = async (color, numContainers = 7) => {
     return Matter.Bodies.rectangle(x, y, barWidth, 100, {
       isStatic: true,
       render: {
-        fillStyle: "white",
+        fillStyle: 'white',
       },
     });
   });
@@ -112,12 +111,12 @@ const generatePins = async (color) => {
       });
     });
     const line = await Promise.all(linePromises);
-    console.log("line length", line.length);
+    console.log('line length', line.length);
     return line;
   });
 
   const pins = await Promise.all(promises);
-  console.log("pins length", pins.length);
+  console.log('pins length', pins.length);
 
   const pinsFlattened = pins.reduce((flattened, line, lineIdx) => {
     flattened = flattened.concat(line);
@@ -182,7 +181,7 @@ const Plinko = (props) => {
     Matter.Bodies.circle(ballConfig.x, ballConfig.y, ballConfig.ballSize, {
       restitution: ballElastity,
       render: {
-        fillStyle: "white",
+        fillStyle: 'white',
       },
     })
   );
@@ -213,7 +212,7 @@ const Plinko = (props) => {
 
   useEffect(() => {
     const handleGameEndNavigate = () => {
-      navigate("/Restaurants");
+      navigate('/Restaurants');
     };
 
     const handleGameEnd = async (selectedOption) => {
@@ -235,7 +234,7 @@ const Plinko = (props) => {
     if (Object.keys(dest).length > 0 && dests.length > 0) {
       console.log(dest);
       if (dest.x != null) {
-        console.log("slot position x", dest.x);
+        console.log('slot position x', dest.x);
         const slotPos = dest.x;
         let slotIdx = dests.reduce((slotIdx, curDest, curDestIdx) => {
           const prevSlotPos =
@@ -250,7 +249,7 @@ const Plinko = (props) => {
 
         slotIdx = slotIdx === -1 ? 0 : slotIdx;
         handleGameEnd(slotIdx);
-        console.log("The ball landed in slot: ", slotIdx);
+        console.log('The ball landed in slot: ', slotIdx);
       }
     }
   }, [dest, dests]);
@@ -287,7 +286,7 @@ const Plinko = (props) => {
         {
           isStatic: true,
           render: {
-            fillStyle: "white",
+            fillStyle: 'white',
           },
         }
       );
@@ -298,14 +297,14 @@ const Plinko = (props) => {
 
       Engine.run(engine);
 
-      Events.on(engine, "collisionEnd", function (event) {
+      Events.on(engine, 'collisionEnd', function (event) {
         var pairs = event.pairs;
         for (var i = 0; i < pairs.length; i++) {
           var pair = pairs[i];
-          pair.bodyA.render.fillStyle = "#fff";
-          pair.bodyB.render.fillStyle = "#fff";
+          pair.bodyA.render.fillStyle = '#fff';
+          pair.bodyB.render.fillStyle = '#fff';
           if (pair.bodyA.position.y >= worldHeight - floorHeight - 16) {
-            console.log("hit the floor");
+            console.log('hit the floor');
             setDest(pair.bodyA.position);
           }
         }
@@ -350,8 +349,8 @@ const Plinko = (props) => {
     <div
       ref={boxRef}
       style={{
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
       }}
     >
       <canvas ref={canvasRef} />

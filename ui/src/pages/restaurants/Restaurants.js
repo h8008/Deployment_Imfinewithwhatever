@@ -1,47 +1,45 @@
-import Grid from "@mui/material/Grid";
-import Restaurant from "../../components/Restaurant";
+import Grid from '@mui/material/Grid';
+import Restaurant from '../../components/Restaurant';
 
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { RestaurantsContext } from "../../providers/RestaurantsProvider";
-import { MessageContext } from "../../providers/MessageProvider";
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { RestaurantsContext } from '../../providers/RestaurantsProvider';
+import { MessageContext } from '../../providers/MessageProvider';
 
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import CheckIcon from "@mui/icons-material/Check";
-import Icon from "@mui/material/Icon";
-import styled from "@emotion/styled";
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import CheckIcon from '@mui/icons-material/Check';
+import Icon from '@mui/material/Icon';
+import styled from '@emotion/styled';
 
-import API from "../../API_Interface";
+import API from '../../API_Interface';
 
-import { UserContext } from "../../providers/UserProvider";
+import { UserContext } from '../../providers/UserProvider';
 import {
   UPDATE_MESSAGE,
   UPDATE_MODAL_OPEN,
-} from "../../reducer/Message/MessageAction";
+} from '../../reducer/Message/MessageAction';
 
 import {
   UPDATE_RESTAURANT,
   UPDATE_RESTAURANTS,
-} from "../../reducer/MainActions";
-
-import { getFoodPreferences } from "../../functions/Functions";
+} from '../../reducer/MainActions';
 
 const RestaurantsComponent = styled(Grid)({
-  width: "1000px",
-  height: "900px",
-  margin: "auto",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  flexWrap: "wrap",
+  width: '1000px',
+  height: '900px',
+  margin: 'auto',
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexWrap: 'wrap',
 });
 
 const RestaurantsContainer = styled(Grid)({
-  width: "100%",
-  height: "100%",
-  data_id: "restaurant-container",
+  width: '100%',
+  height: '100%',
+  data_id: 'restaurant-container',
 });
 
 // Filters the list of restaurants from Yelp API based on the blacklist stored
@@ -49,7 +47,7 @@ const RestaurantsContainer = styled(Grid)({
 const filterRestaurantsByBlackList = (blacklist, restaurants) => {
   const blacklistObject = Object.fromEntries(
     blacklist
-      .filter((item) => item.like === "NO")
+      .filter((item) => item.like === 'NO')
       .map((item) => [item.restaurantID, item.restaurantID])
   );
   return restaurants.filter(
@@ -75,15 +73,16 @@ const Restaurants = (props) => {
 
   const [restaurants, setRestaurants] = useState(() => {
     if (blacklistData == null && restaurantsData == null) {
-      return []
+      return [];
+    } else if (restaurantsData != null) {
+      return [...restaurantsData];
+    } else {
+      return filterRestaurantsByBlackList(
+        [...blacklistData],
+        [...restaurantsData]
+      );
     }
-    else if (restaurantsData != null) {
-      return [...restaurantsData]
-    }
-    else {
-      return filterRestaurantsByBlackList([...blacklistData], [...restaurantsData])
-    }
-  })
+  });
 
   const [preference, setPreference] = useState(false);
   const [modelOpen, setModalOpen] = useState(preference);
@@ -92,7 +91,7 @@ const Restaurants = (props) => {
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] =
     useState(false);
 
-  console.log("showActiveRestaurantLocation", showActiveRestaurantLocation);
+  console.log('showActiveRestaurantLocation', showActiveRestaurantLocation);
 
   const onShowRestaurantLocationCallback = () => {
     setShowActiveRestaurantLocation(true);
@@ -100,15 +99,15 @@ const Restaurants = (props) => {
 
   const onDecisionCallback = async (preference) => {
     if (preference) {
-      navigate("/Feedback");
-      updateActiveRestaurant(activeRestaurantIdx, "preference", [
+      navigate('/Feedback');
+      updateActiveRestaurant(activeRestaurantIdx, 'preference', [
         ...restaurantState.cuisines,
       ]);
       setPreference(true);
     } else {
       const newActiveRestaurantIdx =
         advanceActiveRestaurantIdx(activeRestaurantIdx);
-      updateActiveRestaurant(newActiveRestaurantIdx, "preference", [
+      updateActiveRestaurant(newActiveRestaurantIdx, 'preference', [
         ...restaurantState.cuisines,
       ]);
 
@@ -177,7 +176,7 @@ const Restaurants = (props) => {
   return (
     <RestaurantsContainer>
       <RestaurantsComponent>
-        <Icon fontSize="large" color="error" onClick={handleViewPrevRestaurant}>
+        <Icon fontSize='large' color='error' onClick={handleViewPrevRestaurant}>
           <KeyboardDoubleArrowLeftIcon />
         </Icon>
         {activeRestaurant != null && (
@@ -193,7 +192,7 @@ const Restaurants = (props) => {
             toggleModal={toggleModal}
           />
         )}
-        <Icon fontSize="large" color="error" onClick={handleViewNextRestaurant}>
+        <Icon fontSize='large' color='error' onClick={handleViewNextRestaurant}>
           <KeyboardDoubleArrowRightIcon />
         </Icon>
       </RestaurantsComponent>
