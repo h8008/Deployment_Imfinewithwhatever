@@ -1,6 +1,5 @@
 const corsOptions = {
   credentials: true,
-  origin: '*',
   exposeHeaders: ['Access-Token', 'Cookie'],
   allowMethods: ['OPTIONS', 'POST', 'GET', 'PATCH', 'PUT'],
   allowHeaders: [
