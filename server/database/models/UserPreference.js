@@ -7,8 +7,7 @@ const userPreferenceSchema = new Schema({
     type: String,
   },
   email: {
-    type: Schema.Types.String,
-    ref: User.email,
+    type: String,
   },
   food_prefs: {
     type: String,

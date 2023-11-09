@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const User = require('./User');
 const Schema = mongoose.Schema;
 
 const UserReview = new mongoose.Schema({
@@ -10,8 +9,9 @@ const UserReview = new mongoose.Schema({
     type: String,
   },
   email: {
-    type: Schema.Types.String,
-    ref: User.email,
+    // type: Schema.Types.ObjectId,
+    // ref: "User"
+    type: String,
   },
   review: {
     type: String,

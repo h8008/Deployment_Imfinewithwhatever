@@ -10,8 +10,7 @@ const restaurantBlacklist = new Schema({
     type: String,
   },
   email: {
-    type: Schema.Types.String,
-    ref: User.email,
+    type: String,
   },
 });
 
