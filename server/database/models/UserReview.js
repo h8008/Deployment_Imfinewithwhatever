@@ -9,8 +9,6 @@ const UserReview = new mongoose.Schema({
     type: String,
   },
   email: {
-    // type: Schema.Types.ObjectId,
-    // ref: "User"
     type: String,
   },
   review: {
