@@ -7,10 +7,17 @@
     {
       "name": "Debug UI",
       "request": "launch",
-      "runtimeArgs": ["run-script", "debug-ui"],
-      "runtimeExecutable": "npm",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "node"
+      "type": "chrome",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/ui/src"
     }
+    // {
+    //   "name": "Debug UI",
+    //   "request": "launch",
+    //   "runtimeArgs": ["run-script", "debug-ui"],
+    //   "runtimeExecutable": "npm",
+    //   "skipFiles": ["<node_internals>/**"],
+    //   "type": "node"
+    // }
   ]
 }
