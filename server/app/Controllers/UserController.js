@@ -38,7 +38,7 @@ const signup = async (ctx) => {
     console.log(ctx.request.body);
     let params = ctx.request.body;
     let res = await FIND_USER(params);
-    if (res.length > 0) {
+    if (res) {
       ctx.body = {
         user: res,
         status: 'OK',

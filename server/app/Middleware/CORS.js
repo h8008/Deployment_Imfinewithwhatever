@@ -29,7 +29,6 @@ const cors = async (ctx, next) => {
   );
   if (ctx.req.method === 'OPTIONS') {
     ctx.res.status = 200;
-    return;
   }
   return await next();
 };

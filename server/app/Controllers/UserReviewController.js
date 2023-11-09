@@ -27,7 +27,7 @@ const getReview = async (ctx) => {
     console.log('user_review get review called');
     let params = ctx.params;
     let res = await GET_REVIEW(params);
-    if (res.length > 0) {
+    if (res) {
       ctx.body = {
         data: res[0].review,
         status: 'OK',
@@ -83,7 +83,7 @@ const getReviews = async (ctx) => {
     console.log('user_review get reviews called');
     let params = ctx.params;
     let res = await GET_REVIEWS(params);
-    if (res.length > 0) {
+    if (res) {
       ctx.body = {
         message: 'Retrieved restaurant reviews for the user',
         status: 'OK',
