@@ -1,5 +1,6 @@
 const Authorize = require('../app/Middleware/Authorize.js');
 const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
+const cors = require('./app/Middleware/CORS.js');
 
 const userRouter = require('./UserRoutes.js');
 const userReviewRouter = require('./UserReviewsRoutes.js');
@@ -17,6 +18,8 @@ router.use(
   userReviewRouter.routes(),
   yelpRouter.routes()
 );
+
+router.use(cors);
 
 module.exports = function (app) {
   app.use(router.routes());
