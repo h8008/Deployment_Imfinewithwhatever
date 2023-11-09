@@ -12,14 +12,13 @@ router.get('/', function (ctx) {
   return (ctx.body = 'What is up?');
 });
 
+router.use(cors);
 router.use(
   '',
   userRouter.routes(),
   userReviewRouter.routes(),
   yelpRouter.routes()
 );
-
-router.use(cors);
 
 module.exports = function (app) {
   app.use(router.routes());
