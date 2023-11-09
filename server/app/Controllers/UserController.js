@@ -66,7 +66,7 @@ const login = async (ctx) => {
     console.log(ctx.request.body);
     let params = ctx.request.body;
     const res = await FIND_USER(params);
-    if (res.length > 0) {
+    if (res) {
       bcrypt.compare(params.password, res[0].password, function (err, result) {
         console.log('result', result);
         if (err) {
@@ -130,7 +130,7 @@ const getRestaurantPreference = async (ctx) => {
   try {
     const params = ctx.params;
     const res = await GET_RESTAURANT_PREFERENCE(params);
-    if (res.length > 0) {
+    if (res) {
       ctx.body = {
         data: res[0].food_prefs,
         status: 'OK',
@@ -158,7 +158,7 @@ const getAllRestaurantPreferencesForUser = async (ctx) => {
   try {
     const params = ctx.params;
     const res = await GET_ALL_RESTAURANT_PREFERENCES(params);
-    if (res.length > 0) {
+    if (res) {
       ctx.body = {
         data: res,
         status: 'OK',
