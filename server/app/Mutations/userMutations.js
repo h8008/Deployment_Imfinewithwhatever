@@ -1,31 +1,44 @@
-const { User, UserPreference, UserReview, RestaurantBlacklist } = require('../../database/models')
+const {
+  User,
+  UserPreference,
+  UserReview,
+  RestaurantBlacklist,
+} = require('../../database/models');
 
-const SIGNUP = async ({ email, user_fName, user_lName, password }) => (
+const SIGNUP = async ({ email, user_fName, user_lName, password }) =>
   await User.create({
     email,
     user_fName,
     user_lName,
-    password
-  })
-)
+    password,
+  });
 
-const ADD_RESTAURANT_PREFERENCE = async ({ preference, like, email, restaurantID,}) => (
+const ADD_RESTAURANT_PREFERENCE = async ({
+  preference,
+  like,
+  email,
+  restaurantID,
+}) =>
   await UserPreference.create({
     restaurant_id: restaurantID,
-    email,
-    food_prefs,
-    like
-  })
-)
+    email: email,
+    food_pref: preference,
+    like: like,
+  });
 
-const UPDATE_RESTAURANT_PREFERENCE = async ({ preference, like, email, restaurantID }) => {
+const UPDATE_RESTAURANT_PREFERENCE = async ({
+  preference,
+  like,
+  email,
+  restaurantID,
+}) => {
   await UserPreference.updateOne({
-    food_prefs: preference
+    food_prefs: preference,
   }).where({
     email: email,
-    restaurant_id: restaurantID
-  })
-}
+    restaurant_id: restaurantID,
+  });
+};
 
 module.exports = {
   SIGNUP,
