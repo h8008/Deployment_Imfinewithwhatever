@@ -14,9 +14,11 @@ const cors = async (ctx, next) => {
   // Restrict origin to request origin to work with the withCredential attribute
   // Otherwise set to wildcard for deployment on vercel
   // const allowedOrigin = development() ? ctx.req.headers.origin : "*";
-  const origin = ctx.req.headers.origin == null ? '*' : ctx.req.headers.origin;
-  ctx.res.setHeader('Access-Control-Allow-Credentials', true);
+
+  // const origin = ctx.req.headers.origin == null ? '*' : ctx.req.headers.origin;
+  const origin = '*';
   ctx.res.setHeader('Access-Control-Allow-Origin', origin);
+  ctx.res.setHeader('Access-Control-Allow-Credentials', true);
   ctx.res.setHeader(
     'Access-Control-Allow-Methods',
     'GET,OPTIONS,PATCH,DELETE,POST,PUT'
