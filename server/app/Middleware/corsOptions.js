@@ -3,8 +3,29 @@ const corsOptions = {
   origin: '*',
   exposeHeaders: ['Access-Token', 'Cookie'],
   allowMethods: ['OPTIONS', 'POST', 'GET', 'PATCH', 'PUT'],
-  allowHeaders:
-    'Access-Control-Allow-Credentials, Access-Control-Allow-Origin, Access-Control-Allow-Methods, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+  allowHeaders: [
+    'X-CSRF-Token',
+    'X-Requested-With',
+    'content-type',
+    'x-requested-with',
+    'Accept',
+    'Accept-Encoding',
+    'Accept-Language',
+    'Access-Control-Request-Headers',
+    'Access-Control-Request-Method',
+    'Origin',
+    'Referer',
+    'Sec-Fetch-Dest',
+    'Sec-Fetch-Mode',
+    'Sec-Fetch-Site',
+    'User-Agent',
+    'Accept-Version',
+    'Content-Length',
+    'Content-MD5',
+    'Content-Type',
+    'Date',
+    'X-Api-Version',
+  ],
 };
 
 module.exports = corsOptions;
