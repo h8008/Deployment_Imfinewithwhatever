@@ -1,21 +1,21 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
 const userPreferenceSchema = new Schema({
-    restaurant_id: {
-        type: String
-    },
-    email: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
-    food_prefs: {
-        type: String
-    },
-    like: {
-        type: String
-    }
-})
+  restaurant_id: {
+    type: String,
+  },
+  email: {
+    type: Schema.Types.String,
+    ref: User.email,
+  },
+  food_prefs: {
+    type: String,
+  },
+  like: {
+    type: String,
+  },
+});
 
-module.exports = mongoose.model('UserPreference', userPreferenceSchema)
+module.exports = mongoose.model('UserPreference', userPreferenceSchema);

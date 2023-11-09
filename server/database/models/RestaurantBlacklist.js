@@ -1,17 +1,17 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const restaurantBlacklist = new Schema({
-    restaurant_id: {
-        type: String
-    },
-    restaurantName: {
-        type: String
-    },
-    email: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }
-})
+  restaurant_id: {
+    type: String,
+  },
+  restaurantName: {
+    type: String,
+  },
+  email: {
+    type: Schema.Types.String,
+    ref: User.email,
+  },
+});
 
-module.exports = mongoose.model("RestaurantBlacklist", restaurantBlacklist)
+module.exports = mongoose.model('RestaurantBlacklist', restaurantBlacklist);
