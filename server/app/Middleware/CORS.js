@@ -16,7 +16,9 @@ const cors = async (ctx, next) => {
   // const allowedOrigin = development() ? ctx.req.headers.origin : "*";
 
   // const origin = ctx.req.headers.origin == null ? '*' : ctx.req.headers.origin;
-  const origin = '*';
+  // const origin = '*';
+  const origin = ctx.req.headers.origin;
+  console.log('request origin: ', origin);
   ctx.res.setHeader('Access-Control-Allow-Origin', origin);
   ctx.res.setHeader('Access-Control-Allow-Credentials', true);
   ctx.res.setHeader(
