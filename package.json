@@ -7,8 +7,8 @@
     "install": "cd ui && npm i && cd ../server && npm i",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug-ui": "set NODE_ENV=development && cd ui && npm run start",
-    "debug-server": "set NODE_ENV=development && cd server && npm run debug",
-    "start-server": "set NODE_ENV=development && cd server && npm run start",
+    "debug-development-server": "set NODE_ENV=development && cd server && npm run debug",
+    "start-development-server": "set NODE_ENV=development && cd server && npm run start",
     "start-production-server": "set NODE_ENV=production && cd server && npm run start"
   },
   "eslintConfig": {
