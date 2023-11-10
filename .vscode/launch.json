@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Server",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "debug-development-server"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
+
+    {
       "name": "Debug UI",
       "request": "launch",
       "type": "chrome",

@@ -1,4 +1,4 @@
-const axios = require("axios");
+const axios = require('axios');
 
 const headers = {
   Authorization: `Bearer ${process.env.API_KEY}`,
@@ -6,28 +6,28 @@ const headers = {
 
 const getRestaurantsByCuisine = async (ctx) => {
   try {
-    const endpoint = "https://api.yelp.com/v3/businesses/search";
-    console.log("yelp api get restaurant by cuisine called");
+    const endpoint = 'https://api.yelp.com/v3/businesses/search';
+    console.log('yelp api get restaurant by cuisine called');
     let params = ctx.params;
     await axios
       .get(endpoint, { params, headers })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         ctx.body = {
           restaurantsData: { ...response.data },
-          status: "OK",
+          status: 'OK',
         };
       })
       .catch((error) => {
         console.error(error);
         ctx.body = {
           restaurantsData: undefined,
-          status: "NOT FOUND",
+          status: 'NOT FOUND',
         };
       });
   } catch (error) {
     console.log(
-      "Error while making request to Yelp API for restaurants by cuisine",
+      'Error while making request to Yelp API for restaurants by cuisine',
       error
     );
     throw error;
@@ -36,8 +36,8 @@ const getRestaurantsByCuisine = async (ctx) => {
 
 const getRestaurantsByLocation = async (ctx) => {
   try {
-    const endpoint = "https://api.yelp.com/v3/businesses/search";
-    console.log("yelp api get restaurant by location called");
+    const endpoint = 'https://api.yelp.com/v3/businesses/search';
+    console.log('yelp api get restaurant by location called');
     // let params = ctx.request.body
     let params = ctx.params;
     await axios
@@ -47,7 +47,7 @@ const getRestaurantsByLocation = async (ctx) => {
         console.log(response.data);
         ctx.body = {
           restaurantsData: { ...response.data },
-          status: "OK",
+          status: 'OK',
         };
       })
       .catch((error) => {
@@ -55,12 +55,12 @@ const getRestaurantsByLocation = async (ctx) => {
         console.error(error);
         ctx.body = {
           restaurantsData: undefined,
-          status: "NOT FOUND",
+          status: 'NOT FOUND',
         };
       });
   } catch (error) {
     console.log(
-      "Error while making request to Yelp API for restaurants by location",
+      'Error while making request to Yelp API for restaurants by location',
       error
     );
     throw error;
@@ -77,7 +77,7 @@ const getRestaurantById = async (ctx) => {
         console.log(response.data);
         ctx.body = {
           data: { ...response.data },
-          status: "OK",
+          status: 'OK',
           message: `Success when retrieving restaurant data`,
         };
       })
@@ -85,13 +85,13 @@ const getRestaurantById = async (ctx) => {
         console.error(error);
         ctx.body = {
           data: undefined,
-          status: "NOT FOUND",
+          status: 'NOT FOUND',
           message: `The requested restaurant data cannot be found`,
         };
       });
   } catch (error) {
     console.log(
-      "Error while making request to Yelp API for restaurant by id",
+      'Error while making request to Yelp API for restaurant by id',
       error
     );
     throw error;

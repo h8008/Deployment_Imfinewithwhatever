@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const UserReview = new mongoose.Schema({
+const UserReview = new Schema({
   restaurant_id: {
     type: String,
   },

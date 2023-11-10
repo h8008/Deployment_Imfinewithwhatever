@@ -4,28 +4,29 @@ import {
   UPDATE_OPTION,
   UPDATE_RESTAURANT,
   UPDATE_RESTAURANTS,
-} from "./MainActions";
-import Cookies from "js-cookie";
+} from './MainActions';
+import Cookies from 'js-cookie';
 
 const initialState = {
-  location: "",
+  location: '',
   options: [],
-  option: "",
+  option: '',
   cuisines: [], // this is an alias for the food_prefs mentioned in the design doc
   allCuisines: [
-    "Mexican",
-    "Japanese",
-    "Filipino",
-    "Burgers",
-    "Italian",
-    "Chinese",
-    "BBQ",
-    "Asian",
-    "American",
-    "Pizza",
+    'Mexican',
+    'Japanese',
+    'Filipino',
+    'Burgers',
+    'Italian',
+    'Chinese',
+    'BBQ',
+    'Asian',
+    'American',
+    'Pizza',
   ],
   restaurantsData: undefined,
   restaurant: {},
+  region: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -49,14 +50,18 @@ const reducer = (state = initialState, action) => {
       break;
     }
     case UPDATE_RESTAURANTS: {
-      newState = { ...state, restaurantsData: action.restaurantsData };
+      newState = {
+        ...state,
+        restaurantsData: action.restaurantsData,
+        region: action.region,
+      };
       break;
     }
     default:
       return state;
   }
-  Cookies.set("cuisines", newState.cuisines);
-  Cookies.set("location", newState.location);
+  Cookies.set('cuisines', newState.cuisines);
+  Cookies.set('location', newState.location);
   // Cookies.set("restaurant", JSON.stringify(newState.restaurant));
   return newState;
 };
