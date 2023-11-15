@@ -12,7 +12,6 @@ const getRestaurantsByCuisine = async (ctx) => {
     await axios
       .get(endpoint, { params, headers })
       .then((response) => {
-        // console.log(response.data);
         ctx.body = {
           restaurantsData: { ...response.data },
           status: 'OK',

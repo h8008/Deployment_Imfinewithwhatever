@@ -18,6 +18,7 @@ const {
   ALREADY_SIGNED_UP,
   ERROR_CREATING_USER,
   SUCCESSFULLY_CREATED_USER,
+  LOGGED_IN,
 } = require('../../constants/Messages');
 
 const hash = async (password) => {
@@ -30,6 +31,22 @@ const hash = async (password) => {
       return resolve(hash);
     });
   });
+};
+
+const getCurrentUserData = async (ctx) => {
+  const params = ctx.params;
+  const res = await FIND_CURRENT_USER_DATA(params);
+  ctx.body = res
+    ? { userData: res, status: 'OK' }
+    : { userData: undefined, status: 'NOT FOUND' };
+};
+
+const addCurrentUserData = async (ctx) => {
+  const params = ctx.params;
+  const res = await ADD_CURRENT_USER_DATA(params);
+  ctx.body = res
+    ? { status: 'OK', message: 'DATA ADDED' }
+    : { status: 'FAILED', message: 'DATA NOT ADDED' };
 };
 
 const signup = async (ctx) => {
@@ -46,12 +63,13 @@ const signup = async (ctx) => {
       return;
     }
     const hashedPassword = await hash(params.password);
-    params = Object.values({ ...params, password: hashedPassword });
+    params.password = hashedPassword;
     res = await SIGNUP(params);
     if (res) {
       ctx.body = {
         message: SUCCESSFULLY_CREATED_USER,
         status: 'OK',
+        data: res.email,
       };
     }
   } catch (err) {
@@ -67,20 +85,18 @@ const login = async (ctx) => {
     let params = ctx.request.body;
     const res = await FIND_USER(params);
     if (res) {
-      bcrypt.compare(params.password, res[0].password, function (err, result) {
+      bcrypt.compare(params.password, res.password, function (err, result) {
         console.log('result', result);
         if (err) {
           console.log('Error while logging in');
           return;
         }
       });
-
-      setAccessToken(ctx, res[0]);
-      console.log('from user record. About to return ', res[0]);
+      // console.log('from user record. About to return ', res);
       ctx.body = {
         status: 'OK',
-        message: 'Logged In',
-        data: res[0].email,
+        message: LOGGED_IN,
+        data: res.email,
       };
     }
   } catch (err) {
@@ -132,7 +148,7 @@ const getRestaurantPreference = async (ctx) => {
     const res = await GET_RESTAURANT_PREFERENCE(params);
     if (res) {
       ctx.body = {
-        data: res[0].food_prefs,
+        data: res.food_prefs,
         status: 'OK',
       };
     } else {
@@ -180,6 +196,8 @@ const getAllRestaurantPreferencesForUser = async (ctx) => {
 module.exports = {
   signup,
   login,
+  addCurrentUserData,
+  getCurrentUserData,
   addRestaurantPreference,
   updateRestaurantPreference,
   getRestaurantPreference,

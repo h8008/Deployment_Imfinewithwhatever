@@ -1,14 +1,12 @@
-import { useCallback, useState, memo, useEffect } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { useCallback, useState, memo, useEffect } from "react";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
-import { Grid, styled } from '@mui/material';
-import LOCATIONMASKMESSAGE, {
-  LOCATIONMASTMESSAGE,
-} from '../constants/Constants';
+import { Grid, styled } from "@mui/material";
+import { LOCATIONMASKMESSAGE } from "../constants/Constants";
 
 const containerStyle = {
-  width: '750px',
-  height: '400px',
+  width: "750px",
+  height: "400px",
 };
 
 const center = {
@@ -28,7 +26,7 @@ function BusinessLocator(props) {
   const [marker, setMarker] = useState(null);
 
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: `AIzaSyAtsRKyeEZEf4qYL0DIn9jfVTBB42QQXBw`,
   });
 
@@ -46,7 +44,7 @@ function BusinessLocator(props) {
           return results;
         })
         .catch((e) => {
-          alert('Geocode was not successful for the following reason: ' + e);
+          alert("Geocode was not successful for the following reason: " + e);
         });
     },
     [geocoder, map, marker]
@@ -70,7 +68,7 @@ function BusinessLocator(props) {
   }, []);
 
   useEffect(() => {
-    if (geocoder && props.address !== LOCATIONMASTMESSAGE) {
+    if (geocoder && props.address !== LOCATIONMASKMESSAGE) {
       geocode({ address: address });
     }
   }, [geocode, geocoder, address, props.address]);

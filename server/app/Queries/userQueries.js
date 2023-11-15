@@ -1,4 +1,9 @@
-const { User, UserPreference, UserReview, RestaurantBlacklist } = require('../../database/models')
+const {
+  User,
+  UserPreference,
+  UserReview,
+  RestaurantBlacklist,
+} = require('../../database/models');
 
 // const FIND_USER = {
 //   name: "FIND_USER",
@@ -20,17 +25,25 @@ const { User, UserPreference, UserReview, RestaurantBlacklist } = require('../..
 //   query: `SELECT * FROM user_reviews WHERE restaurantID = "${restaurantID}" and email="${email}"`,
 // });
 
-const FIND_USER = ({ email }) => (User.findOne().where("email").equals(email))
+const FIND_USER = ({ email }) => User.findOne().where('email').equals(email);
 
-const GET_RESTAURANT_PREFERENCE = ({ restaurantID, email }) => (UserPreference.findOne({
+const CURRENT_USER_DATA = async ({ email }) => {
+  const user = await FIND_USER(email);
+  return await JSON.parse(user.data);
+};
+
+const GET_RESTAURANT_PREFERENCE = ({ restaurantID, email }) =>
+  UserPreference.findOne({
     email: email,
-    restaurantID: restaurantID
-  }))
+    restaurantID: restaurantID,
+  });
 
-const GET_ALL_RESTAURANT_PREFERENCES = ({ email }) => (UserPreference.find().where('email').equals(email))
+const GET_ALL_RESTAURANT_PREFERENCES = ({ email }) =>
+  UserPreference.find().where('email').equals(email);
 
 module.exports = {
   FIND_USER,
+  CURRENT_USER_DATA,
   GET_RESTAURANT_PREFERENCE,
   GET_ALL_RESTAURANT_PREFERENCES,
 };

@@ -1,27 +1,45 @@
-import { useContext } from 'react';
+import { Fragment, useState, useEffect, useMemo } from 'react';
 import BingMapsReact from 'bingmaps-react';
-import { RestaurantsContext } from '../providers/RestaurantsProvider';
+
+const getViewOptions = ({ longitude, latitude }) => ({
+  center: {
+    longitude,
+    latitude,
+  },
+  mapTypeId: 'road',
+});
+
+const getMapOptions = () => ({
+  navigationBarMode: 'square',
+});
 
 function BingMap(props) {
-  const { coordinates } = props;
+  // const getCoordinates = useMemo(() => {
+  //   console.log('props to bing maps changed');
+  //   return props.coordinates;
+  // }, [props]);
+
+  const [mapReady, setMapReady] = useState(false);
+
+  // useEffect(() => {
+  //   if (mapReady && coordinates) {
+  //     setViewOptions(getViewOptions(coordinates));
+  //     setMapOptions(getMapOptions());
+  //   }
+  // }, [coordinates, mapReady]);
+
   const apiKey = process.env.REACT_APP_BING_MAP_API_KEY;
-  const longitude = coordinates == null ? 0 : coordinates.longitude;
-  const latitude = coordinates == null ? 0 : coordinates.latitude;
+
   return (
     <BingMapsReact
       bingMapsKey={apiKey}
       height='400px'
       width='500px'
-      mapOptions={{
-        navigationBarMode: 'square',
+      mapOptions={mapReady ? getMapOptions() : null}
+      onMapReady={() => {
+        setMapReady(true);
       }}
-      viewOptions={{
-        center: {
-          longitude,
-          latitude,
-        },
-        mapTypeId: 'grayscale',
-      }}
+      viewOptions={mapReady ? getViewOptions(props.coordinates) : null}
     />
   );
 }

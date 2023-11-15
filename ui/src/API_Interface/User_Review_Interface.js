@@ -1,7 +1,7 @@
 export default class UserReviews {
   constructor(axiosAgent) {
     this.axiosAgent = axiosAgent;
-    this.name = "UserReviews";
+    this.name = 'UserReviews';
   }
 
   async getReview(params) {
@@ -21,7 +21,7 @@ export default class UserReviews {
   async addReview(params) {
     return (
       this.axiosAgent
-        .post(`user_reviews/review`, Object.values(params)) // conveniently passing in an array
+        .post(`user_reviews/review`, { ...params }) // conveniently passing in an array
         // like this: insert into user_reviews values (?)
         .then((reviewInfo) => reviewInfo.data)
         .catch((error) => ({

@@ -15,9 +15,7 @@ const MONGODB_URI = () => {
 };
 
 const getConnectOptions = () => {
-  const options = {
-    useUnifiedTopology: true,
-  };
+  const options = {};
   return dev() ? { ...options, family: 4 } : options;
 };
 

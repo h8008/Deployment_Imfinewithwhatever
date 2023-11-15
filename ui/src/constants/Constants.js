@@ -1,3 +1,3 @@
-const LOCATIONMASTMESSAGE = "click yes to see restaurant location";
+const LOCATIONMASKMESSAGE = "Still DECIDING? Click HMM... and we'll show you the restaurant location.";
 
-export { LOCATIONMASTMESSAGE };
+export { LOCATIONMASKMESSAGE };

@@ -1,15 +1,24 @@
-const {
-  User,
-  UserPreference,
-  UserReview,
-  RestaurantBlacklist,
-} = require('../../database/models');
+const { User, UserPreference } = require('../../database/models');
+const { FIND_USER } = require('../Queries/userQueries');
+const convertToString = require('../../utils/ConvertToString.js');
 
-const SIGNUP = async ({ email, user_fName, user_lName, password }) =>
+const STORE_CURRENT_USER_DATA = async ({
+  email,
+  selectedLocation,
+  selectedCuisines,
+  queriedData,
+}) => {
+  const user = await FIND_USER(email);
+  const data = [selectedLocation, selectedCuisines, queriedData];
+  user.data = convertToString(data);
+  user.save();
+};
+
+const SIGNUP = async ({ email, firstname, lastname, password }) =>
   await User.create({
     email,
-    user_fName,
-    user_lName,
+    user_fName: firstname,
+    user_lName: lastname,
     password,
   });
 
@@ -42,6 +51,7 @@ const UPDATE_RESTAURANT_PREFERENCE = async ({
 
 module.exports = {
   SIGNUP,
+  STORE_CURRENT_USER_DATA,
   ADD_RESTAURANT_PREFERENCE,
   UPDATE_RESTAURANT_PREFERENCE,
 };

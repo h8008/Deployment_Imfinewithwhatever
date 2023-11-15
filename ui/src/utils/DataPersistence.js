@@ -1,3 +1,4 @@
+import API_Interface from '../API_Interface';
 import { arrayToString, objectToString } from './DataExtraction';
 import Cookies from 'js-cookie';
 
@@ -23,4 +24,12 @@ const storeCookie = async (name, object) => {
   Cookies.set(name, string);
 };
 
-export { storeCookie };
+const storeUser = async (user) => {
+  const res = await API_Interface.Users.addCurrentUserData(user);
+  if (res.status === 'OK') {
+    return true;
+  }
+  return false;
+};
+
+export { storeCookie, storeUser };

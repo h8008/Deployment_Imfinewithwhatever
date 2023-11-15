@@ -1,19 +1,5 @@
 import { LOGIN, LOGOUT, UPDATE_PREFERENCES } from "./UserActions";
 import Cookies from "js-cookie";
-import API from "../../API_Interface";
-
-// const getAllRestaurantPreferencesForUser = (email) => {
-//   return new Promise(async (resolve, reject) => {
-//     const res = await API.Users.getAllRestaurantPreferencesForUser({
-//       email: email,
-//     });
-//     if (res.status === "OK") {
-//       return resolve(res.data);
-//     }
-//     console.log(res.message);
-//     return resolve([]);
-//   });
-// };
 
 const initialUserState = async () => {
   const loggedIn = Cookies.get("loggedIn");
@@ -40,6 +26,7 @@ const UserReducer = (state = initialUserState, action) => {
       return initialUserState;
     case UPDATE_PREFERENCES:
       return { ...state, preferences: action.preferences };
+
     default:
       return state;
   }

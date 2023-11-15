@@ -1,29 +1,29 @@
-import { useContext, useState, useEffect, Fragment } from "react";
-import API from "../API_Interface";
-import { MessageContext } from "../providers/MessageProvider";
-import UpArrow from "@mui/icons-material/KeyboardArrowUp";
-import DownArrow from "@mui/icons-material/KeyboardArrowDown";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useContext, useState, useEffect, Fragment } from 'react';
+import API from '../API_Interface';
+import { MessageContext } from '../providers/MessageProvider';
+import UpArrow from '@mui/icons-material/KeyboardArrowUp';
+import DownArrow from '@mui/icons-material/KeyboardArrowDown';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-import { Button, Card, styled } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import Text from "../ui_components/Text";
-import BorderedBox from "../ui_components/BorderedBox";
+import { Button, Card, styled } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Text from '../ui_components/Text';
+import BorderedBox from '../ui_components/BorderedBox';
 
 const RowComponent = styled(Grid)(({ theme }) => ({
   gridRow: true,
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: theme == null ? "flex-start" : theme.justifyContent,
-  alignItems: "flex-start",
-  width: theme == null ? "50%" : theme.width,
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: theme == null ? 'flex-start' : theme.justifyContent,
+  alignItems: 'flex-start',
+  width: theme == null ? '50%' : theme.width,
 }));
 
 const ColumnComponent = styled(Grid)(({ theme }) => ({
   gridRow: true,
-  display: "column",
-  justifyContent: theme == null ? "center" : theme.justifyContent,
-  alignItems: theme == null ? "center" : theme.alignItems,
+  display: 'column',
+  justifyContent: theme == null ? 'center' : theme.justifyContent,
+  alignItems: theme == null ? 'center' : theme.alignItems,
 }));
 
 const Review = (props) => {
@@ -48,27 +48,27 @@ const Review = (props) => {
 
   return (
     <Fragment>
-      <RowComponent theme={{ width: "50%", justifyContent: "space-between" }}>
-        <RowComponent theme={{ width: "70%" }}>
-          <Text text="Restaurant: " style={{ marginRight: '5px' }} />
+      <RowComponent theme={{ width: '50%', justifyContent: 'space-between' }}>
+        <RowComponent theme={{ width: '70%' }}>
+          <Text text='Restaurant: ' style={{ marginRight: '5px' }} />
           <Text
-            text={` ${review.restaurantName} `}
-            style={{ textDecoration: "underline" }}
+            text={` ${review.restaurant_name} `}
+            style={{ textDecoration: 'underline' }}
           />
         </RowComponent>
-        <RowComponent theme={{ width: "30%", justifyContent: "flex-start" }}>
+        <RowComponent theme={{ width: '30%', justifyContent: 'flex-start' }}>
           <Text text={`Rating: `} style={{ marginRight: '5px' }} />
           <Text
             text={` ${review.rating} `}
-            style={{ textDecoration: "underline" }}
+            style={{ textDecoration: 'underline' }}
           />
         </RowComponent>
       </RowComponent>
       <RowComponent>
-        <Text text={"Review: "} style={{ marginRight: '5px' }} />
+        <Text text={'Review: '} style={{ marginRight: '5px' }} />
         <Text
           text={` ${review.review} `}
-          style={{ textDecoration: "underline" }}
+          style={{ textDecoration: 'underline' }}
         />
       </RowComponent>
     </Fragment>

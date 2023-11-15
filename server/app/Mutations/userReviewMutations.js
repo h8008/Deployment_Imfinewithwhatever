@@ -1,30 +1,33 @@
-const { UserReview } = require("../../database/models");
+const { UserReview } = require('../../database/models');
 
-const UPDATE_REVIEW = async ({ restaurantID, review }) => (
-  UserReview.updateOne({
-    review: review
+const UPDATE_REVIEW = async ({ restaurantID, review }) =>
+  await UserReview.updateOne({
+    review: review,
   }).where({
     restaurant_id: restaurantID,
-    email: email
-  })
-)
+    email: email,
+  });
 
-const ADD_REVIEW = async ({ restaurantID, restaurantName, email, review, rating }) => (
-  UserReview.create({
+const ADD_REVIEW = async ({
+  restaurantID,
+  restaurantName,
+  email,
+  review,
+  rating,
+}) =>
+  await UserReview.create({
     restaurant_id: restaurantID,
     restaurant_name: restaurantName,
     email,
     review,
-    rating
-  })
-)
+    rating,
+  });
 
-const DELETE_REVIEW = async ({ restaurantID, email }) => (
-  UserReview.deleteOne({
+const DELETE_REVIEW = async ({ restaurantID, email }) =>
+  await UserReview.deleteOne({
     restaurant_id: restaurantID,
-    email: email
-  })
-)
+    email: email,
+  });
 
 module.exports = {
   ADD_REVIEW,

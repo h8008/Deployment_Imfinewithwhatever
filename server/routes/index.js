@@ -1,6 +1,7 @@
 const Authorize = require('../app/Middleware/Authorize.js');
 const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
 const cors = require('../app/Middleware/CORS.js');
+const errorHandler = require('../app/Middleware/ErrorHandler.js');
 
 const userRouter = require('./UserRoutes.js');
 const userReviewRouter = require('./UserReviewsRoutes.js');
@@ -12,6 +13,7 @@ router.get('/', function (ctx) {
   return (ctx.body = 'What is up?');
 });
 
+router.use(errorHandler);
 router.use(cors);
 router.use(
   '',

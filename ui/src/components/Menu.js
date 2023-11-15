@@ -13,7 +13,7 @@ import { MessageContext } from "../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
 import { LOGOUT } from "../reducer/User/UserActions";
 
-const NavigationComponent = styled(Grid)((props) => ({
+const MenuComponent = styled(Grid)((props) => ({
   width: "100%",
   height: "50px",
   display: "flex",
@@ -21,10 +21,10 @@ const NavigationComponent = styled(Grid)((props) => ({
   justifyContent: "flex-end",
   alignItems: "center",
   backgroundColor: props.color,
-  zIndex: 1
+  zIndex: 1,
 }));
 
-const Navigation = (props) => {
+const Menu = (props) => {
   const { palette } = useTheme();
   const { userState, userDispatch } = useContext(UserContext);
   const { messageDispatch } = useContext(MessageContext);
@@ -47,11 +47,7 @@ const Navigation = (props) => {
   const handleOptionClick = (clickedOption) => {
     if (clickedOption === "Home") {
       navigate("/");
-    } else if (
-      !userState.loggedIn &&
-      clickedOption !== "Login" &&
-      clickedOption !== "Logout"
-    ) {
+    } else if (!userState.loggedIn && clickedOption !== "Login" && clickedOption !== "Logout") {
       navigate("/Login");
       messageDispatch({
         type: UPDATE_MESSAGE,
@@ -66,23 +62,14 @@ const Navigation = (props) => {
   };
 
   return (
-    <NavigationComponent
-      color={palette.error.light}
-      data_id="naviagation-component"
-    >
+    <MenuComponent color={palette.error.light} data_id="naviagation-component">
       {Object.values(options).map((option) => (
-        <Box
-          sx={{ marginRight: "20px" }}
-          onClick={() =>
-            // handleOptionClick(option === "logout" ? "login" : option)
-            handleOptionClick(option)
-          }
-        >
+        <Box sx={{ marginRight: "20px" }} onClick={() => handleOptionClick(option)}>
           <Text text={option} color={palette.primary.contrastText} />
         </Box>
       ))}
-    </NavigationComponent>
+    </MenuComponent>
   );
 };
 
-export default Navigation;
+export default Menu;

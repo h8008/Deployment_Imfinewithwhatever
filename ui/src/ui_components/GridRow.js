@@ -1,8 +1,6 @@
-import { Grid } from "@mui/material";
+import { Grid } from '@mui/material';
 
 const GridRow = (props) => {
-  console.log(props);
-
   return (
     <Grid
       gridRow

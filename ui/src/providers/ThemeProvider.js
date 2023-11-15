@@ -8,7 +8,7 @@ const palette = createTheme();
 const GlobalTheme = createTheme({
   typography: {
     fontFamily: "'Caveat', cursive",
-    fontSize: "18",
+    fontSize: 18,
     fontWeightMedium: "bolder",
   },
   palette: {

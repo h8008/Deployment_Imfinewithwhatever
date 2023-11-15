@@ -29,7 +29,7 @@ const getReview = async (ctx) => {
     let res = await GET_REVIEW(params);
     if (res) {
       ctx.body = {
-        data: res[0].review,
+        data: res.review,
         status: 'OK',
       };
     } else {
