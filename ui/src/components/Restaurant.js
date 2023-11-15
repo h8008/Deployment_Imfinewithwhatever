@@ -9,9 +9,9 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 
 import API from "../API_Interface";
-import BusinessLocator from "../Google_Maps/BusinessLocator";
+// import BusinessLocator from "../Google_Maps/BusinessLocator";
 import BingMap from "../Bing_Maps";
-import MapBox from "./Maps";
+// import MapBox from "./Maps";
 import useDehydrate from "../hooks/useDehydrate";
 
 import { LOCATIONMASKMESSAGE } from "../constants/Constants";
@@ -264,7 +264,7 @@ const Restaurant = (props) => {
             {/* {otherDetails != null && (
               <BingMap coordinates={otherDetails.coordinates} />
             )} */}
-            {otherDetails && otherDetails.coordinates && <MapBox coordinates={otherDetails.coordinates} />}
+            {/* {otherDetails && otherDetails.coordinates && <MapBox coordinates={otherDetails.coordinates} />} */}
             <CardContent>
               <Text text={otherDetails.location} />
             </CardContent>

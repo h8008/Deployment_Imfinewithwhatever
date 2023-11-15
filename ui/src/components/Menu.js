@@ -15,7 +15,7 @@ import { LOGOUT } from "../reducer/User/UserActions";
 
 const MenuComponent = styled(Grid)((props) => ({
   width: "100%",
-  height: "50px",
+  height: "5vh",
   display: "flex",
   flexDirection: "row",
   justifyContent: "flex-end",
@@ -63,8 +63,8 @@ const Menu = (props) => {
 
   return (
     <MenuComponent color={palette.error.light} data_id="naviagation-component">
-      {Object.values(options).map((option) => (
-        <Box sx={{ marginRight: "20px" }} onClick={() => handleOptionClick(option)}>
+      {Object.values(options).map((option, index) => (
+        <Box key={index} sx={{ marginRight: "20px" }} onClick={() => handleOptionClick(option)}>
           <Text text={option} color={palette.primary.contrastText} />
         </Box>
       ))}

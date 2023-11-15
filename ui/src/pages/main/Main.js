@@ -25,6 +25,9 @@ import {
 } from "./Helpers";
 import { NAVIGATE } from "../../reducer/Navigator/actions";
 import { NavigationContext } from "../../providers/NavigationProvider";
+import { HydrateContext } from "../../providers/HydrateProvider";
+import { HYDRATE } from "../../reducer/Hydrate/actions";
+import { UserContext } from "../../providers/UserProvider";
 
 const getFoodPreferences = (categories) => {
   const lowercased_categories = categories.map((category) => {
@@ -133,42 +136,33 @@ const MainComponent = styled(Grid)({
 
 function Main(props) {
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
-  const cuisines = [
-    "Mexican",
-    "Japanese",
-    "Filipino",
-    "Burgers",
-    "Italian",
-    "Chinese",
-    "BBQ",
-    "Asian",
-    "American",
-    "Pizza",
-  ];
+  const cuisines = ["Japanese", "Filipino", "Burgers", "Italian", "Chinese", "BBQ", "Asian", "American", "Pizza"];
 
   const games = ["Plinko", "Wheel", "Coin"];
 
+  const { userState } = useContext(UserContext);
   const { restaurantDispatch } = useContext(RestaurantsContext);
   const { navigatorDispatch } = useContext(NavigationContext);
   const { messageDispatch } = useContext(MessageContext);
+  const { hydrateDispatch } = useContext(HydrateContext);
 
   const [location, setLocation] = useState("");
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
   const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [restaurants, setRestaurants] = useState([]);
-  const [deHydratedData, setDeHydratedData] = useState([]);
+  const [restaurants, setRestaurants] = useState({});
 
-  useDehydrate(deHydratedData);
-  console.log("dehydrated data", deHydratedData);
+  // const [deHydratedData, setDeHydratedData] = useState({});
+  // // useDehydrate(deHydratedData);
+  // console.log("dehydrated data", deHydratedData);
 
   const handleLocationChange = (event) => {
     const location = event.target.value;
     setLocation(location);
   };
 
-  const handleSetDehydrationData = (data) => {
-    setDeHydratedData(data);
-  };
+  // const handleSetDehydrationData = async (data) => {
+  //   await setDeHydratedData(data);
+  // };
 
   const handleCuisinesChange = (selectedCuisineIdx) => {
     const newSelectedCuisines = Object.keys(
@@ -226,7 +220,14 @@ function Main(props) {
         region: dispatchContent.region,
       });
 
-      handleSetDehydrationData(aggregatedRestaurantData.restaurantsData);
+      await hydrateDispatch({
+        type: HYDRATE,
+        payload: {
+          email: userState.email,
+          data: dispatchContent,
+          apiInterface: "Users",
+        },
+      });
 
       return resolve();
     });

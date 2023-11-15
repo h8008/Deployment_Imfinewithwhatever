@@ -24,6 +24,9 @@ const corsOptions = {
     'Content-Type',
     'Date',
     'X-Api-Version',
+    'Pragma',
+    'Cache-Control',
+    'Expires',
   ],
 };
 

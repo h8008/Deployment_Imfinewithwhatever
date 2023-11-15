@@ -27,18 +27,18 @@ const handleArray = (arr) => {
 };
 
 const convertToString = (data) => {
-  if (typeof data === 'string') {
+  if (typeof data === String) {
     return data;
   }
-  if (typeof data !== 'object' || typeof data !== 'array') {
+  if (typeof data !== Object || typeof data !== Array) {
     return JSON.stringify(data);
   }
-  if (typeof data === 'object') {
+  if (typeof data === Object) {
     const keys = Object.keys(data);
     const values = Object.values(data);
     return handleObject(keys, values);
   }
-  if (typeof data === 'array') {
+  if (typeof data === Array) {
     return handleArray(data);
   }
 };

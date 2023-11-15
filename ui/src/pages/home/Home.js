@@ -9,10 +9,12 @@ import Backdrop from "@mui/material/Backdrop";
 import { Grid, useTheme } from "@mui/material";
 import { styled } from "@mui/system";
 
-const HomeComponent = styled(Backdrop)(({ theme }) => ({
-  backgroundColor: attributes.homeBackgroundColor,
+const HomeComponent = styled(Grid)({});
+
+const HomeBackDropComponent = styled(Backdrop)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
   position: "relative",
-  height: "95vh",
+  height: "90vh",
   width: "75vw",
   margin: "auto",
   display: "flex",
@@ -39,8 +41,8 @@ const Home = (props) => {
   const theme = useTheme();
 
   return (
-    <Grid data_id="home-container">
-      <HomeComponent data_id="home" theme={theme} open={true}>
+    <HomeComponent data_id="home-container">
+      <HomeBackDropComponent data_id="home" theme={theme} open={true}>
         <LogoComponent src={Logo} />
         <Developers
           style={{
@@ -50,10 +52,9 @@ const Home = (props) => {
             transform: `translate(-50%, -50%)`,
           }}
           color={theme.palette.primary.light}
-          // color={"white"}
         />
-      </HomeComponent>
-    </Grid>
+      </HomeBackDropComponent>
+    </HomeComponent>
   );
 };
 

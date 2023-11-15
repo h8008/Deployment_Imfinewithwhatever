@@ -6,6 +6,10 @@ const userRouter = require('koa-router')({
   prefix: '/users',
 });
 
+userRouter.get('/', () => {
+  console.log('default user route');
+});
+
 userRouter.post('/login', UserController.login, Authorize('guest'));
 
 userRouter.post('/signup', UserController.signup, Authorize('guest'));
@@ -22,9 +26,9 @@ userRouter.post(
     console.log('user-router update restaurant preference route error: ', err)
 );
 
-userRouter.post('user/current_user/update', UserController.addCurrentUserData);
+userRouter.post('/currentuser/update', UserController.updateCurrentUser);
 
-userRouter.get('user/current_user', UserController.getCurrentUserData);
+userRouter.get('/user/current_user', UserController.getCurrentUser);
 
 userRouter.get(
   '/user/restaurant_preference/:email/:restaurantID',

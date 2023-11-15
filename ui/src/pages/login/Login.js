@@ -1,12 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import {
-  FormControl,
-  IconButton,
-  InputAdornment,
-  TextField,
-  OutlinedInput,
-  InputLabel,
-} from "@mui/material";
+import { FormControl, IconButton, InputAdornment, TextField, OutlinedInput, InputLabel } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -63,7 +56,6 @@ const TextFields = (props) => {
       {props.components.map((component) => (
         <Grid
           row
-          gridRow="true"
           sx={{
             display: "flex",
             flexDirection: "row",
@@ -90,11 +82,7 @@ const TextFields = (props) => {
                         onMouseDown={props.handleHidePassword}
                         edge="end"
                       >
-                        {props.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
+                        {props.showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -104,11 +92,7 @@ const TextFields = (props) => {
                 />
               </FormControlComponent>
             ) : (
-              <TextFieldComponet
-                id={`${component}_input_field`}
-                name={`${component}`}
-                focused="true"
-              />
+              <TextFieldComponet id={`${component}_input_field`} name={`${component}`} focused="true" />
             )}
           </GridItem>
         </Grid>

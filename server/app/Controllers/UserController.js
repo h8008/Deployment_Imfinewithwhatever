@@ -6,6 +6,7 @@ const {
 } = require('../Queries/userQueries');
 const {
   SIGNUP,
+  UPDATE_CURRENT_USER,
   ADD_RESTAURANT_PREFERENCE,
   UPDATE_RESTAURANT_PREFERENCE,
 } = require('../Mutations/userMutations');
@@ -33,7 +34,7 @@ const hash = async (password) => {
   });
 };
 
-const getCurrentUserData = async (ctx) => {
+const getCurrentUser = async (ctx) => {
   const params = ctx.params;
   const res = await FIND_CURRENT_USER_DATA(params);
   ctx.body = res
@@ -41,9 +42,17 @@ const getCurrentUserData = async (ctx) => {
     : { userData: undefined, status: 'NOT FOUND' };
 };
 
-const addCurrentUserData = async (ctx) => {
-  const params = ctx.params;
-  const res = await ADD_CURRENT_USER_DATA(params);
+// const addCurrentUserData = async (ctx) => {
+//   const params = ctx.params;
+//   const res = await ADD_CURRENT_USER_DATA(params);
+//   ctx.body = res
+//     ? { status: 'OK', message: 'DATA ADDED' }
+//     : { status: 'FAILED', message: 'DATA NOT ADDED' };
+// };
+
+const updateCurrentUser = async (ctx) => {
+  const params = ctx.request.body;
+  const res = await UPDATE_CURRENT_USER(params);
   ctx.body = res
     ? { status: 'OK', message: 'DATA ADDED' }
     : { status: 'FAILED', message: 'DATA NOT ADDED' };
@@ -83,7 +92,7 @@ const login = async (ctx) => {
     console.log('user login called');
     console.log(ctx.request.body);
     let params = ctx.request.body;
-    const res = await FIND_USER(params);
+    const res = await FIND_USER(params.email);
     if (res) {
       bcrypt.compare(params.password, res.password, function (err, result) {
         console.log('result', result);
@@ -196,8 +205,8 @@ const getAllRestaurantPreferencesForUser = async (ctx) => {
 module.exports = {
   signup,
   login,
-  addCurrentUserData,
-  getCurrentUserData,
+  updateCurrentUser,
+  getCurrentUser,
   addRestaurantPreference,
   updateRestaurantPreference,
   getRestaurantPreference,

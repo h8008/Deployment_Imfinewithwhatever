@@ -1,4 +1,4 @@
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider as MUIThemeProvider } from "styled-components";
 import { createTheme } from "@mui/material";
 import { green, grey, red } from "@mui/material/colors";
 import attributes from "../config";
@@ -18,7 +18,6 @@ const GlobalTheme = createTheme({
       light: palette.palette.augmentColor({
         color: { main: attributes.backgroundColor },
       }),
-      // light: grey[100],
       dark: palette.palette.augmentColor({
         color: { main: "#3B464A" },
       }),
@@ -32,11 +31,19 @@ const GlobalTheme = createTheme({
     success: {
       main: green[200],
     },
+    background: {
+      default: red.A200,
+      paper: palette.palette.augmentColor({
+        color: { main: "#E48A85" },
+      }),
+    },
   },
 });
 
-const Theme = (props) => {
-  <ThemeProvider theme={GlobalTheme}>{props.children}</ThemeProvider>;
-};
+// const ThemeProvider = (props) => {
+//   <MUIThemeProvider theme={GlobalTheme}>{props.children}</MUIThemeProvider>;
+// };
 
-export { Theme, GlobalTheme };
+// export { ThemeProvider, GlobalTheme };
+
+export default GlobalTheme;

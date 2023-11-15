@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { useTheme } from '@mui/material';
-import Matter, { World } from 'matter-js';
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { useTheme } from "@mui/material";
+import Matter, { World } from "matter-js";
 
-import { RestaurantsContext } from '../../../providers/RestaurantsProvider';
-import { GameContext } from '../../../providers/GameProvider';
-import {
-  UPDATE_CUISINE,
-  UPDATE_RESTAURANTS,
-} from '../../../reducer/MainActions';
+import { RestaurantsContext } from "../../../providers/RestaurantsProvider";
+import { GameContext } from "../../../providers/GameProvider";
+import { UPDATE_CUISINE, UPDATE_RESTAURANTS } from "../../../reducer/MainActions";
 
-import { useNavigate } from 'react-router-dom';
-import { MessageContext } from '../../../providers/MessageProvider';
-import { UPDATE_MESSAGE } from '../../../reducer/Message/MessageAction';
+import { useNavigate } from "react-router-dom";
+import { MessageContext } from "../../../providers/MessageProvider";
+import { UPDATE_MESSAGE } from "../../../reducer/Message/MessageAction";
 
 const worldWidth = 900;
 const worldHeight = 850;
@@ -33,11 +30,6 @@ const ballConfig = {
 };
 
 const generateBars = async (color, numContainers = 7) => {
-  // const totalWidth =
-  //   worldWidth / 2 -
-  //   (maxPins * pinGap) / 2 +
-  //   maxPins * (pinGap + ballConfig.ballSize);
-  // const numContainers = 7;
   const totalWidth = barsSectionWidth;
   const numBars = numContainers + 1;
   const containers = Array(numContainers)
@@ -46,12 +38,6 @@ const generateBars = async (color, numContainers = 7) => {
   const bars = Array(numBars)
     .fill()
     .map((_, index) => index);
-
-  // const containerWidths = containers.map((_, index) =>
-  //   index === 0 || index === numContainers
-  //     ? barWidth + totalWidth / numContainers + barWidth
-  //     : totalWidth / numContainers + barWidth
-  // );
 
   const containerWidth = (totalWidth - numBars * barWidth) / numContainers;
   const containerWidths = containers.map((container, idx) => {
@@ -65,18 +51,16 @@ const generateBars = async (color, numContainers = 7) => {
     return newAccWidth;
   }, 0);
 
-  // const startPosition = worldWidth / 2 - (maxPins * pinGap) / 2 + pinGap;
   const startPosition = 50;
 
   const postPromises = bars.map(async (barIdx) => {
     const x = startPosition + barIdx * (barWidth + containerWidth);
-    const y =
-      marginTop + numlines * ballConfig.ballSize + (numlines - 1) * pinGap;
+    const y = marginTop + numlines * ballConfig.ballSize + (numlines - 1) * pinGap;
 
     return Matter.Bodies.rectangle(x, y, barWidth, 100, {
       isStatic: true,
       render: {
-        fillStyle: 'white',
+        fillStyle: "white",
       },
     });
   });
@@ -111,12 +95,12 @@ const generatePins = async (color) => {
       });
     });
     const line = await Promise.all(linePromises);
-    console.log('line length', line.length);
+    console.log("line length", line.length);
     return line;
   });
 
   const pins = await Promise.all(promises);
-  console.log('pins length', pins.length);
+  console.log("pins length", pins.length);
 
   const pinsFlattened = pins.reduce((flattened, line, lineIdx) => {
     flattened = flattened.concat(line);
@@ -140,8 +124,7 @@ const mapSlotsToOptions = (optionsData) => {
     .map((_, index) => index);
 
   // Gets the the average width of a container for one option
-  const containerWidth =
-    (barsSectionWidth - numOptions * barWidth) / numOptions;
+  const containerWidth = (barsSectionWidth - numOptions * barWidth) / numOptions;
 
   // Creates an array of widths. Each element in the array is the width
   // of a container that represents an option
@@ -181,7 +164,7 @@ const Plinko = (props) => {
     Matter.Bodies.circle(ballConfig.x, ballConfig.y, ballConfig.ballSize, {
       restitution: ballElastity,
       render: {
-        fillStyle: 'white',
+        fillStyle: "white",
       },
     })
   );
@@ -212,7 +195,7 @@ const Plinko = (props) => {
 
   useEffect(() => {
     const handleGameEndNavigate = () => {
-      navigate('/Restaurants');
+      navigate("/Restaurants");
     };
 
     const handleGameEnd = async (selectedOption) => {
@@ -234,11 +217,10 @@ const Plinko = (props) => {
     if (Object.keys(dest).length > 0 && dests.length > 0) {
       console.log(dest);
       if (dest.x != null) {
-        console.log('slot position x', dest.x);
+        console.log("slot position x", dest.x);
         const slotPos = dest.x;
         let slotIdx = dests.reduce((slotIdx, curDest, curDestIdx) => {
-          const prevSlotPos =
-            curDestIdx === 0 ? 0 : dests[curDestIdx - 1].width;
+          const prevSlotPos = curDestIdx === 0 ? 0 : dests[curDestIdx - 1].width;
           const curSlotPos = dests[curDestIdx].width;
           if (prevSlotPos <= slotPos && curSlotPos >= slotPos) {
             slotIdx = curDestIdx - 1;
@@ -249,7 +231,7 @@ const Plinko = (props) => {
 
         slotIdx = slotIdx === -1 ? 0 : slotIdx;
         handleGameEnd(slotIdx);
-        console.log('The ball landed in slot: ', slotIdx);
+        console.log("The ball landed in slot: ", slotIdx);
       }
     }
   }, [dest, dests]);
@@ -278,18 +260,12 @@ const Plinko = (props) => {
         },
       });
 
-      const floor = Bodies.rectangle(
-        0,
-        worldHeight - floorHeight,
-        worldWidth * 2,
-        floorHeight,
-        {
-          isStatic: true,
-          render: {
-            fillStyle: 'white',
-          },
-        }
-      );
+      const floor = Bodies.rectangle(0, worldHeight - floorHeight, worldWidth * 2, floorHeight, {
+        isStatic: true,
+        render: {
+          fillStyle: "white",
+        },
+      });
 
       World.add(engine.world, [floor, ball]);
       Composite.add(engine.world, pins);
@@ -297,14 +273,14 @@ const Plinko = (props) => {
 
       Engine.run(engine);
 
-      Events.on(engine, 'collisionEnd', function (event) {
+      Events.on(engine, "collisionEnd", function (event) {
         var pairs = event.pairs;
         for (var i = 0; i < pairs.length; i++) {
           var pair = pairs[i];
-          pair.bodyA.render.fillStyle = '#fff';
-          pair.bodyB.render.fillStyle = '#fff';
+          pair.bodyA.render.fillStyle = "#fff";
+          pair.bodyB.render.fillStyle = "#fff";
           if (pair.bodyA.position.y >= worldHeight - floorHeight - 16) {
-            console.log('hit the floor');
+            console.log("hit the floor");
             setDest(pair.bodyA.position);
           }
         }
@@ -327,10 +303,7 @@ const Plinko = (props) => {
 
   useEffect(() => {
     const getBars = async () => {
-      const bars = await generateBars(
-        theme.palette.error.main,
-        restaurants.length
-      );
+      const bars = await generateBars(theme.palette.error.main, restaurants.length);
       setBars(bars);
     };
     getBars();
@@ -349,8 +322,8 @@ const Plinko = (props) => {
     <div
       ref={boxRef}
       style={{
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
       }}
     >
       <canvas ref={canvasRef} />

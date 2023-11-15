@@ -1,29 +1,12 @@
-import {
-  UPDATE_LOCATION,
-  UPDATE_CUISINE,
-  UPDATE_OPTION,
-  UPDATE_RESTAURANT,
-  UPDATE_RESTAURANTS,
-} from './MainActions';
-import Cookies from 'js-cookie';
+import { UPDATE_LOCATION, UPDATE_CUISINE, UPDATE_OPTION, UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "./MainActions";
+import Cookies from "js-cookie";
 
 const initialState = {
-  location: '',
+  location: "",
   options: [],
-  option: '',
+  option: "",
   cuisines: [], // this is an alias for the food_prefs mentioned in the design doc
-  allCuisines: [
-    'Mexican',
-    'Japanese',
-    'Filipino',
-    'Burgers',
-    'Italian',
-    'Chinese',
-    'BBQ',
-    'Asian',
-    'American',
-    'Pizza',
-  ],
+  allCuisines: ["Japanese", "Filipino", "Burgers", "Italian", "Chinese", "BBQ", "Asian", "American", "Pizza"],
   restaurantsData: undefined,
   restaurant: {},
   region: {},
@@ -60,8 +43,8 @@ const reducer = (state = initialState, action) => {
     default:
       return state;
   }
-  Cookies.set('cuisines', newState.cuisines);
-  Cookies.set('location', newState.location);
+  Cookies.set("cuisines", newState.cuisines);
+  Cookies.set("location", newState.location);
   // Cookies.set("restaurant", JSON.stringify(newState.restaurant));
   return newState;
 };

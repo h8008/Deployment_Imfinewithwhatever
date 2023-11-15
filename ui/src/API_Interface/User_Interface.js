@@ -1,16 +1,16 @@
 export default class Users {
   constructor(axiosAgent) {
     this.axiosAgent = axiosAgent;
-    this.name = 'Users';
+    this.name = "Users";
   }
 
   async login(params) {
     return this.axiosAgent({
       url: `users/login`,
-      method: 'post',
+      method: "post",
       data: params,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((loginInfo) => loginInfo.data)
@@ -100,7 +100,7 @@ export default class Users {
 
   async addCurrentUserData(params) {
     return this.axiosAgent
-      .post(`user/current_user/update`, params)
+      .post(`users/user/current_user/update`, params)
       .then((currentUserInfo) => currentUserInfo.data)
       .catch((error) => ({
         error,
@@ -110,7 +110,28 @@ export default class Users {
 
   async getCurrentUserData(params) {
     return this.axiosAgent
-      .get(`user/current_user`, params)
+      .get(`users/user/current_user`, params)
+      .then((currentUserInfo) => currentUserInfo.data)
+      .catch((error) => ({
+        error,
+        currentUserInfo: undefined,
+      }));
+  }
+
+  //   async backgroundDispatch(params) {
+  //     return this.axiosAgent
+  //       .post(`users/user/current_user/update`, params)
+  //       .then((currentUserInfo) => currentUserInfo.data)
+  //       .catch((error) => ({
+  //         error,
+  //         currentUserInfo: undefined,
+  //       }));
+  //   }
+  // }
+
+  async backgroundDispatch(params) {
+    return this.axiosAgent
+      .post(`users/currentuser/update`, params)
       .then((currentUserInfo) => currentUserInfo.data)
       .catch((error) => ({
         error,

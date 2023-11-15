@@ -17,7 +17,7 @@ const cors = async (ctx, next) => {
 
   // const origin = ctx.req.headers.origin == null ? '*' : ctx.req.headers.origin;
   // const origin = '*';
-  const origin = ctx.req.headers.origin;
+  const origin = ctx.req.headers.origin == null ? '*' : ctx.req.headers.origin;
   console.log('request origin: ', origin);
   ctx.res.setHeader('Access-Control-Allow-Origin', origin);
   ctx.res.setHeader('Access-Control-Allow-Credentials', true);
@@ -27,7 +27,7 @@ const cors = async (ctx, next) => {
   );
   ctx.res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Pragma, Cache-Control, Expires'
   );
   if (ctx.req.method === 'OPTIONS') {
     ctx.res.status = 200;
