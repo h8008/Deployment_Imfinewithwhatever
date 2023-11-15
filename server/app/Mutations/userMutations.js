@@ -2,24 +2,13 @@ const { User, UserPreference } = require('../../database/models');
 const { FIND_USER } = require('../Queries/userQueries');
 const convertToString = require('../../utils/ConvertToString.js');
 
-// const STORE_CURRENT_USER_DATA = async ({
-//   email,
-//   selectedLocation,
-//   selectedCuisines,
-//   queriedData,
-// }) => {
-//   const user = await FIND_USER(email);
-//   const data = [selectedLocation, selectedCuisines, queriedData];
-//   user.data = convertToString(data);
-//   user.save();
-// };
-
 const UPDATE_CURRENT_USER = async ({ email, data }) => {
   const user = await FIND_USER(email);
-  userData = convertToString(data);
+  const userData = await convertToString(data);
   console.log('stringified user data', userData);
   user.data = userData;
-  user.save();
+  await user.save();
+  return user;
 };
 
 const SIGNUP = async ({ email, firstname, lastname, password }) =>

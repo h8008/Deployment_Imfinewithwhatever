@@ -42,20 +42,12 @@ const getCurrentUser = async (ctx) => {
     : { userData: undefined, status: 'NOT FOUND' };
 };
 
-// const addCurrentUserData = async (ctx) => {
-//   const params = ctx.params;
-//   const res = await ADD_CURRENT_USER_DATA(params);
-//   ctx.body = res
-//     ? { status: 'OK', message: 'DATA ADDED' }
-//     : { status: 'FAILED', message: 'DATA NOT ADDED' };
-// };
-
 const updateCurrentUser = async (ctx) => {
   const params = ctx.request.body;
   const res = await UPDATE_CURRENT_USER(params);
   ctx.body = res
-    ? { status: 'OK', message: 'DATA ADDED' }
-    : { status: 'FAILED', message: 'DATA NOT ADDED' };
+    ? { status: 'OK', message: 'DATA ADDED', data: res }
+    : { status: 'FAILED', message: 'DATA NOT ADDED', data: undefined };
 };
 
 const signup = async (ctx) => {

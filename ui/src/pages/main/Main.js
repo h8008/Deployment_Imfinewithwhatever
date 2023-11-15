@@ -10,8 +10,6 @@ import Grid from "@mui/material/Grid";
 import styled from "@emotion/styled";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import useDehydrate from "../../hooks/useDehydrate";
-
 import { UPDATE_CUISINE, UPDATE_LOCATION, UPDATE_RESTAURANTS } from "../../reducer/MainActions";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
@@ -25,8 +23,8 @@ import {
 } from "./Helpers";
 import { NAVIGATE } from "../../reducer/Navigator/actions";
 import { NavigationContext } from "../../providers/NavigationProvider";
-import { HydrateContext } from "../../providers/HydrateProvider";
-import { HYDRATE } from "../../reducer/Hydrate/actions";
+import { DehydrateContext } from "../../providers/DeHydrateProvider";
+import { DEHYDRATE } from "../../reducer/Dehydrate/actions";
 import { UserContext } from "../../providers/UserProvider";
 
 const getFoodPreferences = (categories) => {
@@ -144,7 +142,7 @@ function Main(props) {
   const { restaurantDispatch } = useContext(RestaurantsContext);
   const { navigatorDispatch } = useContext(NavigationContext);
   const { messageDispatch } = useContext(MessageContext);
-  const { hydrateDispatch } = useContext(HydrateContext);
+  const { hydrateDispatch } = useContext(DehydrateContext);
 
   const [location, setLocation] = useState("");
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
@@ -152,7 +150,6 @@ function Main(props) {
   const [restaurants, setRestaurants] = useState({});
 
   // const [deHydratedData, setDeHydratedData] = useState({});
-  // // useDehydrate(deHydratedData);
   // console.log("dehydrated data", deHydratedData);
 
   const handleLocationChange = (event) => {
@@ -221,11 +218,12 @@ function Main(props) {
       });
 
       await hydrateDispatch({
-        type: HYDRATE,
+        type: DEHYDRATE,
         payload: {
           email: userState.email,
           data: dispatchContent,
           apiInterface: "Users",
+          store: "User",
         },
       });
 

@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, UPDATE_PREFERENCES } from "./UserActions";
+import { LOGIN, LOGOUT, UPDATE_PREFERENCES, HYDRATE } from "./UserActions";
 import Cookies from "js-cookie";
 
 const initialUserState = async () => {
@@ -26,7 +26,8 @@ const UserReducer = (state = initialUserState, action) => {
       return initialUserState;
     case UPDATE_PREFERENCES:
       return { ...state, preferences: action.preferences };
-
+    case HYDRATE:
+      return { ...state, ...action.payload };
     default:
       return state;
   }

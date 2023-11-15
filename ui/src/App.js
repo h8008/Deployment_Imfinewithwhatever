@@ -11,12 +11,12 @@ import Restaurants from "./pages/restaurants/Restaurants";
 import Navigation from "./pages/navigation/Navigation";
 import MultiDecisionMaker from "./pages/multiDecisionMaker/MultiDecisionMaker";
 
-import { NavigationProvider } from "./providers/NavigationProvider";
-import { RestaurantsProvider } from "./providers/RestaurantsProvider";
+import { DehydrateProvider } from "./providers/DeHydrateProvider";
 import { UserProvider } from "./providers/UserProvider";
-import { GameProvider } from "./providers/GameProvider";
+import { NavigationProvider } from "./providers/NavigationProvider";
 import { MessageProvider } from "./providers/MessageProvider";
-import { HydrateProvider } from "./providers/HydrateProvider";
+import { RestaurantsProvider } from "./providers/RestaurantsProvider";
+import { GameProvider } from "./providers/GameProvider";
 
 import { ThemeProvider } from "@mui/material";
 import { main_config } from "./styles/shared";
@@ -32,7 +32,7 @@ import BackgroundDispatcher from "./components/BackgroundDispatcher";
 function App() {
   return (
     <ThemeProvider theme={GlobalTheme}>
-      <HydrateProvider>
+      <DehydrateProvider>
         <UserProvider>
           <NavigationProvider>
             <MessageProvider>
@@ -64,7 +64,7 @@ function App() {
             </MessageProvider>
           </NavigationProvider>
         </UserProvider>
-      </HydrateProvider>
+      </DehydrateProvider>
     </ThemeProvider>
   );
 }

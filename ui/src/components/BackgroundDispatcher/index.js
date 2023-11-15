@@ -1,9 +1,12 @@
-import { useContext, Component, Fragment } from "react";
+import { createContext, useContext, Component, Fragment } from "react";
 import API from "../../API_Interface";
-import { HydrateContext } from "../../providers/HydrateProvider";
+import { DehydrateContext } from "../../providers/DeHydrateProvider";
+import contextSelector from "../../utils/ContextSelector";
+import { HYDRATE } from "../../reducer/User/UserActions";
+import StringToObject from "../../utils/StringToObject";
 
 const BackgroundDispatcher = () => {
-  const { hydrateState } = useContext(HydrateContext);
+  const { hydrateState } = useContext(DehydrateContext);
 
   return (
     <Fragment>

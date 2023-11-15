@@ -30,7 +30,7 @@ const convertToString = (data) => {
   if (typeof data === String) {
     return data;
   }
-  if (typeof data !== Object || typeof data !== Array) {
+  if (typeof data !== Object && typeof data !== Array) {
     return JSON.stringify(data);
   }
   if (typeof data === Object) {
