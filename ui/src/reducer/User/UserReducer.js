@@ -5,10 +5,12 @@ const initialUserState = async () => {
   const loggedIn = Cookies.get("loggedIn");
   const email = Cookies.get("email");
   const preferences = [];
+  const data = null;
   return {
     loggedIn: loggedIn == null ? false : Cookies.get("loggedIn"),
     email: email == null ? "" : Cookies.get("email"),
     preferences: preferences,
+    data: data,
   };
 };
 

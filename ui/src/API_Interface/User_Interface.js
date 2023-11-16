@@ -108,9 +108,19 @@ export default class Users {
       }));
   }
 
-  async getCurrentUserData(params) {
+  // async getCurrentUserData(params) {
+  //   return this.axiosAgent
+  //     .get(`users/user/current_user`, params)
+  //     .then((currentUserInfo) => currentUserInfo.data)
+  //     .catch((error) => ({
+  //       error,
+  //       currentUserInfo: undefined,
+  //     }));
+  // }
+
+  async fetchYelpAPIData(params) {
     return this.axiosAgent
-      .get(`users/user/current_user`, params)
+      .get(`users/currentuser/yelp`, params)
       .then((currentUserInfo) => currentUserInfo.data)
       .catch((error) => ({
         error,
@@ -118,20 +128,9 @@ export default class Users {
       }));
   }
 
-  //   async backgroundDispatch(params) {
-  //     return this.axiosAgent
-  //       .post(`users/user/current_user/update`, params)
-  //       .then((currentUserInfo) => currentUserInfo.data)
-  //       .catch((error) => ({
-  //         error,
-  //         currentUserInfo: undefined,
-  //       }));
-  //   }
-  // }
-
   async backgroundDispatch(params) {
     return this.axiosAgent
-      .post(`users/currentuser/update`, params)
+      .post(`currentuser/update`, params)
       .then((currentUserInfo) => currentUserInfo.data)
       .catch((error) => ({
         error,

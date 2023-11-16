@@ -1,5 +1,6 @@
 const {
   FIND_USER,
+  GET_CURRENT_USER_YELP_DATA,
   GET_RESTAURANT_PREFERENCE,
   GET_ALL_RESTAURANT_PREFERENCES,
   GET_REVIEW,
@@ -39,6 +40,14 @@ const getCurrentUser = async (ctx) => {
   const res = await FIND_CURRENT_USER_DATA(params);
   ctx.body = res
     ? { userData: res, status: 'OK' }
+    : { userData: undefined, status: 'NOT FOUND' };
+};
+
+const getCurrentUserYelp = async (ctx) => {
+  const params = ctx.params;
+  const res = await GET_CURRENT_USER_YELP_DATA(params);
+  ctx.body = res
+    ? { userData: res.data, status: 'OK' }
     : { userData: undefined, status: 'NOT FOUND' };
 };
 
