@@ -28,7 +28,9 @@ userRouter.post(
 
 userRouter.post('/currentuser/update', UserController.updateCurrentUser);
 
-userRouter.get('/user/current_user', UserController.getCurrentUser);
+userRouter.get('/currentuser', UserController.getCurrentUser);
+
+userRouter.get('/currentuser/yelp', UserController.getCurrentUserYelp);
 
 userRouter.get(
   '/user/restaurant_preference/:email/:restaurantID',
