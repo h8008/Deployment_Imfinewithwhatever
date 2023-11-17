@@ -11,14 +11,14 @@ import Restaurants from "./pages/restaurants/Restaurants";
 import Navigation from "./pages/navigation/Navigation";
 import MultiDecisionMaker from "./pages/multiDecisionMaker/MultiDecisionMaker";
 
+import HydrateWrapper from "./wrappers/HydrateWrapper";
+
 import { DehydrateProvider } from "./providers/DeHydrateProvider";
 import { UserProvider } from "./providers/UserProvider";
 import { NavigationProvider } from "./providers/NavigationProvider";
 import { MessageProvider } from "./providers/MessageProvider";
 import { RestaurantsProvider } from "./providers/RestaurantsProvider";
 import { GameProvider } from "./providers/GameProvider";
-
-import { HydrateWrapper } from "./wrappers/HydrateWrapper";
 
 import { ThemeProvider } from "@mui/material";
 import { main_config } from "./styles/shared";

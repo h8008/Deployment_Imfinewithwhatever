@@ -4,9 +4,9 @@ const useDetectRefresh = () => {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("beforeunload", setRefresh);
+    window.addEventListener("beforeunload", setRefresh(true));
     return () => {
-      window.removeEventListener("beforeunload", setRefresh);
+      window.removeEventListener("beforeunload", setRefresh(false));
     };
   }, []);
 

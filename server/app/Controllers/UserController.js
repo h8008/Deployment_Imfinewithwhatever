@@ -44,11 +44,11 @@ const getCurrentUser = async (ctx) => {
 };
 
 const getCurrentUserYelp = async (ctx) => {
-  const params = ctx.params;
+  const params = ctx.request.query;
   const res = await GET_CURRENT_USER_YELP_DATA(params);
   ctx.body = res
-    ? { userData: res.data, status: 'OK' }
-    : { userData: undefined, status: 'NOT FOUND' };
+    ? { data: res, status: 'OK' }
+    : { data: undefined, status: 'NOT FOUND' };
 };
 
 const updateCurrentUser = async (ctx) => {
@@ -208,6 +208,7 @@ module.exports = {
   login,
   updateCurrentUser,
   getCurrentUser,
+  getCurrentUserYelp,
   addRestaurantPreference,
   updateRestaurantPreference,
   getRestaurantPreference,

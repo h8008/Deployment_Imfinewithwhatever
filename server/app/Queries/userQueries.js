@@ -27,7 +27,7 @@ const {
 
 const FIND_USER = (email) => User.findOne().where('email').equals(email);
 
-const GET_CURRENT_USER_YELP_DATA = async (email) => {
+const GET_CURRENT_USER_YELP_DATA = async ({ email }) => {
   const user = await User.findOne().where('email').equals(email);
   return user == null ? undefined : user.data;
 };

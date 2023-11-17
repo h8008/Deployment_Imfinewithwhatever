@@ -119,13 +119,21 @@ export default class Users {
   // }
 
   async fetchYelpAPIData(params) {
-    return this.axiosAgent
-      .get(`users/currentuser/yelp`, params)
-      .then((currentUserInfo) => currentUserInfo.data)
-      .catch((error) => ({
-        error,
-        currentUserInfo: undefined,
-      }));
+    return (
+      this.axiosAgent({
+        url: `users/currentuser/yelp`,
+        method: "get",
+        params: {
+          email: params.email,
+        },
+      })
+        // .get(`users/currentuser/yelp/${params.email}`)
+        .then((currentUserInfo) => currentUserInfo.data)
+        .catch((error) => ({
+          error,
+          currentUserInfo: undefined,
+        }))
+    );
   }
 
   async backgroundDispatch(params) {

@@ -1,17 +1,24 @@
 import { LOGIN, LOGOUT, UPDATE_PREFERENCES, HYDRATE } from "./UserActions";
 import Cookies from "js-cookie";
 
-const initialUserState = async () => {
-  const loggedIn = Cookies.get("loggedIn");
-  const email = Cookies.get("email");
-  const preferences = [];
-  const data = null;
-  return {
-    loggedIn: loggedIn == null ? false : Cookies.get("loggedIn"),
-    email: email == null ? "" : Cookies.get("email"),
-    preferences: preferences,
-    data: data,
-  };
+// const getInitialUserState = async () => {
+//   const loggedIn = Cookies.get("loggedIn");
+//   const email = Cookies.get("email");
+//   const preferences = [];
+//   const data = null;
+//   return {
+//     loggedIn: loggedIn == null ? false : Cookies.get("loggedIn"),
+//     email: email == null ? "" : Cookies.get("email"),
+//     preferences: preferences,
+//     data: data,
+//   };
+// };
+
+const initialUserState = {
+  loggedIn: Cookies.get("loggedIn") || false,
+  email: Cookies.get("email") || "",
+  preferences: [],
+  data: null,
 };
 
 const UserReducer = (state = initialUserState, action) => {

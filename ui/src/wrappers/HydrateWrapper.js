@@ -1,14 +1,16 @@
-import { Fragement, useContext } from "react";
+import { Fragment, useContext } from "react";
 import useHydrate from "../hooks/useHydrate";
 import useDetectRefresh from "../hooks/useDetectRefresh";
+import { RestaurantsContext } from "../providers/RestaurantsProvider";
 import { UserContext } from "../providers/UserProvider";
 
 const HydrateWrapper = (props) => {
-  const { userDispatch } = useContext(UserContext);
+  const { userState: user, userDispatch } = useContext(UserContext);
+  const { restaurantState: restaurant, restaurantDispatch } = useContext(RestaurantsContext);
   const [refresh] = useDetectRefresh();
-  useHydrate({ userDispatch, refresh });
+  useHydrate({ dispatch: restaurantDispatch, refresh, email: user.email });
 
-  return <Fragement>{props.children}</Fragement>;
+  return <Fragment>{props.children}</Fragment>;
 };
 
 export default HydrateWrapper;
