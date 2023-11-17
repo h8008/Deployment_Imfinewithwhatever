@@ -4,7 +4,7 @@ import Matter, { World } from "matter-js";
 
 import { RestaurantsContext } from "../../../providers/RestaurantsProvider";
 import { GameContext } from "../../../providers/GameProvider";
-import { UPDATE_CUISINE, UPDATE_RESTAURANTS } from "../../../reducer/MainActions";
+import { UPDATE_CUISINE, UPDATE_RESTAURANTS } from "../../../reducer/Main/actions";
 
 import { useNavigate } from "react-router-dom";
 import { MessageContext } from "../../../providers/MessageProvider";
@@ -204,7 +204,9 @@ const Plinko = (props) => {
 
       restaurantDispatch({
         type: UPDATE_RESTAURANTS,
-        restaurantsData: [selectedRestaurant],
+        payload: {
+          restaurantsData: [selectedRestaurant],
+        },
       });
 
       messageDispatch({

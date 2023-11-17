@@ -7,6 +7,7 @@ const Image = styled(CardMedia)(({ imageUrl, height, width }) => ({
   width: width,
   backgroundImage: `url(${imageUrl})`,
   backgroundSize: "cover",
+  image: imageUrl,
 }));
 
 export default Image;

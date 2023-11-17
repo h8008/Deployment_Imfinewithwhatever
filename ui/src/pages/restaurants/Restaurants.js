@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import Grid from "@mui/material/Grid";
@@ -11,7 +11,7 @@ import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { UserContext } from "../../providers/UserProvider";
 import { NavigationContext } from "../../providers/NavigationProvider";
 
-import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/MainActions";
+import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
 import { NAVIGATE } from "../../reducer/Navigator/actions";
 
 import { RESTAURANTS_DATA_EMPTY_MESSAGE } from "../../constants/Messages";
@@ -44,14 +44,35 @@ const filterRestaurantsByBlackList = (blacklist, restaurants) => {
   return restaurants.filter((restaurant) => blacklistObject[restaurant.id] == null);
 };
 
-const initializeRestaurants = (blacklist, restaurants) => {
-  if (blacklist != null && restaurants != null) {
-    return filterRestaurantsByBlackList([...blacklist], [...restaurants]);
-  }
-  if (restaurants != null) {
-    return [...restaurants];
-  }
-  return [];
+const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
+  const initializeRestaurants = useMemo(() => {
+    if (intialBlacklist.length > 0 && initialRestaurants.length > 0) {
+      console.log(0);
+      return filterRestaurantsByBlackList([...intialBlacklist], [...initialRestaurants]);
+      // setRestaurants(filterRestaurantsByBlackList([...blacklist], [...restaurants]))
+    }
+    if (initialRestaurants.length > 0) {
+      console.log(1);
+      return [...initialRestaurants];
+      // setRestaurantsData([...restaurants]);
+    }
+    console.log(2);
+    return [];
+    // setRestaurantsData([]);
+  }, [intialBlacklist, initialRestaurants]);
+
+  const restaurantsData = initializeRestaurants;
+  // const [restaurants, setRestaurants] = useState(restaurantsData);
+  // return [restaurants, setRestaurants];
+  return [restaurantsData];
+};
+
+const useInitializeActiveRestaurant = (restaurants, activeRestaurantIdx) => {
+  const restaurant = useMemo(
+    () => (restaurants == null ? undefined : restaurants[activeRestaurantIdx]),
+    [restaurants, activeRestaurantIdx]
+  );
+  return [restaurant];
 };
 
 const Restaurants = (props) => {
@@ -62,15 +83,22 @@ const Restaurants = (props) => {
 
   const restaurantsData = restaurantState.restaurantsData;
   const blacklistData = userState.preferences;
-  const [restaurants, setRestaurants] = useState(initializeRestaurants(blacklistData, restaurantsData));
 
-  useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, "/Main");
+  console.log("global state restaurants", restaurantsData);
 
   const [preference, setPreference] = useState(false);
   const [modelOpen, setModalOpen] = useState(preference);
-  const [activeRestaurant, setActiveRestaurant] = useState(restaurants[0]);
   const [activeRestaurantIdx, setActiveRestaurantIdx] = useState(0);
+  const [restaurants] = useInitializeRestaurants(blacklistData, restaurantsData);
+  const [activeRestaurant] = useInitializeActiveRestaurant(restaurantsData, activeRestaurantIdx);
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
+
+  // console.log("global state restaurants", restaurantsData);
+  console.log("restaurants", restaurants);
+  console.log("active restaurantIdx", activeRestaurantIdx);
+  console.log("active restaurant", activeRestaurant);
+
+  useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, restaurantsData == [], "/Main");
 
   const onShowRestaurantLocationCallback = () => {
     setShowActiveRestaurantLocation(true);
@@ -109,9 +137,10 @@ const Restaurants = (props) => {
       }
       return { ...restaurant };
     });
+
     setActiveRestaurantIdx(newActiveRestaurantIdx);
-    setActiveRestaurant(newActiveRestaurant);
-    setRestaurants(newRestaurants);
+    // setActiveRestaurant(newActiveRestaurant);
+    // setRestaurants(newRestaurants);
 
     restaurantDispatch({
       type: UPDATE_RESTAURANT,
@@ -120,7 +149,9 @@ const Restaurants = (props) => {
 
     restaurantDispatch({
       type: UPDATE_RESTAURANTS,
-      restaurantsData: [...newRestaurants],
+      payload: {
+        restaurantsData: [...newRestaurants],
+      },
     });
   };
 
@@ -151,8 +182,8 @@ const Restaurants = (props) => {
         {activeRestaurant != null && (
           <Restaurant
             index={activeRestaurantIdx}
-            restaurantData={{ ...restaurants[activeRestaurantIdx] }}
-            onDecisionCallback={onDecisionCallback}
+            // restaurantData={{ ...restaurants[activeRestaurantIdx] }}
+            restaurantData={{ ...activeRestaurant }}
             onShowRestaurantLocationCallback={onShowRestaurantLocationCallback}
             showLocation={showActiveRestaurantLocation}
             email={userState.email}

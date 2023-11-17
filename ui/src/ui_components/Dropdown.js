@@ -16,21 +16,12 @@ const Dropdown = (props) => {
   return (
     <FormControl focused color="primary" fullWidth>
       <InputLabel id="dropdown-menu">Restaurant</InputLabel>
-      <Select
-        labelId="dropdown-menu-label"
-        id="dropdown-menu-select"
-        value={value}
-        label="restaurant"
-        // onChange={() => handleChange(index, selectedOption)}
-      >
+      <Select labelId="dropdown-menu-label" id="dropdown-menu-select" value={value} label="restaurant">
         {options != null &&
           options.length > 0 &&
           options.map((option, index) => {
             return (
-              <MenuItem
-                value={index}
-                onClick={() => handleOptionClick(index, option)}
-              >
+              <MenuItem value={index} onClick={() => handleOptionClick(index, option)}>
                 {option.name}
               </MenuItem>
             );

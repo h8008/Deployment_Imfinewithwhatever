@@ -1,5 +1,5 @@
 import { useReducer, createContext } from "react";
-import { reducer, initialState } from "../reducer/MainReducer";
+import { reducer, initialState } from "../reducer/Main/reducer";
 import { useCookies } from "react-cookie";
 
 const RestaurantsContext = createContext();
@@ -13,15 +13,11 @@ const RestaurantsProvider = ({ children }) => {
 
   const [restaurantState, restaurantDispatch] = useReducer(
     reducer,
-    location != null && cuisines != null
-      ? { ...initialState, location, cuisines }
-      : initialState
+    location != null && cuisines != null ? { ...initialState, location, cuisines } : initialState
   );
 
   return (
-    <RestaurantsContext.Provider
-      value={{ restaurantState, restaurantDispatch }}
-    >
+    <RestaurantsContext.Provider value={{ restaurantState, restaurantDispatch }}>
       {children}
     </RestaurantsContext.Provider>
   );

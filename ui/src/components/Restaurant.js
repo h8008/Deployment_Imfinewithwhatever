@@ -9,9 +9,9 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 
 import API from "../API_Interface";
-// import BusinessLocator from "../Google_Maps/BusinessLocator";
-import BingMap from "../Bing_Maps";
-// import MapBox from "./Maps";
+// import BusinessLocator from "../components/Maps/Google_Maps/BusinessLocator";
+// import BingMap from "../components/Maps/Bing_Maps";
+// import MapBox from "../components/Maps/Map_Box";
 
 import { LOCATION_MASK_MESSAGE } from "../constants/Messages";
 
@@ -20,7 +20,6 @@ const CardMediaComponent = styled(CardMedia)(({ imageUrl }) => ({
   alt: "card background img",
   height: "200px",
   width: "200px",
-  backgroundImage: `url(${imageUrl})`,
 }));
 
 const CardContainer = styled(Card)({
@@ -91,21 +90,16 @@ const getDescription = async (description) => {
         const keys = Object.keys(object);
         const values = Object.values(object);
         const pairs = keys.map((key, idx) => [key, values[idx]]);
-
         const string = await Promise.all(
           pairs.map(async ([key, value]) => {
             if (typeof value === "object") {
               const str = await objectToString(value);
-              // console.log(str);
               return str;
             }
             const str = key + ":" + value;
             return str;
           })
         ).then((stringArray) => stringArray.join(", "));
-
-        // console.log("string", string);
-
         return resolve(string);
       });
     };
@@ -137,7 +131,6 @@ const getDescription = async (description) => {
   let values = Object.values(description);
   values = await getValues(values);
 
-  // console.log("values", values);
   const descriptionComponent = await Promise.all(
     keys.map((key, idx) => {
       const value = values[idx];
@@ -145,7 +138,7 @@ const getDescription = async (description) => {
       return pair;
     })
   ).then((comps) => {
-    return comps.map((comp) => <Text style={TextStyle} text={comp} />);
+    return comps.map((comp, index) => <Text key={index} style={TextStyle} text={comp} />);
   });
 
   return descriptionComponent;
@@ -154,12 +147,12 @@ const getDescription = async (description) => {
 const getAttributes = (attributes, data) => {
   return new Promise(async (resolve, reject) => {
     const attributesComponent = await Promise.all(
-      attributes.map(async (attribute) => {
+      attributes.map(async (attribute, index) => {
         if (attribute === "Description") {
           let component = await getDescription({ ...data[attribute] });
           return component;
         } else {
-          const component = <Text style={TextStyle} text={data[attribute]} />;
+          const component = <Text key={index} style={TextStyle} text={data[attribute]} />;
           return component;
         }
       })
@@ -245,10 +238,10 @@ const Restaurant = (props) => {
 
   return (
     <Fragment>
-      {data && (
+      {data != null && (
         <CardContainer>
           <CardSubContainer flexDirection={"row"} justifyContent={"flex-start"}>
-            <CardMediaComponent imageUrl={data.image_url} />
+            <CardMediaComponent image={data.image_url} src={"img"} />
             <CardContent sx={CardContentStyle}>{mainDetails}</CardContent>
           </CardSubContainer>
           <CardSubContainer

@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Card as MUICard,
-  CardMedia,
-  CardContent,
-  Typography,
-  Button,
-  styled,
-} from "@mui/material";
+import { Grid, Card as MUICard, CardMedia, CardContent, Typography, Button, styled } from "@mui/material";
 import Text from "../ui_components/Text";
 
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -28,7 +20,7 @@ const Card = (props) => {
 
   return (
     <MUICard sx={{ maxWidth: 345 }}>
-      <CardMediaComponent imageUrl={cardData.image_url} />
+      <CardMediaComponent image={cardData.image_url} />
       <CardContent>
         <Text text={cardData.name} color="primary" />
       </CardContent>

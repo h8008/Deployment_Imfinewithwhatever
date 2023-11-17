@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import API from "../API_Interface";
-import { UPDATE_RESTAURANTS } from "../reducer/MainActions";
+import { UPDATE_RESTAURANTS } from "../reducer/Main/actions";
 import StringToObject from "../utils/StringToObject";
 
 // const useHydrate = (props) => {
@@ -24,11 +24,12 @@ const useHydrate = (props) => {
         const yelpData = await API.Users.fetchYelpAPIData({ email });
         if (yelpData.status === "OK") {
           const data = await StringToObject(yelpData.data);
-          // console.log("de stringified data", data);
+          console.log("data", data);
           await dispatch({
             type: UPDATE_RESTAURANTS,
-            restaurantsData: data.businesses,
-            region: data.region,
+            payload: {
+              restaurantsData: data.businesses,
+            },
           });
         }
       }

@@ -10,7 +10,7 @@ import Grid from "@mui/material/Grid";
 import styled from "@emotion/styled";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import { UPDATE_CUISINE, UPDATE_LOCATION, UPDATE_RESTAURANTS } from "../../reducer/MainActions";
+import { UPDATE_CUISINE, UPDATE_LOCATION, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { Box } from "@mui/material";
@@ -134,7 +134,18 @@ const MainComponent = styled(Grid)({
 
 function Main(props) {
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
-  const cuisines = ["Japanese", "Filipino", "Burgers", "Italian", "Chinese", "BBQ", "Asian", "American", "Pizza"];
+  const cuisines = [
+    "Mexican",
+    "Japanese",
+    "Filipino",
+    "Burgers",
+    "Italian",
+    "Chinese",
+    "BBQ",
+    "Asian",
+    "American",
+    "Pizza",
+  ];
 
   const games = ["Plinko", "Wheel", "Coin"];
 

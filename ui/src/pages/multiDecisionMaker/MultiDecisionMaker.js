@@ -18,10 +18,7 @@ import { GameContext } from "../../providers/GameProvider";
 
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 import { UPDATE_RESTAURANTS_FOR_GAMES } from "../../reducer/Game/GameActions";
-import {
-  UPDATE_RESTAURANT,
-  UPDATE_RESTAURANTS,
-} from "../../reducer/MainActions";
+import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
 
 const GridRowStyle = (display) => {
   const newdisplay =
@@ -68,13 +65,7 @@ const RestaurantsInputComponent = styled(FormControl)({
 });
 
 const RestaurantsInput = (props) => {
-  const {
-    restaurantInputs,
-    handleChange,
-    handleAddRestaurantInput,
-    handleRemoveRestaurantInput,
-    restaurants,
-  } = props;
+  const { restaurantInputs, handleChange, handleAddRestaurantInput, handleRemoveRestaurantInput, restaurants } = props;
 
   return (
     <RowGridComponent theme={{ height: "30%", rowGap: 20 }}>
@@ -86,11 +77,7 @@ const RestaurantsInput = (props) => {
           {restaurantInputs.map((_, index) => (
             <RowComponent>
               <Text text={index + 1} />
-              <Dropdown
-                index={index}
-                options={restaurants}
-                handleChange={handleChange}
-              />
+              <Dropdown index={index} options={restaurants} handleChange={handleChange} />
             </RowComponent>
           ))}
           <RowComponent>
@@ -118,11 +105,7 @@ const GamesInputComponent = (props) => {
         <Text text={"Select Game"} />
       </GridRow>
       <GridRow>
-        <Checkboxes
-          labels={games}
-          checked={checked}
-          onSelectGameCallback={onSelectGameCallback}
-        />
+        <Checkboxes labels={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
       </GridRow>
     </GridRow>
   );
@@ -152,16 +135,13 @@ const MultiDecisionMaker = (props) => {
   const navigate = useNavigate();
 
   const { messageState, messageDispatch } = useContext(MessageContext);
-  const { restaurantState, restaurantDispatch } =
-    useContext(RestaurantsContext);
+  const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
   const { gameState, gameDispatch } = useContext(GameContext);
 
   // console.log("restaurants", restaurantState.restaurantsData);
 
   const [numRestaurants, setNumRestaurants] = useState(3);
-  const [restaurantInputs, setRestaurantInputs] = useState(
-    createInitialRestaurants(numRestaurants)
-  );
+  const [restaurantInputs, setRestaurantInputs] = useState(createInitialRestaurants(numRestaurants));
   const [selectedGame, setSelectedGame] = useState("");
   const [checked, setChecked] = useState(games.map(() => false));
 
@@ -182,10 +162,7 @@ const MultiDecisionMaker = (props) => {
 
   const handleGoButtonClick = () => {
     // Game start requires at least three valid restaurant inputs that are not empty strings
-    if (
-      restaurantInputs.length < 3 &&
-      restaurantInputs.some((input) => input !== "")
-    ) {
+    if (restaurantInputs.length < 3 && restaurantInputs.some((input) => input !== "")) {
       return;
     }
 
@@ -202,16 +179,16 @@ const MultiDecisionMaker = (props) => {
       if (restaurantInputs.every((restaurant) => restaurant === "")) return;
       if (selectedGame === "") return;
 
-      const filteredRestaurantInputs = restaurantInputs.filter(
-        (restaurant) => Object.keys(restaurant).length !== 0
-      );
+      const filteredRestaurantInputs = restaurantInputs.filter((restaurant) => Object.keys(restaurant).length !== 0);
 
       const handleGameEndCallback = (selectedItem) => {
         // Note the selectedItem returned by the games is a restaurant data object
 
         restaurantDispatch({
           type: UPDATE_RESTAURANTS,
-          restaurantsData: [selectedItem],
+          payload: {
+            restaurantsData: [selectedItem],
+          },
         });
 
         messageDispatch({
@@ -261,11 +238,7 @@ const MultiDecisionMaker = (props) => {
         handleRemoveRestaurantInput={handleRemoveRestaurantInput}
         restaurants={restaurantState.restaurantsData}
       />
-      <GamesInputComponent
-        games={games}
-        checked={checked}
-        onSelectGameCallback={onSelectGameCallback}
-      />
+      <GamesInputComponent games={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
       <RowComponent>
         <RowComponent display={{ justifyContent: "center" }}>
           <RoundButton onClick={handleGoButtonClick}>

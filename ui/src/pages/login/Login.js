@@ -53,9 +53,10 @@ const TextFields = (props) => {
         alignItem: "space-between",
       }}
     >
-      {props.components.map((component) => (
+      {props.components.map((component, index) => (
         <Grid
-          row
+          key={index}
+          row={"true"}
           sx={{
             display: "flex",
             flexDirection: "row",
@@ -92,7 +93,7 @@ const TextFields = (props) => {
                 />
               </FormControlComponent>
             ) : (
-              <TextFieldComponet id={`${component}_input_field`} name={`${component}`} focused="true" />
+              <TextFieldComponet id={`${component}_input_field`} name={`${component}`} focused={true} />
             )}
           </GridItem>
         </Grid>
@@ -114,7 +115,7 @@ const LoginComponent = styled(Grid)(() => ({
 }));
 
 const Buttons = styled(Grid)(() => ({
-  gridRow: true,
+  gridRow: "true",
   columns: 6,
   columnGap: 2,
   display: "flex",
@@ -159,9 +160,6 @@ const Login = (props) => {
   const handleChange = (event) => {
     event.preventDefault();
     var fieldName = event.target.name;
-
-    console.log("fieldname", fieldName);
-
     setFormState({
       ...formState,
       [fieldName]: event.target.value,
