@@ -3,12 +3,12 @@ import useMessageCenter from "./useMessageCenter";
 import useNavigation from "./useNavigation";
 
 const useDetectEmptyData = (message, data, destinationOnEmptyData) => {
-  const [messageCenterOpen, setMessageCenterOpen] = useState(true);
+  const [open, setOpen] = useState(true);
   const onMessageCenterCloseCallback = () => {
-    setMessageCenterOpen(false);
+    setOpen(false);
   };
-  useMessageCenter(message, data == null);
-  useNavigation(destinationOnEmptyData);
+  useMessageCenter(message, data == null, onMessageCenterCloseCallback);
+  useNavigation(destinationOnEmptyData, open == false);
 };
 
 export default useDetectEmptyData;
