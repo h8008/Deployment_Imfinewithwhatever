@@ -140,26 +140,18 @@ function Main(props) {
 
   const { userState } = useContext(UserContext);
   const { restaurantDispatch } = useContext(RestaurantsContext);
-  const { navigatorDispatch } = useContext(NavigationContext);
+  const { navigationDispatch } = useContext(NavigationContext);
   const { messageDispatch } = useContext(MessageContext);
   const { hydrateDispatch } = useContext(DehydrateContext);
 
   const [location, setLocation] = useState("");
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
   const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [restaurants, setRestaurants] = useState({});
-
-  // const [deHydratedData, setDeHydratedData] = useState({});
-  // console.log("dehydrated data", deHydratedData);
 
   const handleLocationChange = (event) => {
     const location = event.target.value;
     setLocation(location);
   };
-
-  // const handleSetDehydrationData = async (data) => {
-  //   await setDeHydratedData(data);
-  // };
 
   const handleCuisinesChange = (selectedCuisineIdx) => {
     const newSelectedCuisines = Object.keys(
@@ -233,7 +225,7 @@ function Main(props) {
 
   const handleDecideForMeButtonClick = async () => {
     await handleSubmitData("normal");
-    await navigatorDispatch({
+    await navigationDispatch({
       type: NAVIGATE,
       payload: {
         shouldNavigate: true,
@@ -245,7 +237,7 @@ function Main(props) {
 
   const handleGoButtonClick = async () => {
     await handleSubmitData("game");
-    await navigatorDispatch({
+    await navigationDispatch({
       type: NAVIGATE,
       payload: {
         shouldNavigate: true,

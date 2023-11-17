@@ -4,10 +4,10 @@ import { initialState, reducer } from "../reducer/Navigator/reducer";
 const NavigationContext = createContext();
 
 const NavigationProvider = (props) => {
-  const [navigatorState, navigatorDispatch] = useReducer(reducer, initialState);
+  const [navigationState, navigationDispatch] = useReducer(reducer, initialState);
 
   return (
-    <NavigationContext.Provider value={{ navigatorState, navigatorDispatch }}>
+    <NavigationContext.Provider value={{ navigationState, navigationDispatch }}>
       {props.children}
     </NavigationContext.Provider>
   );

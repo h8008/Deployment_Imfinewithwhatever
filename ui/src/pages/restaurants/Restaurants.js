@@ -1,25 +1,22 @@
-import Grid from "@mui/material/Grid";
-import Restaurant from "../../components/Restaurant";
-
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { RestaurantsContext } from "../../providers/RestaurantsProvider";
-import { MessageContext } from "../../providers/MessageProvider";
-
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import CheckIcon from "@mui/icons-material/Check";
+import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import styled from "@emotion/styled";
 
-import API from "../../API_Interface";
+import Restaurant from "../../components/Restaurant";
 
+import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { UserContext } from "../../providers/UserProvider";
-import { UPDATE_MESSAGE, UPDATE_MODAL_OPEN } from "../../reducer/Message/MessageAction";
+import { NavigationContext } from "../../providers/NavigationProvider";
 
 import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/MainActions";
 import { NAVIGATE } from "../../reducer/Navigator/actions";
-import { NavigationContext } from "../../providers/NavigationProvider";
+
+import { RESTAURANTS_DATA_EMPTY_MESSAGE } from "../../constants/Messages";
+
+import useDetectEmptyData from "../../hooks/useDetectEmptyData";
 
 const RestaurantsComponent = styled(Grid)({
   width: "1000px",
@@ -47,33 +44,33 @@ const filterRestaurantsByBlackList = (blacklist, restaurants) => {
   return restaurants.filter((restaurant) => blacklistObject[restaurant.id] == null);
 };
 
+const initializeRestaurants = (blacklist, restaurants) => {
+  if (blacklist != null && restaurants != null) {
+    return filterRestaurantsByBlackList([...blacklist], [...restaurants]);
+  }
+  if (restaurants != null) {
+    return [...restaurants];
+  }
+  return [];
+};
+
 const Restaurants = (props) => {
-  // const navigate = useNavigate();
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
-  const { navigatorState, navigatorDispatch } = useContext(NavigationContext);
+  const { navigationDispatch } = useContext(NavigationContext);
   const { userState, userDispatch } = useContext(UserContext);
-  const { messageState, messageDispatch } = useContext(MessageContext);
+  const [message, setMessage] = useState("");
 
   const restaurantsData = restaurantState.restaurantsData;
   const blacklistData = userState.preferences;
+  const [restaurants, setRestaurants] = useState(initializeRestaurants(blacklistData, restaurantsData));
 
-  const [restaurants, setRestaurants] = useState(() => {
-    if (blacklistData == null && restaurantsData == null) {
-      return [];
-    } else if (restaurantsData != null) {
-      return [...restaurantsData];
-    } else {
-      return filterRestaurantsByBlackList([...blacklistData], [...restaurantsData]);
-    }
-  });
+  useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, "/Main");
 
   const [preference, setPreference] = useState(false);
   const [modelOpen, setModalOpen] = useState(preference);
   const [activeRestaurant, setActiveRestaurant] = useState(restaurants[0]);
   const [activeRestaurantIdx, setActiveRestaurantIdx] = useState(0);
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
-
-  // console.log('showActiveRestaurantLocation', showActiveRestaurantLocation);
 
   const onShowRestaurantLocationCallback = () => {
     setShowActiveRestaurantLocation(true);
@@ -83,7 +80,7 @@ const Restaurants = (props) => {
     if (preference) {
       updateActiveRestaurant(activeRestaurantIdx, "preference", [...restaurantState.cuisines]);
       setPreference(true);
-      navigatorDispatch({
+      navigationDispatch({
         type: NAVIGATE,
         payload: {
           destination: "/Feedback",

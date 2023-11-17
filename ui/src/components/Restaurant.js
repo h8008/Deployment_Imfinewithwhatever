@@ -1,5 +1,5 @@
 import { CardContent, CardMedia, styled } from "@mui/material";
-import { useEffect, useState, useContext, useCallback, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 
 import Text from "../ui_components/Text";
 import GridRow from "../ui_components/GridRow";
@@ -13,7 +13,7 @@ import API from "../API_Interface";
 import BingMap from "../Bing_Maps";
 // import MapBox from "./Maps";
 
-import { LOCATIONMASKMESSAGE } from "../constants/Constants";
+import { LOCATION_MASK_MESSAGE } from "../constants/Messages";
 
 const CardMediaComponent = styled(CardMedia)(({ imageUrl }) => ({
   component: "img",
@@ -188,7 +188,7 @@ const extractData = (restaurant) => ({
 const extractOtherData = (restaurant, showLocation) => ({
   url: restaurant.url,
   coordinates: restaurant.coordinates,
-  location: showLocation ? restaurant.location : LOCATIONMASKMESSAGE,
+  location: showLocation ? restaurant.location : LOCATION_MASK_MESSAGE,
   image_url: restaurant.image_url,
 });
 

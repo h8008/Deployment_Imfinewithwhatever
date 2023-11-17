@@ -10,10 +10,13 @@ const initialState = {
   restaurantsData: undefined,
   restaurant: {},
   region: {},
+  statistics: {
+    externalFetching: true,
+  },
 };
 
 const reducer = (state = initialState, action) => {
-  let newState = { ...state };
+  let newState = { ...state, statistics: { externalFetching: state.restaurantsData != null } };
 
   switch (action.type) {
     case UPDATE_LOCATION: {

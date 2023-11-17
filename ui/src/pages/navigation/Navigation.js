@@ -3,8 +3,8 @@ import { NavigationContext } from "../../providers/NavigationProvider";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
-  const { navigatorState } = useContext(NavigationContext);
-  const { shouldNavigate, destination, options } = navigatorState;
+  const { navigationState } = useContext(NavigationContext);
+  const { shouldNavigate, destination, options } = navigationState;
   const navigate = useNavigate();
 
   useEffect(() => {

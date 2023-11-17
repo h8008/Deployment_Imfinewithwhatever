@@ -208,7 +208,7 @@ const Feedback = (props) => {
   const { userState, userDispatch } = useContext(UserContext);
   const { messageState, messageDispatch } = useContext(MessageContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
-  const { navigatorDispatch } = useContext(NavigationContext);
+  const { navigationDispatch } = useContext(NavigationContext);
 
   const handleCommentsChange = (event) => {
     // const newComments = comments.split().join();
@@ -258,7 +258,7 @@ const Feedback = (props) => {
 
   useEffect(() => {
     const handleReviewEndNavigate = () => {
-      navigatorDispatch({
+      navigationDispatch({
         type: NAVIGATE,
         payload: {
           destination: "/Profile",
@@ -274,7 +274,7 @@ const Feedback = (props) => {
         onModalClick: handleReviewEndNavigate,
       });
     }
-  }, [messageDispatch, navigatorDispatch, reviewed]);
+  }, [messageDispatch, navigationDispatch, reviewed]);
 
   const handleAddOrUpdatePreference = (wouldGoAgain) => {
     return new Promise(async (resolve, reject) => {
