@@ -84,7 +84,7 @@ const Restaurants = (props) => {
   const restaurantsData = restaurantState.restaurantsData;
   const blacklistData = userState.preferences;
 
-  console.log("global state restaurants", restaurantsData);
+  // console.log("global state restaurants", restaurantsData);
 
   const [preference, setPreference] = useState(false);
   const [modelOpen, setModalOpen] = useState(preference);
@@ -94,9 +94,9 @@ const Restaurants = (props) => {
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
 
   // console.log("global state restaurants", restaurantsData);
-  console.log("restaurants", restaurants);
-  console.log("active restaurantIdx", activeRestaurantIdx);
-  console.log("active restaurant", activeRestaurant);
+  // console.log("restaurants", restaurants);
+  // console.log("active restaurantIdx", activeRestaurantIdx);
+  // console.log("active restaurant", activeRestaurant);
 
   useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, restaurantsData == [], "/Main");
 
