@@ -17,6 +17,7 @@ import { NAVIGATE } from "../../reducer/Navigator/actions";
 import { RESTAURANTS_DATA_EMPTY_MESSAGE } from "../../constants/Messages";
 
 import useDetectEmptyData from "../../hooks/useDetectEmptyData";
+import API from "../../API_Interface";
 
 const RestaurantsComponent = styled(Grid)({
   width: "1000px",
@@ -47,23 +48,15 @@ const filterRestaurantsByBlackList = (blacklist, restaurants) => {
 const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
   const initializeRestaurants = useMemo(() => {
     if (intialBlacklist.length > 0 && initialRestaurants.length > 0) {
-      console.log(0);
       return filterRestaurantsByBlackList([...intialBlacklist], [...initialRestaurants]);
-      // setRestaurants(filterRestaurantsByBlackList([...blacklist], [...restaurants]))
     }
     if (initialRestaurants.length > 0) {
-      console.log(1);
       return [...initialRestaurants];
-      // setRestaurantsData([...restaurants]);
     }
-    console.log(2);
     return [];
-    // setRestaurantsData([]);
   }, [intialBlacklist, initialRestaurants]);
 
   const restaurantsData = initializeRestaurants;
-  // const [restaurants, setRestaurants] = useState(restaurantsData);
-  // return [restaurants, setRestaurants];
   return [restaurantsData];
 };
 
@@ -75,6 +68,34 @@ const useInitializeActiveRestaurant = (restaurants, activeRestaurantIdx) => {
   return [restaurant];
 };
 
+const useInitializeVerdicts = (restaurants, pos = null, v = "neutral") => {
+  const initializeVerdicts = useMemo(() => {
+    return restaurants != null && restaurants.length > 0
+      ? new Array(restaurants.length).fill("neutral").map((verdict, index) => (index === pos ? v : verdict))
+      : [];
+  }, [pos, restaurants, v]);
+
+  const verdicts = initializeVerdicts();
+  return [verdicts];
+};
+
+const useRecordVerdictsOnPageRedirect = async (verdicts, restaurants, email) => {
+  useEffect(() => {
+    const add = async (verdict, restaurant, email) => {
+      const res = await API.Preference.add({
+        restaurant_id: restaurant.restaurant_id,
+        email: email,
+        like: verdict,
+      });
+      if (res.status !== "OK") {
+      }
+    };
+    verdicts.forEach((v, idx) => {
+      add(v, restaurants[idx], email);
+    });
+  }, [email, restaurants, verdicts]);
+};
+
 const Restaurants = (props) => {
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
   const { navigationDispatch } = useContext(NavigationContext);
@@ -84,19 +105,13 @@ const Restaurants = (props) => {
   const restaurantsData = restaurantState.restaurantsData;
   const blacklistData = userState.preferences;
 
-  // console.log("global state restaurants", restaurantsData);
-
-  const [preference, setPreference] = useState(false);
+  const [preference, setPreference] = useState(null);
   const [modelOpen, setModalOpen] = useState(preference);
   const [activeRestaurantIdx, setActiveRestaurantIdx] = useState(0);
   const [restaurants] = useInitializeRestaurants(blacklistData, restaurantsData);
   const [activeRestaurant] = useInitializeActiveRestaurant(restaurantsData, activeRestaurantIdx);
+  const [verdicts] = useInitializeVerdicts(restaurantsData, activeRestaurantIdx, preference);
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
-
-  // console.log("global state restaurants", restaurantsData);
-  // console.log("restaurants", restaurants);
-  // console.log("active restaurantIdx", activeRestaurantIdx);
-  // console.log("active restaurant", activeRestaurant);
 
   useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, restaurantsData == [], "/Main");
 
@@ -107,7 +122,6 @@ const Restaurants = (props) => {
   const onDecisionCallback = async (preference) => {
     if (preference) {
       updateActiveRestaurant(activeRestaurantIdx, "preference", [...restaurantState.cuisines]);
-      setPreference(true);
       navigationDispatch({
         type: NAVIGATE,
         payload: {
@@ -117,9 +131,8 @@ const Restaurants = (props) => {
     } else {
       const newActiveRestaurantIdx = advanceActiveRestaurantIdx(activeRestaurantIdx);
       updateActiveRestaurant(newActiveRestaurantIdx, "preference", [...restaurantState.cuisines]);
-
-      setPreference(false);
     }
+    setPreference(preference);
   };
 
   const toggleModal = () => {
@@ -139,8 +152,6 @@ const Restaurants = (props) => {
     });
 
     setActiveRestaurantIdx(newActiveRestaurantIdx);
-    // setActiveRestaurant(newActiveRestaurant);
-    // setRestaurants(newRestaurants);
 
     restaurantDispatch({
       type: UPDATE_RESTAURANT,
@@ -190,6 +201,7 @@ const Restaurants = (props) => {
             modalOpen={modelOpen}
             updateActiveRestaurant={updateActiveRestaurant}
             toggleModal={toggleModal}
+            onDecisionCallback={onDecisionCallback}
           />
         )}
         <Icon fontSize="large" color="error" onClick={handleViewNextRestaurant}>

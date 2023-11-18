@@ -216,8 +216,10 @@ function Main(props) {
           : aggregatedRestaurantData.restaurantsData;
       await restaurantDispatch({
         type: dispatchType,
-        restaurantsData: dispatchContent.businesses,
-        region: dispatchContent.region,
+        payload: {
+          restaurantsData: dispatchContent.businesses,
+          region: dispatchContent.region,
+        },
       });
 
       await hydrateDispatch({
