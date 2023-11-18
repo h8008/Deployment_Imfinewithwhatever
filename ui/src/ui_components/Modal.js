@@ -1,13 +1,6 @@
 // Referenced from MUI documentation at https://codesandbox.io/s/74fq8m?file=/demo.tsx
 
-import {
-  useContext,
-  useState,
-  useEffect,
-  forwardRef,
-  cloneElement,
-  Fragment,
-} from "react";
+import { useContext, useState, useEffect, forwardRef, cloneElement, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 
@@ -22,21 +15,10 @@ import RowComponent from "./RowComponent";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 
-import {
-  UPDATE_MODAL_OPEN,
-  BULK_UPDATE,
-} from "../reducer/Message/MessageAction";
+import { UPDATE_MODAL_OPEN, BULK_UPDATE } from "../reducer/Message/MessageAction";
 
 const Fade = forwardRef(function Fade(props, ref) {
-  const {
-    children,
-    in: open,
-    onClick,
-    onEnter,
-    onExited,
-    ownerState,
-    ...other
-  } = props;
+  const { children, in: open, onClick, onEnter, onExited, ownerState, ...other } = props;
   const style = useSpring({
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
@@ -80,6 +62,7 @@ const SpringModal = (props) => {
       modalOpen: true,
     });
   };
+
   const handleClose = () => {
     messageDispatch({
       type: UPDATE_MODAL_OPEN,
@@ -106,9 +89,7 @@ const SpringModal = (props) => {
       <DialogTitle>{messageState.message}</DialogTitle>
       {messageState.interactive && (
         <List>
-          <RowComponent
-            theme={{ justifyContent: "space-evenly", alignItems: "center" }}
-          >
+          <RowComponent theme={{ justifyContent: "space-evenly", alignItems: "center" }}>
             <RoundButton
               onClick={() => {
                 handleInteractiveClose();

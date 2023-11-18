@@ -1,6 +1,7 @@
 import axios from "axios";
 import Users from "./User_Interface";
 import UserReviews from "./User_Review_Interface";
+import Preference from "./Preference_Interface";
 import YelpAPI from "./External_API_Interface";
 import axiosBaseUrl from "../utils/AxiosBaseUrl";
 
@@ -32,6 +33,7 @@ class APIInterface {
   constructor() {
     this.Users = new Users(axiosAgent);
     this.UserReviews = new UserReviews(axiosAgent);
+    this.Preference = new Preference(axiosAgent);
     this.YelpAPI = new YelpAPI(axiosAgent);
   }
 

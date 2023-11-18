@@ -136,7 +136,7 @@ export default class Users {
     );
   }
 
-  async backgroundDispatch(params) {
+  async updateCurrentUser(params) {
     return this.axiosAgent
       .post(`currentuser/update`, params)
       .then((currentUserInfo) => currentUserInfo.data)

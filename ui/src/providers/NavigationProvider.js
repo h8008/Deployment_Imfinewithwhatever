@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { initialState, reducer } from "../reducer/Navigator/reducer";
+import { initialState, reducer } from "../reducer/Navigation/reducer";
 
 const NavigationContext = createContext();
 

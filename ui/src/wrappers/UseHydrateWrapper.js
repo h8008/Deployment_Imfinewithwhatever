@@ -4,7 +4,7 @@ import useDetectRefresh from "../hooks/useDetectRefresh";
 import { RestaurantsContext } from "../providers/RestaurantsProvider";
 import { UserContext } from "../providers/UserProvider";
 
-const HydrateWrapper = (props) => {
+const UseHydrateWrapper = (props) => {
   const { userState: user, userDispatch } = useContext(UserContext);
   const { restaurantState: restaurant, restaurantDispatch } = useContext(RestaurantsContext);
   const [refresh] = useDetectRefresh();
@@ -13,4 +13,4 @@ const HydrateWrapper = (props) => {
   return <Fragment>{props.children}</Fragment>;
 };
 
-export default HydrateWrapper;
+export default UseHydrateWrapper;

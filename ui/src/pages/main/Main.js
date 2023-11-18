@@ -21,11 +21,12 @@ import {
   handleGetRestaurantByLocation,
   handleGetAggregatedRestaurantsData,
 } from "./Helpers";
-import { NAVIGATE } from "../../reducer/Navigator/actions";
+import { NAVIGATE } from "../../reducer/Navigation/actions";
 import { NavigationContext } from "../../providers/NavigationProvider";
-import { DehydrateContext } from "../../providers/DeHydrateProvider";
-import { DEHYDRATE } from "../../reducer/Dehydrate/actions";
+import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchProvider";
+import { DISPATCH } from "../../reducer/BackgroundDispatch/actions";
 import { UserContext } from "../../providers/UserProvider";
+import API_Interface from "../../API_Interface";
 
 const getFoodPreferences = (categories) => {
   const lowercased_categories = categories.map((category) => {
@@ -153,7 +154,7 @@ function Main(props) {
   const { restaurantDispatch } = useContext(RestaurantsContext);
   const { navigationDispatch } = useContext(NavigationContext);
   const { messageDispatch } = useContext(MessageContext);
-  const { hydrateDispatch } = useContext(DehydrateContext);
+  const { backgroundDispatch } = useContext(BackgroundDispatchContext);
 
   const [location, setLocation] = useState("");
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
@@ -222,13 +223,13 @@ function Main(props) {
         },
       });
 
-      await hydrateDispatch({
-        type: DEHYDRATE,
+      await backgroundDispatch({
+        type: DISPATCH,
         payload: {
-          email: userState.email,
-          data: dispatchContent,
+          data: { data: dispatchContent, email: userState.email },
           apiInterface: "Users",
           store: "User",
+          func: API_Interface.Users.updateCurrentUser,
         },
       });
 

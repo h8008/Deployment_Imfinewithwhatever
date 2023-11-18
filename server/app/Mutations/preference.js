@@ -25,11 +25,4 @@ const DELETE_PREFERENCE = async ({ email, restaurantID }) => {
   });
 };
 
-const GET_PREFERENCE = async ({ email, restaurantID }) => {
-  await Preference.findOne({
-    email: email,
-    restaurant_id: restaurantID,
-  });
-};
-
-export { GET_PREFERENCE, ADD_PREFERENCE, UPDATE_PREFERENCE, DELETE_PREFERENCE };
+module.exports = { ADD_PREFERENCE, UPDATE_PREFERENCE, DELETE_PREFERENCE };

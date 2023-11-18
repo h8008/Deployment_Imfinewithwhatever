@@ -10,6 +10,7 @@ const {
 } = require('../Mutations/preference.js');
 
 const add = async (ctx) => {
+  console.log('in preference add controller');
   const params = ctx.request.body;
   const res = await ADD_PREFERENCE(params);
   ctx.body = res

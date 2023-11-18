@@ -1,23 +1,23 @@
-import { DEHYDRATE } from "./actions";
+import { DISPATCH } from "./actions";
 
 const initialState = {
   data: {},
   apiInterface: "",
-  email: "",
-  shouldHydrate: false,
+  shouldDispatch: false,
   store: "",
+  func: () => {},
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case DEHYDRATE: {
-      const shouldDehydrate = Object.keys(action.payload.data).length > 0;
+    case DISPATCH: {
+      const shouldDispatch = Object.keys(action.payload.data).length > 0;
       return {
         data: action.payload.data,
         apiInterface: action.payload.apiInterface,
-        email: action.payload.email,
-        shouldDehydrate: shouldDehydrate,
+        shouldDispatch: shouldDispatch,
         store: action.payload.store,
+        func: action.payload.func,
       };
     }
     default: {

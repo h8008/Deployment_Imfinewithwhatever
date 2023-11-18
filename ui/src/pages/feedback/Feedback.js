@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import { NAVIGATE } from "../../reducer/Navigator/actions";
+import { NAVIGATE } from "../../reducer/Navigation/actions";
 import { NavigationContext } from "../../providers/NavigationProvider";
 
 const calcCellWidth = (addon = 0) => {
@@ -336,7 +336,7 @@ const Feedback = (props) => {
   };
 
   const onBarCellHoverCallback = (cellIndex) => {
-    console.log("index", cellIndex);
+    // console.log("index", cellIndex);
     if (curRating === cellIndex) return;
     const newBar = bar.map((cell, index) => {
       if (index <= cellIndex) {

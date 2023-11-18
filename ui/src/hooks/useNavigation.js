@@ -1,6 +1,6 @@
 const { useContext, useEffect } = require("react");
 const { NavigationContext } = require("../providers/NavigationProvider");
-const { NAVIGATE } = require("../reducer/Navigator/actions");
+const { NAVIGATE } = require("../reducer/Navigation/actions");
 
 const useNavigation = (destination, condition) => {
   const { navigationDispatch } = useContext(NavigationContext);

@@ -5,7 +5,7 @@ const convertToString = require('../../utils/ConvertToString.js');
 const UPDATE_CURRENT_USER = async ({ email, data }) => {
   const user = await FIND_USER(email);
   const userData = await convertToString(data);
-  console.log('stringified user data', userData);
+  // console.log('stringified user data', userData);
   user.data = userData;
   await user.save();
   return user;

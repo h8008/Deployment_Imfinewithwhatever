@@ -5,6 +5,7 @@ const errorHandler = require('../app/Middleware/ErrorHandler.js');
 
 const userRouter = require('./UserRoutes.js');
 const userReviewRouter = require('./UserReviewsRoutes.js');
+const preferenceRouter = require('./PreferencesRoutes.js');
 const yelpRouter = require('./YelpAPIRoutes.js');
 const router = require('koa-router')();
 
@@ -19,6 +20,7 @@ router.use(
   '',
   userRouter.routes(),
   userReviewRouter.routes(),
+  preferenceRouter.routes(),
   yelpRouter.routes()
 );
 

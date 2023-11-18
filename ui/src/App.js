@@ -11,9 +11,10 @@ import Restaurants from "./pages/restaurants/Restaurants";
 import Navigation from "./pages/navigation/Navigation";
 import MultiDecisionMaker from "./pages/multiDecisionMaker/MultiDecisionMaker";
 
-import HydrateWrapper from "./wrappers/HydrateWrapper";
+import UseHydrateWrapper from "./wrappers/UseHydrateWrapper";
+import UseLocationWrapper from "./wrappers/UseLocationWrapper";
 
-import { DehydrateProvider } from "./providers/DeHydrateProvider";
+import { BackgroundDispatchProvider } from "./providers/BackgroundDispatchProvider";
 import { UserProvider } from "./providers/UserProvider";
 import { NavigationProvider } from "./providers/NavigationProvider";
 import { MessageProvider } from "./providers/MessageProvider";
@@ -29,17 +30,17 @@ import Wheel from "./components/Games/Wheel/Wheel";
 import Menu from "./components/Menu";
 
 import GlobalTheme from "./providers/ThemeProvider";
-import BackgroundDispatcher from "./components/BackgroundDispatcher";
+import BackgroundDispatcher from "./wrappers/BackgroundDispatcher";
 
 function App() {
   return (
     <ThemeProvider theme={GlobalTheme}>
-      <DehydrateProvider>
+      <BackgroundDispatchProvider>
         <UserProvider>
           <NavigationProvider>
             <MessageProvider>
               <RestaurantsProvider>
-                <HydrateWrapper>
+                <UseHydrateWrapper>
                   <GameProvider>
                     <div className="App">
                       <Backdrop>
@@ -63,12 +64,12 @@ function App() {
                       </Backdrop>
                     </div>
                   </GameProvider>
-                </HydrateWrapper>
+                </UseHydrateWrapper>
               </RestaurantsProvider>
             </MessageProvider>
           </NavigationProvider>
         </UserProvider>
-      </DehydrateProvider>
+      </BackgroundDispatchProvider>
     </ThemeProvider>
   );
 }
