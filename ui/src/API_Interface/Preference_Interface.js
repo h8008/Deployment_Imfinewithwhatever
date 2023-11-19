@@ -5,15 +5,41 @@ export default class UserPreferences {
   }
 
   async add(params) {
-    await this.axiosAgent
+    return await this.axiosAgent
       .post(`preferences/add`, { ...params })
       .then((preferenceData) => {
-        console.log(preferenceData);
         return preferenceData;
       })
       .catch((error) => ({
         error,
         preference: undefined,
+      }));
+  }
+
+  async get(params) {
+    // await this.axiosAgent
+    //   .get(`preferences/getall`, { ...params })
+    //   .then((preferenceData) => {
+    //     return preferenceData;
+    //   })
+    //   .catch((error) => ({
+    //     error,
+    //     preference: undefined,
+    //   }));
+    return await this.axiosAgent({
+      url: `preferences/getall`,
+      method: "get",
+      params: {
+        ...params,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.data)
+      .catch((error) => ({
+        error,
+        preferences: undefined,
       }));
   }
 }

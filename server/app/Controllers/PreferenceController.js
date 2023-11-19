@@ -6,8 +6,9 @@ const {
   ADD_PREFERENCE,
   UPDATE_PREFERENCE,
   DELETE_PREFERENCE,
-  GET_PREFERENCE,
 } = require('../Mutations/preference.js');
+
+const { GET_PREFERENCES } = require('../Queries/preference.js');
 
 const add = async (ctx) => {
   console.log('in preference add controller');
@@ -32,15 +33,17 @@ const destroy = async (ctx) => {
   ctx.body = res ? { status: 'OK' } : { status: 'FAILED TO DELETE' };
 };
 
-const get = async (ctx) => {
+const getAll = async (ctx) => {
   const params = ctx.request.query;
-  const res = await GET_PREFERENCE(params);
-  ctx.body = res ? { status: 'OK' } : { status: 'NOT FOUND' };
+  const res = await GET_PREFERENCES(params);
+  ctx.body = res
+    ? { data: res, status: 'OK' }
+    : { data: undefined, status: 'NOT FOUND' };
 };
 
 module.exports = {
   add,
   update,
   destroy,
-  get,
+  getAll,
 };

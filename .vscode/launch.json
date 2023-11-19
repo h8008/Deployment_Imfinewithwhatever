@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+
+    {
       "name": "Debug Server",
       "request": "launch",
       "runtimeArgs": ["run-script", "debug-development-server"],
@@ -20,13 +29,5 @@
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/ui/src"
     }
-    // {
-    //   "name": "Debug UI",
-    //   "request": "launch",
-    //   "runtimeArgs": ["run-script", "debug-ui"],
-    //   "runtimeExecutable": "npm",
-    //   "skipFiles": ["<node_internals>/**"],
-    //   "type": "node"
-    // }
   ]
 }

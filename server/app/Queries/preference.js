@@ -1,8 +1,8 @@
-const GET_PREFERENCE = async ({ email, restaurantID }) => {
-  await Preference.findOne({
-    email: email,
-    restaurant_id: restaurantID,
-  });
-};
+const Preference = require('../../database/models/Preference');
 
-module.exports = { GET_PREFERENCE };
+const GET_PREFERENCES = async ({ email }) =>
+  await Preference.find({
+    email: email,
+  });
+
+module.exports = { GET_PREFERENCES };
