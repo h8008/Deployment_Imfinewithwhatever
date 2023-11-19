@@ -12,6 +12,7 @@ import API from "../../API_Interface";
 
 import { UserContext } from "../../providers/UserProvider";
 import { MessageContext } from "../../providers/MessageProvider";
+import quicksort from "../../utils/Sorting/Quicksort";
 
 const ProfileComponent = styled(Grid)({
   height: "90%",
@@ -72,26 +73,48 @@ const useGetPreferences = (email) => {
   return [preferences, setPreferences];
 };
 
-const getFavorites = (preferences) => {
-  const dict = {};
-  preferences.forEach((p, i) => {
-    if (dict[p] == null) {
-      dict[p] = 1;
+const sortFavorites = async (dict) => {
+  const input = Object.entries(dict).map((key) => [key[0], key[1]]);
+  const sorted = await quicksort(input, 0, input.length - 1);
+  return sorted;
+};
+
+const getFavorites = async (preferences) => {
+  const catToLikes = {};
+  await preferences.forEach(({ categories: cat }, i) => {
+    if (catToLikes[cat] == null) {
+      catToLikes[cat] = 1;
     } else {
-      dict[p]++;
+      catToLikes[cat]++;
     }
   });
-  // sort preferences
+  return catToLikes;
+};
+
+const useSortPreferences = (preferences) => {
+  const [sorted, setSorted] = useState([]);
+  useEffect(() => {
+    const sort = async () => {
+      const favorites = await getFavorites(preferences);
+      const favorites_sorted = await sortFavorites(favorites);
+      setSorted(favorites_sorted);
+    };
+    if (preferences.length > 0) {
+      sort();
+    }
+  }, [preferences]);
+  return [sorted, setSorted];
 };
 
 const Profile = (props) => {
   const { userState, userDispatch } = useContext(UserContext);
   const { messageState, messageDispatch } = useContext(MessageContext);
+
   const [reviews, setReviews] = useState([]);
   const [preferences, setPreferences] = useGetPreferences(userState.email);
-  const theme = useTheme();
+  const [sortedPreferences, setSortedPreferences] = useSortPreferences(preferences);
 
-  // console.log("preferences", preferences);
+  const theme = useTheme();
 
   useEffect(() => {
     const getReviews = async () => {
@@ -104,23 +127,6 @@ const Profile = (props) => {
     getReviews();
   }, [messageDispatch, userState.email]);
 
-  // useEffect(() => {
-  //   const getPreferences = async () => {
-  //     const res = await API.Users.getAllRestaurantPreferencesForUser({
-  //       email: userState.email,
-  //     });
-  //     if (res.status === 'OK') {
-  //       const preferences = API.apiResHandling(
-  //         res,
-  //         messageDispatch,
-  //         res.message
-  //       );
-  //       setPreferences([...preferences]);
-  //     }
-  //   };
-  //   getPreferences();
-  // }, [messageDispatch, userState.email]);
-
   return (
     <ProfileComponent>
       <HeaderComponent>
@@ -129,7 +135,6 @@ const Profile = (props) => {
           <RowComponent>
             <Text text={"Email: "} style={{ marginRight: "5px" }} />
             <Text text={userState.email} style={{ textDecoration: "underline" }} />
-            {/* </RowComponent> */}
           </RowComponent>
         </ColumnComponent>
         <ColumnComponent>
@@ -147,7 +152,7 @@ const Profile = (props) => {
         </ColumnComponent>
       </HeaderComponent>
       <ReviewsComponent>{reviews.length > 0 && <Reviews reviews={reviews} />}</ReviewsComponent>
-      {/* {preferences.length > 0 && <Preferences preferences={preferences} />} */}
+      {sortedPreferences.length > 0 && <Preferences preferences={sortedPreferences} />}
     </ProfileComponent>
   );
 };

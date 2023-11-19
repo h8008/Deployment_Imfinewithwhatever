@@ -6,12 +6,12 @@ const swap = (A, i, j) => {
 
 const partition = (A, l, r, p) => {
   while (l <= r) {
-    while (A[l] < p) {
+    while (A[l][1] > p) {
       l++;
     }
-    while (r > l && A[r] >= p) r--;
+    while (r >= l && A[r][1] <= p) r--;
+    if (r > l) swap(A, r, l);
   }
-  if (r > l) swap(A, r, l);
   return l;
 };
 
@@ -21,14 +21,12 @@ const getPivot = (i, j) => {
 
 const quicksort = async (A, i, j) => {
   const p = await getPivot(i, j);
-  await swap(A, j, A[p]);
-  const k = await partition(A, i, j - 1, p);
+  await swap(A, j, p);
+  const k = await partition(A, i, j - 1, A[j][1]);
   swap(A, k, j);
-  if (k - i > 1) await quicksort(A, 0, k - 1);
-  if (j - k > 1) await quicksort(A, k + 1, j);
+  if (k - i > 1) A = await quicksort(A, i, k - 1);
+  if (j - k > 1) A = await quicksort(A, k + 1, j);
+  return A;
 };
 
-const A = [76, 6, 57, 88, 85, 42];
-quicksort(A, 0, A.length - 1).then((A) => console.log(A));
-
-// export default quicksort;
+export default quicksort;

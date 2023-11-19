@@ -6,7 +6,7 @@ const PreferenceComponent = styled(Grid)({
   height: "45%",
   width: "100%",
   display: "flex",
-  flexDirection: "row",
+  flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
 });
@@ -16,7 +16,9 @@ const Preferences = (props) => {
 
   return (
     <PreferenceComponent>
-      <Text text={"Your liked restaurants"} />
+      {preferences.map((preference, index) => (
+        <Text key={index} text={preference} />
+      ))}
     </PreferenceComponent>
   );
 };

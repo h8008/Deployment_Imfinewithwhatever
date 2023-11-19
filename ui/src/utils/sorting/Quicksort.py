@@ -9,10 +9,11 @@ def partition(A, l, r, p):
     while (l <= r):
         while (A[l] < p):
             l = l + 1
-        while (r > l and A[r] >= p):
+        while (r >= l and A[r] >= p):
             r = r - 1
-    if (r > l):
-        swap(A, r, l)
+        if (r > l):
+            swap(A, r, l)
+    return l
 
 def getPivot(i, j):
     return math.floor((i + j) / 2)
@@ -20,10 +21,10 @@ def getPivot(i, j):
 def quicksort(A, i, j):
     p = getPivot(i, j)
     swap(A, j, p)
-    k = partition(A, i, j - 1, A[p])
+    k = partition(A, i, j - 1, A[j])
     swap(A, k, j)
     if (k - i > 1):
-        quicksort(A, 0, k - 1)
+        quicksort(A, i, k - 1)
     if (j - k > 1):
         quicksort(A, k + 1, j)
 
