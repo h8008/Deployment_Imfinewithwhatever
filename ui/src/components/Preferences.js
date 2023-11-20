@@ -22,8 +22,8 @@ const Preferences = (props) => {
 
   return (
     <Fragment>
-      <BarChart data={likes} id={0} pos={0} height={100} width={width} color="red" />
-      <BarChart data={dislikes} id={2} pos={25} height={100} width={width} color="black" />
+      <BarChart data={likes} id={0} pos={0} height={200} width={width} color="red" />
+      <BarChart data={dislikes} id={2} pos={25} height={200} width={width} color="black" />
     </Fragment>
   );
 };
