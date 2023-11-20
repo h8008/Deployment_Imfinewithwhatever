@@ -43,25 +43,25 @@ function App() {
                 <UseHydrateWrapper>
                   <GameProvider>
                     <div className="App">
-                      <Backdrop>
-                        <Router>
-                          <Navigation />
-                          <Menu />
-                          <SpringModal />
-                          <BackgroundDispatcher />
-                          <Routes>
-                            <Route exact path="/" element={<Home />} />
-                            <Route exact path="/Main" element={<Main />} />
-                            <Route exact path="/Login" element={<Login theme={main_config} />} />
-                            <Route exact path="/Feedback" element={<Feedback theme={main_config} />} />
-                            <Route exact path="/Restaurants" element={<Restaurants theme={main_config} />} />
-                            <Route exact path="/Profile" element={<Profile />} />
-                            <Route exact path="/MultiDecisionMaker" element={<MultiDecisionMaker />} />
-                            <Route exact path="/Games/Plinko" element={<Plinko />} />
-                            <Route exact path="/Games/Wheel" element={<Wheel />} />
-                          </Routes>
-                        </Router>
-                      </Backdrop>
+                      {/* <Backdrop> */}
+                      <Router>
+                        <Navigation />
+                        <Menu />
+                        <SpringModal />
+                        <BackgroundDispatcher />
+                        <Routes>
+                          <Route exact path="/" element={<Home />} />
+                          <Route exact path="/Main" element={<Main />} />
+                          <Route exact path="/Login" element={<Login theme={main_config} />} />
+                          <Route exact path="/Feedback" element={<Feedback theme={main_config} />} />
+                          <Route exact path="/Restaurants" element={<Restaurants theme={main_config} />} />
+                          <Route exact path="/Profile" element={<Profile />} />
+                          <Route exact path="/MultiDecisionMaker" element={<MultiDecisionMaker />} />
+                          <Route exact path="/Games/Plinko" element={<Plinko />} />
+                          <Route exact path="/Games/Wheel" element={<Wheel />} />
+                        </Routes>
+                      </Router>
+                      {/* </Backdrop> */}
                     </div>
                   </GameProvider>
                 </UseHydrateWrapper>

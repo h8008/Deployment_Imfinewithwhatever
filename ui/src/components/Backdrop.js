@@ -14,6 +14,8 @@ const BackDropComponent = styled(MUIBackdrop)({
   flexDirection: "column",
   justifyContent: "flex-start",
   alignItems: "center",
+  zIndex: -1,
+  position: "relative",
   // flexDirection: "row",
   // justifyContent: "center",
   // alignItems: "center",
@@ -31,18 +33,11 @@ const Backdrop = (props) => {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 0,
-    position: 'relative'
+    zIndex: -1,
+    position: "relative",
   };
 
-  return (
-    // <Grid style={style} data_id="backdrop-component">
-    //   {props.children}
-    // </Grid>
-    <BackDropComponent open={true}>
-      {props.children}
-    </BackDropComponent>
-  );
+  return <BackDropComponent open={true}>{props.children}</BackDropComponent>;
 };
 
 export default Backdrop;

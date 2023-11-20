@@ -1,6 +1,9 @@
 import styled from "@emotion/styled";
 import Text from "../ui_components/Text";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid";
+
+import BarChart from "./BarChart/BarChart";
+import { Fragment } from "react";
 
 const PreferenceComponent = styled(Grid)({
   height: "45%",
@@ -13,13 +16,15 @@ const PreferenceComponent = styled(Grid)({
 
 const Preferences = (props) => {
   const { preferences } = props;
+  const { likes, dislikes } = preferences;
+
+  const width = window.innerWidth;
 
   return (
-    <PreferenceComponent>
-      {preferences.map((preference, index) => (
-        <Text key={index} text={preference} />
-      ))}
-    </PreferenceComponent>
+    <Fragment>
+      <BarChart data={likes} id={0} pos={0} height={100} width={width} color="red" />
+      <BarChart data={dislikes} id={2} pos={25} height={100} width={width} color="black" />
+    </Fragment>
   );
 };
 

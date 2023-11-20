@@ -7,6 +7,7 @@ import Text from "../../ui_components/Text";
 import Box from "../../ui_components/Box";
 import BorderedBox from "../../ui_components/BorderedBox";
 import RowComponent from "../../ui_components/RowComponent";
+import BarChart from "../../components/BarChart/BarChart";
 
 import API from "../../API_Interface";
 
@@ -33,6 +34,17 @@ const HeaderComponent = styled(Grid)({
   alignItems: "center",
 });
 
+const BodyComponent = styled(Grid)({
+  container: true,
+  rowGap: 50,
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
 const ColumnComponent = styled(Grid)({
   gridRow: true,
   display: "flex",
@@ -49,6 +61,17 @@ const ReviewsComponent = styled(Box)({
   alignItems: "center",
   width: "100%",
   height: "45%",
+});
+
+const PreferencesComponent = styled(Grid)({
+  container: true,
+  gridRow: true,
+  // height: "500px",
+  // width: "200px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
 });
 
 const ReviewComponent = styled(BorderedBox)({
@@ -73,31 +96,44 @@ const useGetPreferences = (email) => {
   return [preferences, setPreferences];
 };
 
-const sortFavorites = async (dict) => {
+const sortObject = async (dict) => {
   const input = Object.entries(dict).map((key) => [key[0], key[1]]);
   const sorted = await quicksort(input, 0, input.length - 1);
   return sorted;
 };
 
-const getFavorites = async (preferences) => {
-  const catToLikes = {};
-  await preferences.forEach(({ categories: cat }, i) => {
-    if (catToLikes[cat] == null) {
-      catToLikes[cat] = 1;
+const getStatistics = async (input) => {
+  const obj = {};
+  await input.forEach((p) => {
+    const cat = p.categories;
+    if (obj[cat] == null) {
+      obj[cat] = 1;
     } else {
-      catToLikes[cat]++;
+      obj[cat]++;
     }
   });
-  return catToLikes;
+  return obj;
+};
+
+const getFavorites = async (preferences) => {
+  const favorites = await preferences.filter((p) => p.like === "true");
+  return await getStatistics(favorites);
+};
+
+const getDislikes = async (preferences) => {
+  const dislikes = preferences.filter((p) => p.like === "false");
+  return await getStatistics(dislikes);
 };
 
 const useSortPreferences = (preferences) => {
-  const [sorted, setSorted] = useState([]);
+  const [sorted, setSorted] = useState({});
   useEffect(() => {
     const sort = async () => {
-      const favorites = await getFavorites(preferences);
-      const favorites_sorted = await sortFavorites(favorites);
-      setSorted(favorites_sorted);
+      let likes = await getFavorites(preferences);
+      let dislikes = await getDislikes(preferences);
+      likes = await sortObject(likes);
+      dislikes = await sortObject(dislikes);
+      setSorted({ likes, dislikes });
     };
     if (preferences.length > 0) {
       sort();
@@ -151,8 +187,12 @@ const Profile = (props) => {
           </BorderedBox>
         </ColumnComponent>
       </HeaderComponent>
-      <ReviewsComponent>{reviews.length > 0 && <Reviews reviews={reviews} />}</ReviewsComponent>
-      {sortedPreferences.length > 0 && <Preferences preferences={sortedPreferences} />}
+      <BodyComponent>
+        <PreferencesComponent>
+          {Object.keys(sortedPreferences).length > 0 && <Preferences preferences={sortedPreferences} />}
+        </PreferencesComponent>
+        <ReviewsComponent>{reviews.length > 0 && <Reviews reviews={reviews} />}</ReviewsComponent>
+      </BodyComponent>
     </ProfileComponent>
   );
 };
