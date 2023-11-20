@@ -16,14 +16,30 @@ const PreferenceComponent = styled(Grid)({
 
 const Preferences = (props) => {
   const { preferences } = props;
-  const { likes, dislikes } = preferences;
+  const { likes, dislikes, totalDataLength } = preferences;
 
   const width = window.innerWidth;
 
   return (
     <Fragment>
-      <BarChart data={likes} id={0} pos={0} height={200} width={width} color="red" />
-      <BarChart data={dislikes} id={2} pos={25} height={200} width={width} color="black" />
+      <BarChart
+        chartData={likes}
+        totalDataLength={totalDataLength}
+        id={0}
+        pos={0}
+        height={350}
+        width={width}
+        color="red"
+      />
+      <BarChart
+        chartData={dislikes}
+        totalDataLength={totalDataLength}
+        id={2}
+        pos={25}
+        height={350}
+        width={width}
+        color="green"
+      />
     </Fragment>
   );
 };

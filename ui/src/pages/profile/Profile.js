@@ -133,7 +133,7 @@ const useSortPreferences = (preferences) => {
       let dislikes = await getDislikes(preferences);
       likes = await sortObject(likes);
       dislikes = await sortObject(dislikes);
-      setSorted({ likes, dislikes });
+      setSorted({ likes, dislikes, totalDataLength: likes.length + dislikes.length });
     };
     if (preferences.length > 0) {
       sort();
@@ -191,7 +191,7 @@ const Profile = (props) => {
         <PreferencesComponent>
           {Object.keys(sortedPreferences).length > 0 && <Preferences preferences={sortedPreferences} />}
         </PreferencesComponent>
-        <ReviewsComponent>{reviews.length > 0 && <Reviews reviews={reviews} />}</ReviewsComponent>
+        {/* <ReviewsComponent>{reviews.length > 0 && <Reviews reviews={reviews} />}</ReviewsComponent> */}
       </BodyComponent>
     </ProfileComponent>
   );

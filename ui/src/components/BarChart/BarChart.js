@@ -6,28 +6,30 @@ import * as d3 from "d3";
 
 // import rd3 from "react-d3-library";
 import "./BarChart.css";
-// import { Square, YouTube } from "@mui/icons-material";
-// const RD3Component = rd3.Component;
 
-const PreferencesComponent = styled(Grid)({
-  container: true,
-  height: "500px",
-  width: "200px",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-});
+const initializeTextVisible = (len) => new Array(len).fill(false).map((el) => el);
 
 const BarChart = (props) => {
-  const { data, color, height, width } = props;
+  const { chartData, totalDataLength, color, height, width } = props;
+  const [data, setData] = useState(chartData);
+  const [textVisible, setTextVisible] = useState(initializeTextVisible(chartData.length));
 
   const barWidth = 25;
   const chartWidth = data.length * (barWidth + 5);
   const xScale = d3.scaleLinear().domain([0, data.length]).range([0, chartWidth]);
   const yScale = (d) => 10 * d;
   const xOffset = window.innerWidth / 2 - chartWidth / 2;
-  const maxHeight = yScale(data[0][1]);
+  // const maxHeight = yScale(data[0][1]);
+
+  console.log("all data length", totalDataLength);
+
+  const maxHeight = yScale(totalDataLength);
+
+  const handleSetVisible = (idx) => {
+    const v = initializeTextVisible(data.length);
+    v[idx] = true;
+    setTextVisible(v);
+  };
 
   return (
     <Fragment>
@@ -40,13 +42,21 @@ const BarChart = (props) => {
           const arrowDest = y + barHeight + 100;
           return (
             <Fragment>
-              <g key={idx} width={barWidth} transform={`translate(${x}, ${0})`}>
-                <rect width={barWidth} height={y} fill={"white"} />
+              <g
+                key={idx}
+                width={barWidth}
+                height={maxHeight}
+                transform={`translate(${x}, ${0})`}
+                style={{ border: "1px solid black" }}
+                onClick={() => handleSetVisible(idx)}
+              >
+                <rect width={barWidth} height={y} fill={"black"} />
                 <rect width={barWidth} transform={`translate(${0}, ${y})`} height={barHeight} fill={color} />
               </g>
               <CurvedArrowLine
-                // visible={visible}
-                // onClick={handleSetVisible}
+                color={color}
+                visible={textVisible[idx]}
+                data={d[0]}
                 start={{ x, y: arrowSrc }}
                 stop={{ x: x - 100, y: arrowDest }}
               />
@@ -54,7 +64,6 @@ const BarChart = (props) => {
           );
         })}
       </svg>
-      {/* <PopupComponent open={popup} setOpen={setPopup} content={popupContent} coordinates={popupContentCoordinates} /> */}
     </Fragment>
   );
 };

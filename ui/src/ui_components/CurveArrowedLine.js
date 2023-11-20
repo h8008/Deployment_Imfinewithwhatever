@@ -1,74 +1,63 @@
-import { path } from "d3";
-import { Component, findDOMNode, useEffect, useRef } from "react";
-
-// export default class CurveArrowedLine extends Component {
-//   componentDidMount() {
-//     var markerNode = findDOMNode(this.refs.marker);
-//     var markerEndNode = findDOMNode(this.refs.markerEndNode);
-
-//     markerNode.setAttribute("markerWidth", 13);
-//     markerNode.setAttribute("markerHeight", 13);
-//     markerNode.setAttribute("refx", 2);
-//     markerNode.setAttribute("refy", 6);
-//   }
-//   render() {
-//     var style = {
-//       position: "absolute",
-//       zIndex: 200,
-//     };
-
-//     var path_d = "M" + this.props.start.x + "," + this.props.start.y + " ";
-//     path_d += "L" + this.props.stop.x + "," + this.props.stop.y;
-
-//     return (
-//       <svg width="300" height="100" style={style}>
-//         <defs>
-//           <marker ref="marker" id="arrow">
-//             <path d="M2,1 L2,10 L10,6 L2,2" style={{ fill: "red" }} />
-//             {/* <path d={path_d} style={{ fill: "red" }} /> */}
-//           </marker>
-//         </defs>
-
-//         <path
-//           ref={"markerEndNode"}
-//           d="M30,150 L100,50"
-//           style={{ stroke: "red", strokeWidth: "1.25px", fill: "none" }}
-//         />
-//       </svg>
-//     );
-//   }
-// }
+import { Component, Fragment, findDOMNode, useState, useEffect, useRef } from "react";
 
 const getLength = (src, dest) => {
   return Math.sqrt(Math.pow(src.x - dest.x, 2) + Math.pow(dest.y - src.y, 2));
 };
 
 const CurveArrowedLine = (props) => {
+  const dataRef = useRef(null);
   const markerNode = useRef(null);
   const markerEndNode = useRef(null);
-  const { start, stop } = props;
+  const { visible, start, stop, data, color } = props;
+  const [dest, setDest] = useState(null);
+  const [pathD, setPathD] = useState(null);
 
   var style = {
     position: "absolute",
     zIndex: 3,
   };
 
-  var pathD = "M" + start.x + "," + start.y + " ";
-  pathD += "L" + stop.x + "," + stop.y;
-  pathD += "H" + (stop.x - getLength(start, stop));
+  useEffect(() => {
+    var pathD = "M" + start.x + "," + start.y + " ";
+    var finalStop = { x: stop.x - getLength(start, stop), y: stop.y };
+    pathD += "L" + stop.x + "," + stop.y;
+    pathD += "H" + finalStop.x;
+    setPathD(pathD);
+    setDest(finalStop);
+  }, [start, stop]);
 
-  console.log("path", pathD);
+  useEffect(() => {
+    if (dataRef && dataRef.current && dest) {
+      dataRef.current.style.fill = `red`;
+      console.log(dataRef.current);
+      const charCount = data
+        .split(",")
+        .map((str) => Array.from(str).length)
+        .reduce((acc, cur) => acc + cur, 0);
+      dataRef.current.style.transform = `translate(${dest.x - charCount * 10}px, ${dest.y}px)`;
+    }
+  }, [data, data.length, dataRef, dest]);
 
   return (
-    <svg width="1500" height="200" style={style}>
-      <defs>
-        <marker ref={markerNode} id="arrow">
-          <path d={pathD} style={{ fill: "black" }} />
-        </marker>
-      </defs>
-
-      <path ref={markerEndNode} d={pathD} style={{ stroke: "red", strokeWidth: "1.25px", fill: "none" }} />
-    </svg>
+    <Fragment>
+      {visible && pathD && (
+        <Fragment>
+          <svg width="1500" height="200" style={style}>
+            <defs>
+              <marker ref={markerNode} id="arrow">
+                <path d={pathD} style={{ fill: { color } }} />
+              </marker>
+            </defs>
+            <path ref={markerEndNode} d={pathD} style={{ stroke: color, strokeWidth: "1.25px", fill: "none" }} />
+          </svg>
+          <g>
+            <text ref={dataRef} color={color}>
+              {data}
+            </text>
+          </g>
+        </Fragment>
+      )}
+    </Fragment>
   );
 };
 
