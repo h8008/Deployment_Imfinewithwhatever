@@ -1,26 +1,27 @@
 import * as React from "react";
-import { Button, styled } from "@mui/material";
-import { ToggleCard, TinderLikeCard, StackCard } from "react-stack-cards";
+import { styled } from "@mui/material";
+import { TinderLikeCard } from "react-stack-cards";
 import BorderedBox from "../ui_components/BorderedBox";
 
 import Review from "./Review";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import UpArrow from "@mui/icons-material/KeyboardArrowUp";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
 import API from "../API_Interface";
 import { MessageContext } from "../providers/MessageProvider";
+import { NavigationContext } from "../providers/NavigationProvider";
 
 import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
-
-import Text from "../ui_components/Text";
+import { NAVIGATE } from "../reducer/Navigation/actions";
 
 const ReviewsComponent = styled(Grid)({
   container: true,
-  position: 'absolute',
-  rowGap: 5,
+  position: "absolute",
+  columnGap: 20,
   display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
+  flexDirection: "row",
+  justifyContent: "center",
   alignItems: "center",
 });
 
@@ -31,19 +32,26 @@ const RowComponent = styled(Grid)({
   alignItems: "center",
 });
 
-const ColumnComponent = styled(Grid)({
+const ColumnComponent = styled(Grid)((props) => ({
+  data_id: "column-component",
   gridRow: true,
+  heights: `${props.numItems * 50}px`,
+  width: `50px`,
   display: "column",
   justifyContent: "center",
   alignItems: "center",
-});
+}));
+
+const EMPYT_DATA_MESSAGE = "Go explore and don't forget to leave some reviews!";
 
 const Reviews = (props) => {
-  const { messageState, messageDispatch } = React.useContext(MessageContext);
+  const { messageDispatch } = React.useContext(MessageContext);
+  const { navigationDispatch } = React.useContext(NavigationContext);
 
   return (
     <ReviewsClassComponent
       messageDispatch={messageDispatch}
+      navigationDispatch={navigationDispatch}
       reviews={props.reviews}
     />
   );
@@ -67,6 +75,24 @@ class ReviewsClassComponent extends React.Component {
     this.advanceIdx = this.advanceIdx.bind(this);
   }
 
+  onEmptyData() {
+    this.props.messageDispatch({
+      type: UPDATE_MESSAGE,
+      message: EMPYT_DATA_MESSAGE,
+      onModalClick: () =>
+        this.props.navigationDispatch({
+          type: NAVIGATE,
+          payload: {
+            destination: "/Main",
+          },
+        }),
+    });
+  }
+
+  componentDidMount() {
+    if (this.state.reviews == null || this.state.reviews.length === 0) this.onEmptyData();
+  }
+
   advanceIdx() {
     const newIdx = this.state.activeReviewIdx + (1 % this.state.reviews.length);
     return newIdx;
@@ -77,10 +103,7 @@ class ReviewsClassComponent extends React.Component {
     const swipedReviewIdx = this.state.activeReviewIdx;
     const newActiveReviewIdx = this.advanceIdx();
 
-    const newSwipableReviews = [
-      ...this.state.swipableReviews,
-      this.state.swipableReviews[swipedReviewIdx],
-    ];
+    const newSwipableReviews = [...this.state.swipableReviews, this.state.swipableReviews[swipedReviewIdx]];
 
     this.setState({
       activeReviewIdx: newActiveReviewIdx,
@@ -105,19 +128,17 @@ class ReviewsClassComponent extends React.Component {
 
   async onDeleteReview() {
     if (this.state.reviews.length === 0) return;
-
-    const { restaurantID, email } =
-      this.state.reviews[this.state.activeReviewIdx];
+    const { restaurant_id, email } = this.state.reviews[this.state.activeReviewIdx];
     const res = await API.UserReviews.deleteReview({
-      restaurantID: restaurantID,
+      restaurantID: restaurant_id,
       email: email,
     });
-    const newReviews = this.state.reviews.filter(
-      (review, index) => index !== this.state.activeReviewIdx
-    );
+    const newReviews = this.state.reviews.filter((review, index) => index !== this.state.activeReviewIdx);
+
     this.setState({
       ...this.state,
       reviews: [...newReviews],
+      swipableReviews: [...newReviews],
     });
 
     if (res.status === "OK") {
@@ -128,52 +149,42 @@ class ReviewsClassComponent extends React.Component {
   render() {
     return (
       <ReviewsComponent>
-        <TinderLikeCard
-          images={this.state.swipableReviews}
-          width="800"
-          height="200"
-          direction={this.state.directionTinder}
-          duration={400}
-          ref={(node) => (this.Tinder = node)}
-          className="tinder"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        > 
-          {this.state.swipableReviews != null &&
-            this.state.swipableReviews.length > 0 &&
-            this.state.swipableReviews.map((review, index) => (
-              <BorderedBox
+        {this.state.swipableReviews != null &&
+          this.state.swipableReviews.length > 0 &&
+          this.state.swipableReviews.map((review, index) => (
+            <React.Fragment>
+              <ColumnComponent numItems={2}>
+                <UpArrow onClick={this.onTinderSwipe} />
+                <DeleteForeverIcon onClick={this.onDeleteReview} />
+              </ColumnComponent>
+              <TinderLikeCard
+                images={this.state.swipableReviews}
+                width="800"
+                height="200"
+                direction={this.state.directionTinder}
+                duration={400}
+                ref={(node) => (this.Tinder = node)}
+                className="tinder"
                 style={{
-                  height: "100%",
-                  backgroundColor: "white",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
                 }}
               >
-                <Review review={review} />
-              </BorderedBox>
-            ))}
-        </TinderLikeCard>
-
-        <RowComponent>
-          <UpArrow onClick={this.onTinderSwipe} />
-          <DeleteForeverIcon onClick={this.onDeleteReview} />
-        </RowComponent>
-
-        {/* <StackCard
-          images={arr}
-          color={"#f95c5c"}
-          width="350"
-          height="240"
-          direction={this.state.directionStack}
-          onClick={() => alert("Hello")}
-        >
-          <div>i</div>
-        </StackCard> */}
+                <BorderedBox
+                  style={{
+                    height: "100%",
+                    backgroundColor: "white",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Review review={review} />
+                </BorderedBox>
+              </TinderLikeCard>
+            </React.Fragment>
+          ))}
       </ReviewsComponent>
     );
   }

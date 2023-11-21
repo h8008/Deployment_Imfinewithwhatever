@@ -29,6 +29,7 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-scrollbars-custom": "^4.1.1",
+    "react-simple-star-rating": "^5.1.7",
     "react-simply-carousel": "^8.5.5",
     "react-stack-cards": "^1.0.8",
     "styled-component": "^2.8.0",

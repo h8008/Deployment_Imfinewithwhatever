@@ -103,11 +103,6 @@ const PreferencesComponent = (props) => {
   );
 };
 
-const ReviewComponent = styled(BorderedBox)({
-  width: "90%",
-  height: "200px",
-});
-
 const useGetPreferences = (email) => {
   const [preferences, setPreferences] = useState([]);
   useEffect(() => {
