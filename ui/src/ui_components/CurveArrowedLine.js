@@ -20,7 +20,7 @@ const CurveArrowedLine = (props) => {
   useEffect(() => {
     var pathD = "M" + start.x + "," + start.y + " ";
     var finalStop = { x: stop.x - getLength(start, stop), y: stop.y };
-    pathD += "L" + stop.x + "," + stop.y;
+    pathD += "L" + stop.x + "," + stop.y + " ";
     pathD += "H" + finalStop.x;
     setPathD(pathD);
     setDest(finalStop);
@@ -28,7 +28,7 @@ const CurveArrowedLine = (props) => {
 
   useEffect(() => {
     if (dataRef && dataRef.current && dest) {
-      dataRef.current.style.fill = `red`;
+      // dataRef.current.style.fill = ``;
       console.log(dataRef.current);
       const charCount = data
         .split(",")
@@ -42,7 +42,7 @@ const CurveArrowedLine = (props) => {
     <Fragment>
       {visible && pathD && (
         <Fragment>
-          <svg width="1500" height="200" style={style}>
+          <svg width="1500" height="300" style={style}>
             <defs>
               <marker ref={markerNode} id="arrow">
                 <path d={pathD} style={{ fill: { color } }} />
@@ -51,7 +51,7 @@ const CurveArrowedLine = (props) => {
             <path ref={markerEndNode} d={pathD} style={{ stroke: color, strokeWidth: "1.25px", fill: "none" }} />
           </svg>
           <g>
-            <text ref={dataRef} color={color}>
+            <text ref={dataRef} fill={color}>
               {data}
             </text>
           </g>

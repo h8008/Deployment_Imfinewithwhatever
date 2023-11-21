@@ -8,7 +8,10 @@ const {
   DELETE_PREFERENCE,
 } = require('../Mutations/preference.js');
 
-const { GET_PREFERENCES } = require('../Queries/preference.js');
+const {
+  GET_PREFERENCES,
+  GET_PREFERENCES_FOR_CURRENT_USER,
+} = require('../Queries/preference.js');
 
 const add = async (ctx) => {
   console.log('in preference add controller');
@@ -33,8 +36,16 @@ const destroy = async (ctx) => {
   ctx.body = res ? { status: 'OK' } : { status: 'FAILED TO DELETE' };
 };
 
-const getAll = async (ctx) => {
+const getAllForCurrentUser = async (ctx) => {
   const params = ctx.request.query;
+  const res = await GET_PREFERENCES_FOR_CURRENT_USER(params);
+  ctx.body = res
+    ? { data: res, status: 'OK' }
+    : { data: undefined, status: 'NOT FOUND' };
+};
+
+const getAll = async (ctx) => {
+  const params = ctx.reques.query;
   const res = await GET_PREFERENCES(params);
   ctx.body = res
     ? { data: res, status: 'OK' }
@@ -46,4 +57,5 @@ module.exports = {
   update,
   destroy,
   getAll,
+  getAllForCurrentUser,
 };

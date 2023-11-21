@@ -19,9 +19,6 @@ const BarChart = (props) => {
   const xScale = d3.scaleLinear().domain([0, data.length]).range([0, chartWidth]);
   const yScale = (d) => 10 * d;
   const xOffset = window.innerWidth / 2 - chartWidth / 2;
-  // const maxHeight = yScale(data[0][1]);
-
-  console.log("all data length", totalDataLength);
 
   const maxHeight = yScale(totalDataLength);
 

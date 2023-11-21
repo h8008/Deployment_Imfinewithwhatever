@@ -1,27 +1,38 @@
-import { useState, useEffect, useContext } from "react";
-import Reviews from "../../components/Reviews";
-import Preferences from "../../components/Preferences";
-
+import { useState, useEffect, useContext, cloneElement, useMemo } from "react";
 import { Grid, styled, useTheme } from "@mui/material";
+
+import Preferences from "../../components/Preferences";
+import SideMenu from "../../components/SideMenu";
 import Text from "../../ui_components/Text";
 import Box from "../../ui_components/Box";
 import BorderedBox from "../../ui_components/BorderedBox";
 import RowComponent from "../../ui_components/RowComponent";
-import BarChart from "../../components/BarChart/BarChart";
 
 import API from "../../API_Interface";
 
+import { AssetsContext } from "../../providers/AssetsProvider";
 import { UserContext } from "../../providers/UserProvider";
 import { MessageContext } from "../../providers/MessageProvider";
+
 import quicksort from "../../utils/Sorting/Quicksort";
+import Reviews from "../../components/Reviews";
 
 const ProfileComponent = styled(Grid)({
-  height: "90%",
+  height: "90vh",
   width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
 });
+
+const DefaultComponent = styled(Grid)((props) => ({
+  height: "100%",
+  width: "80%",
+  backgroundImage: `url(${props.backdrop})`,
+  backgroundPosition: "center",
+  backgroundSize: "contain",
+  backgroundRepeat: "no-repeat",
+}));
 
 const HeaderComponent = styled(Grid)({
   gridRow: true,
@@ -53,7 +64,7 @@ const ColumnComponent = styled(Grid)({
   alignItems: "center",
 });
 
-const ReviewsComponent = styled(Box)({
+const ReviewsStyledComponent = styled(Box)({
   gridRow: true,
   display: "flex",
   flexDirection: "column",
@@ -63,16 +74,34 @@ const ReviewsComponent = styled(Box)({
   height: "45%",
 });
 
-const PreferencesComponent = styled(Grid)({
+const PreferencesStyledComponent = styled(Grid)({
   container: true,
   gridRow: true,
-  // height: "500px",
-  // width: "200px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
 });
+
+const ReviewsComponent = (props) => {
+  const { reviews } = props;
+
+  return (
+    <ReviewsStyledComponent>
+      <Reviews reviews={reviews} />
+    </ReviewsStyledComponent>
+  );
+};
+
+const PreferencesComponent = (props) => {
+  const { preferences } = props;
+
+  return (
+    <PreferencesStyledComponent>
+      <Preferences preferences={preferences} />
+    </PreferencesStyledComponent>
+  );
+};
 
 const ReviewComponent = styled(BorderedBox)({
   width: "90%",
@@ -83,7 +112,7 @@ const useGetPreferences = (email) => {
   const [preferences, setPreferences] = useState([]);
   useEffect(() => {
     const getPreferences = async () => {
-      const res = await API.Preference.get({ email: email });
+      const res = await API.Preference.getAllForCurrentUser({ email: email });
       if (res.status === "OK") {
         setPreferences([...res.data]);
       }
@@ -93,7 +122,24 @@ const useGetPreferences = (email) => {
     }
   }, [email]);
 
-  return [preferences, setPreferences];
+  return [preferences];
+};
+
+const useGetReviews = (email) => {
+  const [reviews, setReviews] = useState(null);
+  useEffect(() => {
+    const getReviews = async () => {
+      const res = await API.UserReviews.getReviews({ email: email });
+      if (res.status === "OK") {
+        setReviews({ reviews: [...res.data] });
+      }
+    };
+    if (email) {
+      getReviews();
+    }
+  }, [email]);
+
+  return [reviews];
 };
 
 const sortObject = async (dict) => {
@@ -126,54 +172,114 @@ const getDislikes = async (preferences) => {
 };
 
 const useSortPreferences = (preferences) => {
-  const [sorted, setSorted] = useState({});
+  const [sorted, setSorted] = useState(null);
   useEffect(() => {
     const sort = async () => {
       let likes = await getFavorites(preferences);
       let dislikes = await getDislikes(preferences);
       likes = await sortObject(likes);
       dislikes = await sortObject(dislikes);
-      setSorted({ likes, dislikes, totalDataLength: likes.length + dislikes.length });
+      setSorted({ preferences: { likes, dislikes, totalDataLength: likes.length + dislikes.length } });
     };
     if (preferences.length > 0) {
       sort();
     }
   }, [preferences]);
-  return [sorted, setSorted];
+  return [sorted];
+};
+
+const getActiveComponent = (activeComponentIdx, components) => {
+  return components[activeComponentIdx];
+};
+
+const getComponents = () => [<DefaultComponent />, <PreferencesComponent />, <ReviewsComponent />];
+
+const useGetComponents = (ready, componentProps) => {
+  const components = useMemo(() => {
+    if (ready) {
+      const components = getComponents();
+      const curriedComponents = components.map((component, idx) => cloneElement(component, { ...componentProps[idx] }));
+      return curriedComponents;
+    }
+  }, [componentProps, ready]);
+
+  return [components];
+};
+
+const useGetComponentProps = (props) => {
+  const [componentProps, setComponentProps] = useState(
+    Array(props.length)
+      .fill(null)
+      .map((el) => el)
+  );
+  useEffect(() => {
+    const cp = [...componentProps];
+    props.forEach((p, i) => {
+      if (p != null && cp[i] == null) {
+        cp[i] = p;
+      }
+    });
+    const update = cp.filter((p, i) => p != componentProps[i]).length > 0;
+    if (update) {
+      setComponentProps(cp);
+    }
+  }, [componentProps, props]);
+
+  return [componentProps];
+};
+
+const useGetReadyState = (props) => {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const condition = props.every((p) => p != null);
+    if (condition) {
+      setReady(true);
+    }
+  }, [props]);
+  return [ready];
+};
+
+const useGetBackdropOfTheDay = (assets) => {
+  const pick = useMemo(() => {
+    const { backdrops } = assets;
+    const idx = Math.floor(Math.random() * (backdrops.length - 1));
+    return { backdrop: backdrops[idx] };
+  }, [assets]);
+  return [pick];
 };
 
 const Profile = (props) => {
+  const theme = useTheme();
+  const { assets } = useContext(AssetsContext);
   const { userState, userDispatch } = useContext(UserContext);
   const { messageState, messageDispatch } = useContext(MessageContext);
 
-  const [reviews, setReviews] = useState([]);
-  const [preferences, setPreferences] = useGetPreferences(userState.email);
-  const [sortedPreferences, setSortedPreferences] = useSortPreferences(preferences);
+  const [backdrop] = useGetBackdropOfTheDay(assets);
+  const [reviews] = useGetReviews(userState.email);
+  const [preferences] = useGetPreferences(userState.email);
+  const [sortedPreferences] = useSortPreferences(preferences);
+  const [componentProps] = useGetComponentProps([backdrop, sortedPreferences, reviews]);
+  const [ready] = useGetReadyState(componentProps);
+  const [components] = useGetComponents(ready, componentProps);
+  const [componentNames, setComponentNames] = useState(["Default", "Preferences", "Reviews"]);
+  const [activeComponentIdx, setActiveComponentIdx] = useState(0);
 
-  const theme = useTheme();
-
-  useEffect(() => {
-    const getReviews = async () => {
-      const res = await API.UserReviews.getReviews({ email: userState.email });
-      if (res.status === "OK") {
-        const reviews = API.apiResHandling(res, messageDispatch, res.message);
-        setReviews([...reviews]);
-      }
-    };
-    getReviews();
-  }, [messageDispatch, userState.email]);
+  const onSelectMenuItemCallback = (idx) => {
+    setActiveComponentIdx(idx);
+  };
 
   return (
-    <ProfileComponent>
-      <HeaderComponent>
-        <ColumnComponent>
-          <Text text={"User Page"} />
+    <ProfileComponent data_id={"Profile-Page"}>
+      <SideMenu user={{ ...userState }} items={componentNames} onSelectMenuItemCallback={onSelectMenuItemCallback} />
+      {/* <HeaderComponent>
+        <ColumnComponent> */}
+      {/* <Text text={"User Page"} />
           <RowComponent>
             <Text text={"Email: "} style={{ marginRight: "5px" }} />
             <Text text={userState.email} style={{ textDecoration: "underline" }} />
-          </RowComponent>
-        </ColumnComponent>
-        <ColumnComponent>
+          </RowComponent> */}
+      {/* </ColumnComponent> */}
+      {/* <ColumnComponent>
           <Text text={"Reset Preferences?"} />
           <BorderedBox
             style={{
@@ -185,13 +291,14 @@ const Profile = (props) => {
           >
             <Text text={"Reset"} />
           </BorderedBox>
-        </ColumnComponent>
-      </HeaderComponent>
+        </ColumnComponent> */}
+      {/* // </HeaderComponent> */}
       <BodyComponent>
-        <PreferencesComponent>
+        {/* <DefaultComponent image={assets.backdrops[0]} /> */}
+        {/* <PreferencesComponent>
           {Object.keys(sortedPreferences).length > 0 && <Preferences preferences={sortedPreferences} />}
-        </PreferencesComponent>
-        {/* <ReviewsComponent>{reviews.length > 0 && <Reviews reviews={reviews} />}</ReviewsComponent> */}
+        </PreferencesComponent> */}
+        {components != null && getActiveComponent(activeComponentIdx, components)}
       </BodyComponent>
     </ProfileComponent>
   );

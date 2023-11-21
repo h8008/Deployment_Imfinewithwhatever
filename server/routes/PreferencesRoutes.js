@@ -15,6 +15,11 @@ preferenceRouter.post('/update', PreferenceController.update);
 
 preferenceRouter.post('/delete', PreferenceController.destroy);
 
+preferenceRouter.get(
+  '/currentuser/getall',
+  PreferenceController.getAllForCurrentUser
+);
+
 preferenceRouter.get('/getall', PreferenceController.getAll);
 
 module.exports = preferenceRouter;

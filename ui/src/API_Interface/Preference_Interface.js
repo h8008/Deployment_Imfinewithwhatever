@@ -16,18 +16,9 @@ export default class UserPreferences {
       }));
   }
 
-  async get(params) {
-    // await this.axiosAgent
-    //   .get(`preferences/getall`, { ...params })
-    //   .then((preferenceData) => {
-    //     return preferenceData;
-    //   })
-    //   .catch((error) => ({
-    //     error,
-    //     preference: undefined,
-    //   }));
+  async getAllForCurrentUser(params) {
     return await this.axiosAgent({
-      url: `preferences/getall`,
+      url: `preferences/currentuser/getall`,
       method: "get",
       params: {
         ...params,
@@ -35,6 +26,18 @@ export default class UserPreferences {
       headers: {
         "Content-Type": "application/json",
       },
+    })
+      .then((response) => response.data)
+      .catch((error) => ({
+        error,
+        preferences: undefined,
+      }));
+  }
+
+  async getAll() {
+    return await this.axiosAgent({
+      url: `preferences/getall`,
+      method: "get",
     })
       .then((response) => response.data)
       .catch((error) => ({

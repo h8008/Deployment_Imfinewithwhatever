@@ -1,4 +1,8 @@
 import * as React from "react";
+import { useState } from "react";
+
+import { styled } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
@@ -10,14 +14,29 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import InputTwoToneIcon from "@mui/icons-material/InputTwoTone";
 
-export default function SwipeableTemporaryDrawer() {
-  const [state, setState] = React.useState({
+const SlideOutComponent = styled(InputTwoToneIcon)(({ theme }) => ({}));
+
+const SideMenuComponent = styled(Grid)({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItems: "center",
+});
+
+export default function SwipeableTemporaryDrawer(props) {
+  const { data, items, onSelectMenuItemCallback } = props;
+
+  const [state, setState] = useState({
     top: false,
     left: false,
     bottom: false,
     right: false,
   });
+
+  const [anchor, setAnchor] = useState("left");
+  const menuItems = [data.email, ...items];
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event && event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
@@ -35,8 +54,14 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {/* <ListItem>
+          <ListItemButton>
+            <ListItemIcon>{MailIcon}</ListItemIcon>
+            <ListItemText primary={menuItems[0]} />
+          </ListItemButton>
+        </ListItem> */}
+        {items.map((text, index) => (
+          <ListItem key={text} disablePadding onClick={() => onSelectMenuItemCallback(index)}>
             <ListItemButton>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
@@ -45,8 +70,8 @@ export default function SwipeableTemporaryDrawer() {
         ))}
       </List>
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
+      {/* <List>
+        {["Messages"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
@@ -54,25 +79,26 @@ export default function SwipeableTemporaryDrawer() {
             </ListItemButton>
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </Box>
   );
 
   return (
     <div>
-      {["left", "right", "top", "bottom"].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
+      {/* <React.Fragment key={anchor}> */}
+      <SideMenuComponent>
+        <Button onClick={toggleDrawer(anchor, true)}>{<SlideOutComponent />}</Button>
+        <SwipeableDrawer
+          anchor={anchor}
+          open={state[anchor]}
+          onClose={toggleDrawer(anchor, false)}
+          onOpen={toggleDrawer(anchor, true)}
+        >
+          {list(anchor)}
+        </SwipeableDrawer>
+      </SideMenuComponent>
+      {/* </React.Fragment> */}
+      {/* ))} */}
     </div>
   );
 }
