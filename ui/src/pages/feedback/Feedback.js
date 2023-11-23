@@ -1,29 +1,30 @@
 import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import MUIGrid from "@mui/material/Grid";
+import { Box, styled } from "@mui/material";
+
 import Grid from "../../ui_components/Grid";
 import Text from "../../ui_components/Text";
 import GridRow from "../../ui_components/GridRow";
 import GridItem from "../../ui_components/GridItem";
 import TextField from "../../ui_components/TextField";
-
-import { Box, styled } from "@mui/material";
-
-import { main_config } from "../../styles/shared";
 import RoundButton from "../../ui_components/RoundButton";
 import RowComponent from "../../ui_components/RowComponent";
+
+import { main_config } from "../../styles/shared";
 
 import { UserContext } from "../../providers/UserProvider";
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { MessageContext } from "../../providers/MessageProvider";
+import { NavigationContext } from "../../providers/NavigationProvider";
+import { NAVIGATE } from "../../reducer/Navigation/actions";
 
 import API from "../../API_Interface";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 import { getFoodPreferences } from "../../utils/Functions";
-import { useNavigate } from "react-router-dom";
-
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import { NAVIGATE } from "../../reducer/Navigation/actions";
-import { NavigationContext } from "../../providers/NavigationProvider";
 
 const calcCellWidth = (addon = 0) => {
   const cellBorderWidth = 1;
@@ -51,7 +52,6 @@ const TextComponent = (props) => {
   return (
     <GridRow style={style}>
       <Text text={props.text} />
-      {/* <TextField text={props.text} onChange={props.handleCommentsChange} /> */}
     </GridRow>
   );
 };
@@ -141,6 +141,19 @@ const createInitialBar = () => {
     .fill()
     .map(() => createInitialCell());
 };
+
+const FeedbackComponent = styled(MUIGrid)((props) => ({
+  container: true,
+  width: "80%",
+  height: "90vh",
+  margin: "auto",
+  theme: props.theme,
+  rowGap: props.rowGap,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "cetner",
+}));
 
 const RaterComponent = (props) => {
   const style = {
@@ -354,7 +367,9 @@ const Feedback = (props) => {
   };
 
   return (
-    <Grid rowGap={5} style={theme}>
+    // <Grid rowGap={5} style={theme}>
+    // <FeedbackComponent rowGap={5} theme={theme} />
+    <FeedbackComponent rowGap={5} theme={theme}>
       <RaterComponent>
         <TextComponent text={"Rate you food:"} />
         <BarComponent
@@ -379,7 +394,7 @@ const Feedback = (props) => {
           </RoundButton>
         </RowComponent>
       </DecisionComponent>
-    </Grid>
+    </FeedbackComponent>
   );
 };
 

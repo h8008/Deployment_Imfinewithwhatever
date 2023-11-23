@@ -27,7 +27,7 @@ const Preferences = (props) => {
         totalDataLength={totalDataLength}
         id={0}
         pos={0}
-        height={350}
+        height={400}
         width={width}
         color="red"
       />
@@ -36,7 +36,7 @@ const Preferences = (props) => {
         totalDataLength={totalDataLength}
         id={2}
         pos={25}
-        height={350}
+        height={400}
         width={width}
         color="green"
       />

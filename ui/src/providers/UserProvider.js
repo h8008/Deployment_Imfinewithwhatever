@@ -11,8 +11,11 @@ const UserProvider = ({ children }) => {
   const email = cookies.email;
   const [userState, userDispatch] = useReducer(
     UserReducer,
-    loggedIn != null && email != null ? { ...initialUserState, loggedIn: loggedIn, email: email } : initialUserState
+    loggedIn != null && email != null ? { ...initialUserState, loggedIn: true, email: email } : initialUserState
   );
+  // const [userState, userDispatch] = useReducer(UserReducer, initialUserState);
+
+  console.log("user state in user provider", userState);
 
   return <UserContext.Provider value={{ userState, userDispatch }}>{children}</UserContext.Provider>;
 };

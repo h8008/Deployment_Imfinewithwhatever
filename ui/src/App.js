@@ -6,6 +6,7 @@ import Main from "./pages/main/Main";
 import Backdrop from "./components/Backdrop";
 import Profile from "./pages/profile/Profile";
 import Login from "./pages/login/Login";
+import Logout from "./pages/logout/Logout";
 import Feedback from "./pages/feedback/Feedback";
 import Restaurants from "./pages/restaurants/Restaurants";
 import Navigation from "./pages/navigation/Navigation";
@@ -55,6 +56,7 @@ function App() {
                             <Route exact path="/" element={<Home />} />
                             <Route exact path="/Main" element={<Main />} />
                             <Route exact path="/Login" element={<Login theme={main_config} />} />
+                            <Route exact path="/Logout" element={<Logout />} />
                             <Route exact path="/Feedback" element={<Feedback theme={main_config} />} />
                             <Route exact path="/Restaurants" element={<Restaurants theme={main_config} />} />
                             <Route exact path="/Profile" element={<Profile />} />

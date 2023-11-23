@@ -27,6 +27,7 @@ import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchPro
 import { DISPATCH } from "../../reducer/BackgroundDispatch/actions";
 import { UserContext } from "../../providers/UserProvider";
 import API_Interface from "../../API_Interface";
+import { useNavigate } from "react-router-dom";
 
 const getFoodPreferences = (categories) => {
   const lowercased_categories = categories.map((category) => {
@@ -134,6 +135,8 @@ const MainComponent = styled(Grid)({
 });
 
 function Main(props) {
+  console.log("Rendering main page");
+
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
   const cuisines = [
     "Mexican",
@@ -152,13 +155,14 @@ function Main(props) {
 
   const { userState } = useContext(UserContext);
   const { restaurantDispatch } = useContext(RestaurantsContext);
-  const { navigationDispatch } = useContext(NavigationContext);
+  // const { navigationDispatch } = useContext(NavigationContext);
   const { messageDispatch } = useContext(MessageContext);
   const { backgroundDispatch } = useContext(BackgroundDispatchContext);
 
   const [location, setLocation] = useState("");
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
   const [selectedCuisines, setSelectedCuisines] = useState([]);
+  const navigate = useNavigate();
 
   const handleLocationChange = (event) => {
     const location = event.target.value;
@@ -238,26 +242,28 @@ function Main(props) {
   };
 
   const handleDecideForMeButtonClick = async () => {
-    await handleSubmitData("normal");
-    await navigationDispatch({
-      type: NAVIGATE,
-      payload: {
-        shouldNavigate: true,
-        destination: "/MultiDecisioinMaker",
-        options: { replace: true },
-      },
-    });
+    await handleSubmitData("game");
+    navigate("/MultiDecisionMaker", { replace: true });
+    // await navigationDispatch({
+    //   type: NAVIGATE,
+    //   payload: {
+    //     shouldNavigate: true,
+    //     destination: "/MultiDecisioinMaker",
+    //     options: { replace: true },
+    //   },
+    // });
   };
 
   const handleGoButtonClick = async () => {
-    await handleSubmitData("game");
-    await navigationDispatch({
-      type: NAVIGATE,
-      payload: {
-        shouldNavigate: true,
-        destination: "/Restaurants",
-      },
-    });
+    await handleSubmitData("normal");
+    navigate("/Restaurants");
+    // await navigationDispatch({
+    //   type: NAVIGATE,
+    //   payload: {
+    //     shouldNavigate: true,
+    //     destination: "/Restaurants",
+    //   },
+    // });
   };
 
   return (

@@ -20,6 +20,22 @@ export default class Users {
       }));
   }
 
+  async logout(params) {
+    return this.axiosAgent({
+      url: `users/logout`,
+      method: "post",
+      // data: params,
+      // headers: {
+      //   "Content-Type" : "application/json"
+      // }
+    })
+      .then((logoutInfo) => logoutInfo.data)
+      .catch((error) => ({
+        error,
+        user: undefined,
+      }));
+  }
+
   async signup(params) {
     return this.axiosAgent
       .post(`users/signup`, { ...params })

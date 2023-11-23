@@ -1,4 +1,5 @@
 const Authorize = require('../app/Middleware/Authorize.js');
+const DeAuthorize = require('../app/Middleware/DeAuthorize.js');
 const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
 
 const UserController = require('../app/Controllers/UserController');
@@ -11,6 +12,8 @@ userRouter.get('/', () => {
 });
 
 userRouter.post('/login', UserController.login, Authorize('guest'));
+
+userRouter.post('/logout', DeAuthorize('guest'), UserController.logout);
 
 userRouter.post('/signup', UserController.signup, Authorize('guest'));
 

@@ -8,6 +8,18 @@ import * as d3 from "d3";
 import "./BarChart.css";
 
 const initializeTextVisible = (len) => new Array(len).fill(false).map((el) => el);
+const labelStyle = {
+  height: "50px",
+  width: "25px",
+  border: `1px solid black`,
+  backgroundColor: "blue",
+};
+const dataStyle = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};
 
 const BarChart = (props) => {
   const { chartData, totalDataLength, color, height, width } = props;
@@ -21,6 +33,8 @@ const BarChart = (props) => {
   const xOffset = window.innerWidth / 2 - chartWidth / 2;
 
   const maxHeight = yScale(totalDataLength);
+
+  console.log(data);
 
   const handleSetVisible = (idx) => {
     const v = initializeTextVisible(data.length);
@@ -41,14 +55,16 @@ const BarChart = (props) => {
             <Fragment>
               <g
                 key={idx}
+                style={dataStyle}
                 width={barWidth}
                 height={maxHeight}
                 transform={`translate(${x}, ${0})`}
-                style={{ border: "1px solid black" }}
+                // style={{ border: "1px solid black" }}
                 onClick={() => handleSetVisible(idx)}
               >
                 <rect width={barWidth} height={y} fill={"black"} />
                 <rect width={barWidth} transform={`translate(${0}, ${y})`} height={barHeight} fill={color} />
+                <text style={labelStyle}>1</text>
               </g>
               <CurvedArrowLine
                 color={color}

@@ -88,7 +88,7 @@ const signup = async (ctx) => {
   }
 };
 
-const login = async (ctx) => {
+const login = async (ctx, next) => {
   try {
     console.log('user login called');
     console.log(ctx.request.body);
@@ -113,6 +113,12 @@ const login = async (ctx) => {
     console.log('Error while logging in: ', err);
     throw err;
   }
+
+  return await next();
+};
+
+const logout = async (ctx) => {
+  ctx.body = { status: 'OK' };
 };
 
 const addRestaurantPreference = async (ctx) => {
@@ -206,6 +212,7 @@ const getAllRestaurantPreferencesForUser = async (ctx) => {
 module.exports = {
   signup,
   login,
+  logout,
   updateCurrentUser,
   getCurrentUser,
   getCurrentUserYelp,

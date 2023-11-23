@@ -84,6 +84,7 @@ class ReviewsClassComponent extends React.Component {
           type: NAVIGATE,
           payload: {
             destination: "/Main",
+            options: { replace: true },
           },
         }),
     });
@@ -91,21 +92,33 @@ class ReviewsClassComponent extends React.Component {
 
   componentDidMount() {
     if (this.state.reviews == null || this.state.reviews.length === 0) this.onEmptyData();
+    if (this.state.reviews != null || this.state.swipableReviews.length !== this.state.reviews.length)
+      this.setState({
+        ...this.state,
+        swipableReviews: this.state.reviews,
+      });
   }
 
-  advanceIdx() {
-    const newIdx = this.state.activeReviewIdx + (1 % this.state.reviews.length);
+  advanceIdx(swipableReviewIdx) {
+    let newIdx = swipableReviewIdx + 1;
+    newIdx = newIdx === this.state.reviews.length ? 0 : newIdx;
     return newIdx;
   }
 
   onTinderSwipe() {
     this.Tinder.swipe();
-    const swipedReviewIdx = this.state.activeReviewIdx;
-    const newActiveReviewIdx = this.advanceIdx();
+    if (this.state.swipableReviews.length === 0) return;
+    if (this.state.swipableReviews.length === 1) return;
 
-    const newSwipableReviews = [...this.state.swipableReviews, this.state.swipableReviews[swipedReviewIdx]];
+    const swipedReviewIdx = this.state.activeReviewIdx;
+    const newActiveReviewIdx = this.advanceIdx(swipedReviewIdx);
+    const newSwipableReviews = [...this.state.swipableReviews];
+    const head = this.state.swipableReviews[0];
+    newSwipableReviews.shift();
+    newSwipableReviews.push(head);
 
     this.setState({
+      ...this.state,
       activeReviewIdx: newActiveReviewIdx,
       swipableReviews: newSwipableReviews,
     });
@@ -147,44 +160,44 @@ class ReviewsClassComponent extends React.Component {
   }
 
   render() {
+    const activeReviewIdx = this.state.activeReviewIdx;
+
     return (
       <ReviewsComponent>
-        {this.state.swipableReviews != null &&
-          this.state.swipableReviews.length > 0 &&
-          this.state.swipableReviews.map((review, index) => (
-            <React.Fragment>
-              <ColumnComponent numItems={2}>
-                <UpArrow onClick={this.onTinderSwipe} />
-                <DeleteForeverIcon onClick={this.onDeleteReview} />
-              </ColumnComponent>
-              <TinderLikeCard
-                images={this.state.swipableReviews}
-                width="800"
-                height="200"
-                direction={this.state.directionTinder}
-                duration={400}
-                ref={(node) => (this.Tinder = node)}
-                className="tinder"
+        {this.state.swipableReviews != null && this.state.swipableReviews.length > 0 && (
+          <React.Fragment>
+            <ColumnComponent numItems={2}>
+              <UpArrow onClick={this.onTinderSwipe} />
+              <DeleteForeverIcon onClick={this.onDeleteReview} />
+            </ColumnComponent>
+            <TinderLikeCard
+              images={this.state.swipableReviews}
+              width="800"
+              height="200"
+              direction={this.state.directionTinder}
+              duration={400}
+              ref={(node) => (this.Tinder = node)}
+              className="tinder"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <BorderedBox
                 style={{
+                  height: "100%",
+                  backgroundColor: "white",
                   display: "flex",
                   flexDirection: "column",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
                 }}
               >
-                <BorderedBox
-                  style={{
-                    height: "100%",
-                    backgroundColor: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Review review={review} />
-                </BorderedBox>
-              </TinderLikeCard>
-            </React.Fragment>
-          ))}
+                <Review review={this.state.swipableReviews[activeReviewIdx]} />
+              </BorderedBox>
+            </TinderLikeCard>
+          </React.Fragment>
+        )}
       </ReviewsComponent>
     );
   }

@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useContext, useState, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
 import Text from "../ui_components/Text";
@@ -9,9 +9,6 @@ import styled from "@emotion/styled";
 import { useTheme } from "@mui/material";
 
 import { UserContext } from "../providers/UserProvider";
-import { MessageContext } from "../providers/MessageProvider";
-import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
-import { LOGOUT } from "../reducer/User/UserActions";
 
 const MenuComponent = styled(Grid)((props) => ({
   width: "100%",
@@ -24,49 +21,48 @@ const MenuComponent = styled(Grid)((props) => ({
   zIndex: 1,
 }));
 
+const LinkComponent = styled(Link)((props) => ({
+  width: "50px",
+  height: "50px",
+}));
+
+const getOptions = (loggedIn, dest) => {
+  return dest === "Login" && loggedIn ? "Logout" : dest;
+};
+
+const getName = (option) => {
+  return option === "/" ? "Home" : option.slice(1, option.length);
+};
+
+const getDest = (to, loggedIn) => {
+  let dest = getOptions(loggedIn, to);
+  return dest === "Home" ? "/" : "/" + dest;
+};
+
+const intializeOptions = (names, loggedIn) => Object.values(names).map((name, idx) => getDest(name, loggedIn));
+
 const Menu = (props) => {
   const { palette } = useTheme();
   const { userState, userDispatch } = useContext(UserContext);
-  const { messageDispatch } = useContext(MessageContext);
 
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    userDispatch({
-      type: LOGOUT,
-    });
-  };
-
-  const options = {
-    Home: "Home",
-    Login: userState.loggedIn ? "Logout" : "Login",
-    Main: "Main",
-    Profile: "Profile",
-  };
-
-  const handleOptionClick = (clickedOption) => {
-    if (clickedOption === "Home") {
-      navigate("/");
-    } else if (!userState.loggedIn && clickedOption !== "Login" && clickedOption !== "Logout") {
-      navigate("/Login");
-      messageDispatch({
-        type: UPDATE_MESSAGE,
-        message: "Please login",
-      });
-    } else if (clickedOption === "Logout") {
-      handleLogout();
-    } else {
-      const destionation = options[clickedOption];
-      navigate(`/${destionation}`);
-    }
-  };
+  const options = useMemo(() => {
+    const names = {
+      Home: "Home",
+      Login: "Login",
+      Main: "Main",
+      Profile: "Profile",
+    };
+    return intializeOptions(names, userState.loggedIn);
+  }, [userState.loggedIn]);
 
   return (
-    <MenuComponent color={palette.error.light} data_id="naviagation-component">
-      {Object.values(options).map((option, index) => (
-        <Box key={index} sx={{ marginRight: "20px" }} onClick={() => handleOptionClick(option)}>
-          <Text text={option} color={palette.primary.contrastText} />
-        </Box>
+    <MenuComponent color={palette.error.light} data_id="navigation-component">
+      {options.map((option, index) => (
+        <LinkComponent key={index} to={option} color={palette.primary.contrastText}>
+          <Box key={index} sx={{ marginRight: "20px" }}>
+            <Text text={getName(option)} color={palette.primary.contrastText} />
+          </Box>
+        </LinkComponent>
       ))}
     </MenuComponent>
   );

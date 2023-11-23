@@ -16,6 +16,7 @@ import API from "../../API_Interface";
 import { UserContext } from "../../providers/UserProvider";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_PREFERENCES } from "../../reducer/User/UserActions";
+import useNavigator from "../../hooks/useNavigator";
 
 const FormComponent = styled("form")(() => ({
   width: "100%",
@@ -154,7 +155,6 @@ const Login = (props) => {
   const { userDispatch } = useContext(UserContext);
   const { messageDispatch } = useContext(MessageContext);
 
-  const navigate = useNavigate();
   const components = ["email", "firstname", "lastname", "password"];
 
   const handleChange = (event) => {
@@ -222,11 +222,8 @@ const Login = (props) => {
     setShowPassword(false);
   };
 
-  useEffect(() => {
-    if (authenticated) {
-      navigate("/");
-    }
-  }, [authenticated, navigate]);
+  // useNavigation("/", authenticated === true);
+  useNavigator({ dest: "/", cond: authenticated === true });
 
   return (
     <LoginComponent data_id="login-component">

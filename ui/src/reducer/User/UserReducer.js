@@ -28,10 +28,6 @@ const UserReducer = (state = initialUserState, action) => {
       Cookies.set("loggedIn", true);
       return { ...state, loggedIn: true, email: action.email };
     case LOGOUT:
-      Cookies.remove("email");
-      Cookies.remove("loggedIn");
-      Cookies.remove("access_token");
-      Cookies.remove("restaurantData");
       return initialUserState;
     case UPDATE_PREFERENCES:
       return { ...state, preferences: action.preferences };
