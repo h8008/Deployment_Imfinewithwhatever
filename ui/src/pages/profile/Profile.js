@@ -97,9 +97,9 @@ const PreferencesComponent = (props) => {
   const { preferences } = props;
 
   return (
-    <PreferencesStyledComponent>
-      <Preferences preferences={preferences} />
-    </PreferencesStyledComponent>
+    // <PreferencesStyledComponent data_id={"preferences_component"}>
+    <Preferences preferences={preferences} />
+    // </PreferencesStyledComponent>
   );
 };
 

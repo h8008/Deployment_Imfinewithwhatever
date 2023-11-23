@@ -1,14 +1,15 @@
-import { Component, Fragment, findDOMNode, useState, useEffect, useRef } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 
 const getLength = (src, dest) => {
   return Math.sqrt(Math.pow(src.x - dest.x, 2) + Math.pow(dest.y - src.y, 2));
 };
 
 const CurveArrowedLine = (props) => {
+  const { visible, start, stop, data, color } = props;
+
   const dataRef = useRef(null);
   const markerNode = useRef(null);
   const markerEndNode = useRef(null);
-  const { visible, start, stop, data, color } = props;
   const [dest, setDest] = useState(null);
   const [pathD, setPathD] = useState(null);
 
@@ -28,7 +29,6 @@ const CurveArrowedLine = (props) => {
 
   useEffect(() => {
     if (dataRef && dataRef.current && dest) {
-      // dataRef.current.style.fill = ``;
       console.log(dataRef.current);
       const charCount = data
         .split(",")

@@ -30,7 +30,8 @@ const BarChart = (props) => {
   const chartWidth = data.length * (barWidth + 5);
   const xScale = d3.scaleLinear().domain([0, data.length]).range([0, chartWidth]);
   const yScale = (d) => 10 * d;
-  const xOffset = window.innerWidth / 2 - chartWidth / 2;
+  // const xOffset = window.innerWidth / 2 - chartWidth / 2;
+  const xOffset = 0;
 
   const maxHeight = yScale(totalDataLength);
 
@@ -44,13 +45,17 @@ const BarChart = (props) => {
 
   return (
     <Fragment>
-      <svg height={height} width={width}>
+      <svg
+        height={height}
+        width={width}
+        style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}
+      >
         {data.map((d, idx) => {
           const barHeight = yScale(d[1]);
           const x = xScale(idx) + xOffset;
           const y = maxHeight - barHeight;
           const arrowSrc = y + barHeight;
-          const arrowDest = y + barHeight + 100;
+          const arrowDest = y + barHeight + 50;
           return (
             <Fragment>
               <g
@@ -59,12 +64,10 @@ const BarChart = (props) => {
                 width={barWidth}
                 height={maxHeight}
                 transform={`translate(${x}, ${0})`}
-                // style={{ border: "1px solid black" }}
-                onClick={() => handleSetVisible(idx)}
+                onMouseEnter={() => handleSetVisible(idx)}
               >
                 <rect width={barWidth} height={y} fill={"black"} />
                 <rect width={barWidth} transform={`translate(${0}, ${y})`} height={barHeight} fill={color} />
-                <text style={labelStyle}>1</text>
               </g>
               <CurvedArrowLine
                 color={color}
