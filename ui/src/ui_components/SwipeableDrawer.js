@@ -26,7 +26,8 @@ const SideMenuComponent = styled(Grid)({
 });
 
 export default function SwipeableTemporaryDrawer(props) {
-  const { data, items, onSelectMenuItemCallback } = props;
+  const { data, items } = props;
+  const onSelectMenuItemCallback = props.onSelectMenuItemCallback ? props.onSelectMenuItemCallback : () => {};
 
   const [state, setState] = useState({
     top: false,
@@ -36,7 +37,7 @@ export default function SwipeableTemporaryDrawer(props) {
   });
 
   const [anchor, setAnchor] = useState("left");
-  const menuItems = [data.email, ...items];
+  // const menuItems = [data.email, ...items];
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event && event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
@@ -54,12 +55,6 @@ export default function SwipeableTemporaryDrawer(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {/* <ListItem>
-          <ListItemButton>
-            <ListItemIcon>{MailIcon}</ListItemIcon>
-            <ListItemText primary={menuItems[0]} />
-          </ListItemButton>
-        </ListItem> */}
         {items.map((text, index) => (
           <ListItem key={text} disablePadding onClick={() => onSelectMenuItemCallback(index)}>
             <ListItemButton>
@@ -93,6 +88,9 @@ export default function SwipeableTemporaryDrawer(props) {
           open={state[anchor]}
           onClose={toggleDrawer(anchor, false)}
           onOpen={toggleDrawer(anchor, true)}
+          // sx={{
+          //   opacity: 1,
+          // }}
         >
           {list(anchor)}
         </SwipeableDrawer>

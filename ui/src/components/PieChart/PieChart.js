@@ -101,7 +101,7 @@ const options = (title) => ({
       display: true,
     },
     title: {
-      display: true,
+      display: false,
       text: title,
     },
   },

@@ -4,6 +4,31 @@ const headers = {
   Authorization: `Bearer ${process.env.API_KEY}`,
 };
 
+const endpoints = {
+  base: `https://api.yelp.com/v3/businesses`,
+  search: `search`,
+  reviews: `reviews`,
+};
+
+const getRestaurantReviews = async (ctx) => {
+  try {
+    const params = ctx.params;
+    const endpoint = endpoints.base + '/' + params.id + '/' + endpoints.reviews;
+    await axios.get(endpoint, { params, headers }).then((response) => {
+      ctx.body = {
+        restaurantsData: { ...response.data },
+        status: 'OK',
+      };
+    });
+  } catch (error) {
+    console.error(error);
+    ctx.body = {
+      restaurantData: undefined,
+      status: 'NOT FOUND',
+    };
+  }
+};
+
 const getRestaurantsByCuisine = async (ctx) => {
   try {
     const endpoint = 'https://api.yelp.com/v3/businesses/search';
@@ -73,7 +98,6 @@ const getRestaurantById = async (ctx) => {
     await axios
       .get(endpoint, { params, headers })
       .then((response) => {
-        console.log(response.data);
         ctx.body = {
           data: { ...response.data },
           status: 'OK',
@@ -101,4 +125,5 @@ module.exports = {
   getRestaurantsByLocation,
   getRestaurantsByCuisine,
   getRestaurantById,
+  getRestaurantReviews,
 };

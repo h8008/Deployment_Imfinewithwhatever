@@ -23,23 +23,49 @@ import useDispatchMessage from "../../hooks/useDispatchMessage";
 
 import API from "../../API_Interface";
 import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchProvider";
+import { AssetsContext } from "../../providers/AssetsProvider";
 
-const RestaurantsComponent = styled(Grid)({
-  width: "1000px",
-  height: "900px",
+import attributes from "../../config";
+import MapBox from "../../components/Maps/Map_Box";
+import { useTheme } from "@mui/material";
+
+const RestaurantsComponent = styled(Grid)(({ theme }) => ({
+  width: "90%",
+  height: "90vh",
   margin: "auto",
   display: "flex",
-  flexDirection: "row",
+  flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
   flexWrap: "wrap",
+  // backgroundImage: `url(${attributes.images.restaurants})`,
+  backgroundColor: theme.palette.background.default,
+}));
+
+const ButtonsComponent = styled(Grid)({
+  container: true,
+  width: "60%",
+  display: "flex",
+  justifyContent: "flex-end",
+  alignItems: "center",
+  flexDirection: "row",
 });
 
-const RestaurantsContainer = styled(Grid)({
-  width: "100%",
-  height: "100%",
-  data_id: "restaurant-container",
+const RestaurantComponent = styled(Grid)({
+  width: "60%",
+  height: "75%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  flexDirection: "column",
+  backgroundColor: "white",
 });
+
+// const RestaurantsContainer = styled(Grid)({
+//   width: "100%",
+//   height: "100%",
+//   data_id: "restaurant-container",
+// });
 
 // Filters the list of restaurants from Yelp API based on the blacklist stored
 // in the User global state which was retrieved from the database at login
@@ -79,7 +105,7 @@ const initializeVerdicts = (restaurants, pos, v) => {
     : [];
 };
 
-const initializeMessage = () => "How do you like these restaurants? Yes ? No ?";
+const initializeMessage = () => "";
 
 const useRecordVerdictsOnPageChange = (verdicts, restaurants, email, ready) => {
   const getCategories = (categories) => categories.map((cat) => cat.title);
@@ -111,26 +137,28 @@ const updateVerdicts = (verdicts, activeRestaurantIdx, verdict) => {
 };
 
 const Restaurants = (props) => {
+  const theme = useTheme();
+
+  const { assets } = useContext(AssetsContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
   const { navigationState, navigationDispatch } = useContext(NavigationContext);
   const { backgroundDispatch } = useContext(BackgroundDispatchContext);
   const { userState, userDispatch } = useContext(UserContext);
-  const [message, setMessage] = useState(initializeMessage());
 
   const restaurantsData = restaurantState.restaurantsData;
   const blacklistData = userState.preferences;
 
+  const [message, setMessage] = useState(initializeMessage());
   const [preference, setPreference] = useState(null);
   const [modelOpen, setModalOpen] = useState(preference);
   const [activeRestaurantIdx, setActiveRestaurantIdx] = useState(0);
   const [restaurants] = useInitializeRestaurants(blacklistData, restaurantsData);
   const [activeRestaurant] = useInitializeActiveRestaurant(restaurantsData, activeRestaurantIdx);
-  // const [verdicts] = useInitializeVerdicts(restaurantsData, activeRestaurantIdx, preference);
   const [verdicts, setVerdicts] = useState(initializeVerdicts(restaurants, activeRestaurantIdx, preference));
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
   const [dispatchVerdicts, setDispatchVerdicts] = useState(false);
 
-  useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, restaurantsData == [], "/Main");
+  // useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, restaurantsData == [], "/Main");
   useRecordVerdictsOnPageChange(verdicts, restaurants, userState.email, dispatchVerdicts);
   useDispatchMessage(message);
 
@@ -209,32 +237,35 @@ const Restaurants = (props) => {
   };
 
   return (
-    <RestaurantsContainer>
-      <RestaurantsComponent>
-        <Icon fontSize="large" color="error" onClick={handleViewPrevRestaurant}>
+    <RestaurantsComponent backdrop={assets[5]}>
+      <ButtonsComponent>
+        <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={handleViewPrevRestaurant}>
           <KeyboardDoubleArrowLeftIcon />
         </Icon>
-        <RoundButton onClick={handleDoneSettingPreference}>
-          <Text text="Done" />
-        </RoundButton>
-        {activeRestaurant != null && (
-          <Restaurant
-            index={activeRestaurantIdx}
-            restaurantData={{ ...activeRestaurant }}
-            onShowRestaurantLocationCallback={onShowRestaurantLocationCallback}
-            showLocation={showActiveRestaurantLocation}
-            email={userState.email}
-            modalOpen={modelOpen}
-            updateActiveRestaurant={updateActiveRestaurant}
-            toggleModal={toggleModal}
-            onDecisionCallback={onDecisionCallback}
-          />
-        )}
-        <Icon fontSize="large" color="error" onClick={handleViewNextRestaurant}>
+        <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={handleViewNextRestaurant}>
           <KeyboardDoubleArrowRightIcon />
         </Icon>
-      </RestaurantsComponent>
-    </RestaurantsContainer>
+      </ButtonsComponent>
+      {activeRestaurant != null && (
+        <Restaurant
+          index={activeRestaurantIdx}
+          restaurantData={{ ...activeRestaurant }}
+          onShowRestaurantLocationCallback={onShowRestaurantLocationCallback}
+          showLocation={showActiveRestaurantLocation}
+          email={userState.email}
+          modalOpen={modelOpen}
+          updateActiveRestaurant={updateActiveRestaurant}
+          toggleModal={toggleModal}
+          onDecisionCallback={onDecisionCallback}
+        />
+      )}
+      {/* {activeRestaurant && (
+        <MapBox coordinates={activeRestaurant.coordinates} style={{ width: "500px", height: "500px" }} />
+      )} */}
+      {/* <RoundButton onClick={handleDoneSettingPreference}>
+        <Text text="Done" />
+      </RoundButton> */}
+    </RestaurantsComponent>
   );
 };
 

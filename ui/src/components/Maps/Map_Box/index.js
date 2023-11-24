@@ -37,7 +37,7 @@ const MapBox = (props) => {
   }, []);
 
   return (
-    <div>
+    <div style={props.style}>
       <div ref={mapContainer} className="map-container" />
     </div>
   );
