@@ -1,100 +1,117 @@
-import { color } from "d3";
-import { Fragment, useState } from "react";
-import { PieChart as PC } from "react-minimal-pie-chart";
-import CurveArrowedLine from "../../ui_components/CurveArrowedLine";
+import React, { Fragment, useState } from "react";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+import { border } from "@mui/system";
 
-const initializeData = (data, colors) => {
-  return data.map((d, i) => ({ title: d[0], value: d[1], color: colors[d[1]] }));
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const data = {
+  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+  datasets: [
+    {
+      label: "# of Votes",
+      data: [12, 19, 3, 5, 2, 3],
+      backgroundColor: [
+        "rgba(255, 99, 132, 0.2)",
+        "rgba(54, 162, 235, 0.2)",
+        "rgba(255, 206, 86, 0.2)",
+        "rgba(75, 192, 192, 0.2)",
+        "rgba(153, 102, 255, 0.2)",
+        "rgba(255, 159, 64, 0.2)",
+      ],
+      borderColor: [
+        "rgba(255, 99, 132, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)",
+      ],
+      borderWidth: 2,
+    },
+  ],
 };
 
-const getColors = (data) => {
-  const colors = {};
-  data.forEach((d, i) => {
-    if (colors[d[1]] == null) {
-      const c = "#" + Math.random().toString(16).slice(-6);
-      colors[d[1]] = c;
-    }
+const palette = {
+  backgroundColor: [
+    "rgba(255, 99, 132, 0.2)",
+    "rgba(54, 162, 235, 0.2)",
+    "rgba(255, 206, 86, 0.2)",
+    "rgba(75, 192, 192, 0.2)",
+    "rgba(153, 102, 255, 0.2)",
+    "rgba(255, 159, 64, 0.2)",
+  ],
+  borderColor: [
+    "rgba(255, 99, 132, 1)",
+    "rgba(54, 162, 235, 1)",
+    "rgba(255, 206, 86, 1)",
+    "rgba(75, 192, 192, 1)",
+    "rgba(153, 102, 255, 1)",
+    "rgba(255, 159, 64, 1)",
+  ],
+};
+
+const getBackgroundColors = (data, num) => {
+  const getColorIdx = (i) => (i + i === palette.backgroundColor.length ? 0 : i + 1);
+  var colorIdx = -1;
+  const colors = data.map((d, i) => {
+    colorIdx = getColorIdx(colorIdx);
+    return [palette.backgroundColor[colorIdx], palette.borderColor[colorIdx]];
   });
 
-  return colors;
+  const backgroundColor = colors.map((color) => color[0]);
+  const borderColor = colors.map((color) => color[1]);
+  return [backgroundColor, borderColor];
 };
 
-const classifyData = (data, slices) => {
-  const dict = {};
+const redistributeVotes = (data) => {
+  const totalVotes = data.reduce((acc, cur) => acc + cur, 0);
+  const weight = 360 / totalVotes;
+  const votes = data.map((d) => d * weight);
 
-  data.forEach((d, i) => {
-    dict[d.value] = dict[d.value] == null ? [d] : [...dict[d.value], d];
-  });
-
-  const values = Object.fromEntries(
-    Object.keys(dict).map((key, i) => {
-      const value = key / slices;
-      return [key, value];
-    })
-  );
-
-  const classified = Object.keys(dict).map((key, i) => {
-    const data = dict[key];
-    return data.map((d, i) => ({ ...d, value: Math.floor(values[key] + 1) }));
-  });
-
-  const condensed = classified
-    .map((data, i) => {
-      if (data.length > 1) {
-        return data.reduce(
-          (acc, cur, i) =>
-            i === 0 ? [...acc] : [{ title: acc[0].title + "," + cur.title, value: cur.value, color: cur.color }],
-          [{ ...data[0] }]
-        );
-      }
-      return data;
-    })
-    .reduce((acc, arr, i) => [...acc, ...arr], []);
-
-  return condensed;
+  return votes;
 };
 
-// const getTotalSlices = (data) => data.reduce((total, curSet) => total + curSet[1], 0);
-const getTotalSlices = (data) => Array.from(new Set(data.map((d) => d[1])).values()).length;
+const getData = (chartData) => {
+  const labels = chartData.map((d, i) => d[0]);
+  const data = redistributeVotes(chartData.map((d, i) => d[1]));
 
-const handleShowCategories = (e, segmentIdx, showTitle, setShowTitle, titleStartPos, setTitleStartPos) => {
-  const newShowTile = [...showTitle];
-  const newTitleStartPos = [...titleStartPos];
-  newShowTile[segmentIdx] = true;
-  newTitleStartPos[segmentIdx] = { x: e.clientX, y: e.clientY };
-  setShowTitle(newShowTile);
-  setTitleStartPos(newTitleStartPos);
+  const label = "# of Votes";
+  const borderWidth = 2;
+  const [backgroundColor, borderColor] = getBackgroundColors(data);
+  return {
+    labels,
+    datasets: [
+      {
+        label,
+        data,
+        backgroundColor,
+        borderColor,
+        borderWidth,
+      },
+    ],
+  };
 };
 
-const getCurvedLine = (visible, { x, y }, data, color) => {
-  return <CurveArrowedLine visible={visible} start={x} stop={y} data={data} color={color} />;
+const options = (title) => ({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: true,
+    },
+    title: {
+      display: true,
+      text: title,
+    },
+  },
+});
+
+const PieChart = ({ chartData, title, ...otherProps }) => {
+  console.log("chart data", chartData);
+  const [data, setData] = useState(getData(chartData));
+
+  return <Fragment>{data && <Pie {...otherProps} data={data} options={options(title)} />}</Fragment>;
 };
 
-const PieChartComponent = (props) => {
-  const { chartData } = props;
-  const [colors, setColors] = useState(getColors(chartData));
-  const [slices, setSlices] = useState(getTotalSlices(chartData));
-  const [data, setData] = useState(initializeData(chartData, colors));
-  const [classifiedData, setClassifiedData] = useState(classifyData(data, slices));
-  const [showTitle, setShowTitle] = useState(classifiedData.map((_) => true));
-  const [titles, setTitles] = useState(classifiedData.map((d) => d.title));
-  //   const [titleStartPos, setTitleStartPos] = useState(classifiedData.map((_) => ({ x: 0, y: 0 })));
-  //   const [arrows, setArrows] = useState(
-  //     titles.map((_, idx) => [showTitle[idx], titleStartPos[idx], titles[idx], colors[idx]])
-  //   );
-
-  return (
-    <Fragment>
-      <PC
-        data={classifiedData}
-        label={({ dataEntry }) => `${Math.round(dataEntry.percentage)} %`}
-        // onMouseOver={(e, segmentIdx) =>
-        //   handleShowCategories(e, segmentIdx, showTitle, setShowTitle, titleStartPos, setTitleStartPos)
-        // }
-      />
-      {/* {arrows.map((arrowProps) => getCurvedLine([...arrowProps]))} */}
-    </Fragment>
-  );
-};
-
-export default PieChartComponent;
+export default PieChart;

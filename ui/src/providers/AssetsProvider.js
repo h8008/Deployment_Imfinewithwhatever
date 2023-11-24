@@ -13,8 +13,6 @@ const AssetsProvider = (props) => {
     backdrops: [backdropTwo, backdropOne, backdropThree, backdropFive, backdropSix],
   });
 
-  console.log("Assets provider", assets);
-
   return <AssetsContext.Provider value={{ assets, setAssets }}>{props.children}</AssetsContext.Provider>;
 };
 
