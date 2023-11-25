@@ -4,7 +4,7 @@ import { useEffect, useState, Fragment } from "react";
 import Text from "../ui_components/Text";
 import GridRow from "../ui_components/GridRow";
 import RoundButton from "../ui_components/RoundButton";
-import SwipeableTemporaryDrawer from "../ui_components/SwipeableDrawer";
+import SwipeableDrawer from "../ui_components/SwipeableDrawer";
 
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -14,6 +14,8 @@ import API from "../API_Interface";
 import { LOCATION_MASK_MESSAGE } from "../constants/Messages";
 import BusinessLocator from "../components/Maps/Google_Maps/BusinessLocator";
 import { useGetRestaurantReviews } from "../hooks/API/Yelp";
+
+import SwipeableTemporaryDrawer from "../ui_components/SwipeableDrawer2";
 
 const CardMediaComponent = styled(CardMedia)((props) => ({
   component: "img",
@@ -249,7 +251,9 @@ const Restaurant = (props) => {
   const [otherDetails, setOtherDetails] = useState({
     location: "",
   });
-  const [reviews] = useGetRestaurantReviews({ id: restaurantData.id });
+
+  // const [reviews] = useGetRestaurantReviews({ id: restaurantData.id });
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     const getPreference = async () => {
@@ -290,7 +294,7 @@ const Restaurant = (props) => {
     <Fragment>
       {data != null && (
         <CardContainer>
-          <SwipeableTemporaryDrawer items={reviews.map((r) => r.text)} />
+          {reviews.length > 0 && <SwipeableDrawer items={reviews.map((r) => r.text)} />}
           <TopComponent flexDirection={"row"} justifyContent={"flex-start"}>
             <CardMediaComponent image={data.image_url} src={"img"} flex={"60%"} />
             <MainDetailsComponent flex={"40%"} details={mainDetails} />

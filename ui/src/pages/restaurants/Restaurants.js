@@ -6,6 +6,7 @@ import Icon from "@mui/material/Icon";
 import styled from "@emotion/styled";
 import RoundButton from "../../ui_components/RoundButton";
 import Text from "../../ui_components/Text";
+import SwipeableTemporaryDrawer from "../../ui_components/SwipeableDrawer2";
 
 import Restaurant from "../../components/Restaurant";
 
@@ -25,8 +26,6 @@ import API from "../../API_Interface";
 import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchProvider";
 import { AssetsContext } from "../../providers/AssetsProvider";
 
-import attributes from "../../config";
-import MapBox from "../../components/Maps/Map_Box";
 import { useTheme } from "@mui/material";
 
 const RestaurantsComponent = styled(Grid)(({ theme }) => ({
@@ -38,7 +37,6 @@ const RestaurantsComponent = styled(Grid)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   flexWrap: "wrap",
-  // backgroundImage: `url(${attributes.images.restaurants})`,
   backgroundColor: theme.palette.background.default,
 }));
 
@@ -60,12 +58,6 @@ const RestaurantComponent = styled(Grid)({
   flexDirection: "column",
   backgroundColor: "white",
 });
-
-// const RestaurantsContainer = styled(Grid)({
-//   width: "100%",
-//   height: "100%",
-//   data_id: "restaurant-container",
-// });
 
 // Filters the list of restaurants from Yelp API based on the blacklist stored
 // in the User global state which was retrieved from the database at login
@@ -138,7 +130,6 @@ const updateVerdicts = (verdicts, activeRestaurantIdx, verdict) => {
 
 const Restaurants = (props) => {
   const theme = useTheme();
-
   const { assets } = useContext(AssetsContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
   const { navigationState, navigationDispatch } = useContext(NavigationContext);

@@ -6,15 +6,29 @@ export const useGetRestaurantReviews = (params) => {
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await API_Interface.YelpAPI.getRestaurantReviews(params);
-      if (res.status === "OK") {
-        setReviews(res.restaurantsData.reviews);
-      }
+      setTimeout(async () => {
+        const res = await API_Interface.YelpAPI.getRestaurantReviews(params);
+        if (res.status === "OK") {
+          setReviews(res.restaurantsData.reviews);
+        }
+      }, [2500]);
     };
     if (params.id) {
+      // setTimeout(async () => {
       fetch();
+      // }, [2000]);
     }
   }, [params, params.id]);
 
   return [reviews];
 };
+
+const fetchRestaurantReviews = async (restaurantID) => {
+  const res = await API_Interface.YelpAPI.getRestaurantReviews({ id: restaurantID });
+  if (res.status === "OK") {
+    return res.restaurantsData.reviews;
+  }
+  return [];
+};
+
+const initializeReviews = (num) => new Array(num).fill(true).map(() => []);

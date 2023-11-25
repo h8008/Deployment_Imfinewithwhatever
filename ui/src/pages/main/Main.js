@@ -1,5 +1,8 @@
 import { Fragment, useState, useContext, useEffect } from "react";
-import TextField from "../../ui_components/TextField";
+import { Navigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
+// import TextField from "../../ui_components/TextField";
 import GridRow from "../../ui_components/GridRow";
 import GridItem from "../../ui_components/GridItem";
 import Text from "../../ui_components/Text";
@@ -7,27 +10,21 @@ import Form from "../../ui_components/Form";
 import RoundButton from "../../ui_components/RoundButton";
 
 import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import MultiDecisionMaker from "../multiDecisionMaker/MultiDecisionMaker";
+
+import { main_config } from "../../styles/shared";
 import styled from "@emotion/styled";
+
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import { UPDATE_CUISINE, UPDATE_LOCATION, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
-import { Box } from "@mui/material";
+import API from "../../API_Interface";
+import { Box, useTheme } from "@mui/material";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
-import {
-  handleGetRestaurantsByCuisine,
-  handleGetRestaurantByLocation,
-  handleGetAggregatedRestaurantsData,
-} from "./Helpers";
-import { NAVIGATE } from "../../reducer/Navigation/actions";
-import { NavigationContext } from "../../providers/NavigationProvider";
-import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchProvider";
-import { DISPATCH } from "../../reducer/BackgroundDispatch/actions";
-import { UserContext } from "../../providers/UserProvider";
-import API_Interface from "../../API_Interface";
-import { useNavigate } from "react-router-dom";
 
 const getFoodPreferences = (categories) => {
   const lowercased_categories = categories.map((category) => {
@@ -45,9 +42,9 @@ const getFoodPreferences = (categories) => {
 const CuisineSliders = (props) => {
   return (
     <Form
-      fullWidth={true}
+      fullWidth="true"
       color="primary"
-      focused={true}
+      focused="true"
       options={props.cuisines}
       onClick={props.handleCuisinesChange}
     />
@@ -55,15 +52,15 @@ const CuisineSliders = (props) => {
 };
 
 const MultipleIdeas = (props) => {
-  const boxStyle = {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    border: "2px solid black",
-    borderRadius: "5px",
-    height: "66px",
-  };
+  // const boxStyle = {
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   alignItems: "center",
+  //   border: "2px solid black",
+  //   borderRadius: "5px",
+  //   height: "66px",
+  // };
 
   const rowStyle = {
     width: "100%",
@@ -71,10 +68,10 @@ const MultipleIdeas = (props) => {
 
   return (
     <GridRow style={rowStyle}>
-      <Box sx={boxStyle}>
+      <GameInputComponent>
         <Text text={"Decide for me"} />
         <ArrowForwardIcon onClick={() => props.onMultipleIdeasCallback()} />
-      </Box>
+      </GameInputComponent>
     </GridRow>
   );
 };
@@ -86,8 +83,26 @@ const Components = (props) => {
     alignItems: "center",
   };
 
+  const theme = useTheme();
+  const borderColor = theme.palette.primary.light.main;
+
   const components = [
-    <TextField fullWidth={true} color="primary" focused handleChange={props.handleLocationChange} />,
+    <TextField
+      fullWidth={true}
+      focused
+      onChange={(e) => props.handleLocationChange(e)}
+      sx={{
+        "& .MuiInputLabel-root": { color: theme.palette.primary.light.main },
+        border: `1px solid ${borderColor}`,
+        borderRadius: 2,
+        height: "50px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      InputProps={{ disableUnderline: true }}
+      variant="standard"
+    />,
     <CuisineSliders
       cuisines={props.cuisines}
       cuisine={props.cuisine}
@@ -105,16 +120,9 @@ const Components = (props) => {
       {props.components.map((comp, index) => (
         <GridRow columns={12} columnGap={20} style={rowStyle} color="primary">
           <GridItem style={{ width: "20%" }}>
-            <Text text={comp} color="error" />
+            <Text text={comp} color={theme.palette.primary.light.main} />
           </GridItem>
-          <GridItem
-            style={{
-              width: "80%",
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
+          <GridItem style={{ width: "80%", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
             {components[index]}
           </GridItem>
         </GridRow>
@@ -123,20 +131,38 @@ const Components = (props) => {
   );
 };
 
-const MainComponent = styled(Grid)({
+const MainComponent = styled(Grid)(({ theme }) => ({
   container: true,
-  rowGap: 50,
-  width: "90%",
-  height: "100%",
+  backgroundColor: theme.palette.background.default,
+  position: "relative",
+  height: "90vh",
+  width: "75vw",
+  margin: "auto",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-});
+  rowGap: 50,
+  invisible: false,
+}));
+
+// const LocationInputComponent = styled(TextField)(({ theme }) => ({
+//   // variant: theme.palette.primary.light.main,
+//   border: `1px solid black`,
+// }));
+
+const GameInputComponent = styled(Box)(({ theme, chidlren, ...otherProps }) => ({
+  color: theme.palette.primary.light.main,
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  border: "2px solid black",
+  borderRadius: "5px",
+  height: "50px",
+}));
 
 function Main(props) {
-  console.log("Rendering main page");
-
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
   const cuisines = [
     "Mexican",
@@ -153,15 +179,16 @@ function Main(props) {
 
   const games = ["Plinko", "Wheel", "Coin"];
 
-  const { userState } = useContext(UserContext);
-  const { restaurantDispatch } = useContext(RestaurantsContext);
-  // const { navigationDispatch } = useContext(NavigationContext);
+  const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
+
   const { messageDispatch } = useContext(MessageContext);
-  const { backgroundDispatch } = useContext(BackgroundDispatchContext);
 
   const [location, setLocation] = useState("");
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
   const [selectedCuisines, setSelectedCuisines] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
+
   const navigate = useNavigate();
 
   const handleLocationChange = (event) => {
@@ -170,6 +197,7 @@ function Main(props) {
   };
 
   const handleCuisinesChange = (selectedCuisineIdx) => {
+    console.log("selected cuisines", cuisines[selectedCuisineIdx]);
     const newSelectedCuisines = Object.keys(
       Object.fromEntries(
         [...selectedCuisines, cuisines[selectedCuisineIdx]].map((cuisine, index) => [cuisine, cuisine])
@@ -182,88 +210,65 @@ function Main(props) {
   const handleSubmitData = (mode) => {
     return new Promise(async (resolve, reject) => {
       if (location === "" && selectedCuisines.length === 0) {
-        await messageDispatch({
+        messageDispatch({
           type: UPDATE_MESSAGE,
           message: "Please enter a location.",
         });
         return;
       }
+
       await restaurantDispatch({
         type: UPDATE_CUISINE,
         cuisines: selectedCuisines,
       });
+
       await restaurantDispatch({
         type: UPDATE_LOCATION,
         location: location,
       });
 
-      let locationParams = { term: "restaurant", location: location };
-      let cuisineParams = {
+      let params = { term: "restaurant", location: location };
+      let restaurant_by_location_response = await API.YelpAPI.getRestaurantsByLocation(params);
+      let restaurantsByLocationData = {};
+      if (restaurant_by_location_response.status === "OK") {
+        restaurantsByLocationData = await {
+          ...restaurantsByLocationData,
+          ...restaurant_by_location_response.restaurantsData,
+        };
+      }
+
+      params = {
         term: "food",
         location: location,
         categories: await getFoodPreferences(selectedCuisines),
       };
+      let restaurant_by_cuisine_response = await API.YelpAPI.getRestaurantsByCuisine(params);
+      if (restaurant_by_cuisine_response.status === "OK") {
+        const aggregatedRestaurantData = await {
+          ...restaurantsByLocationData,
+          ...restaurant_by_cuisine_response.restaurantsData,
+        };
 
-      const restaurantByLocationResponse = await handleGetRestaurantByLocation(locationParams);
-      const restaurantByCuisineResponse = await handleGetRestaurantsByCuisine(cuisineParams);
-      const aggregatedRestaurantData = await handleGetAggregatedRestaurantsData(
-        restaurantByLocationResponse,
-        restaurantByCuisineResponse
-      );
+        setRestaurants(aggregatedRestaurantData.businesses);
 
-      let dispatchType = UPDATE_RESTAURANTS;
-      let dispatchContent =
-        aggregatedRestaurantData == null
-          ? {
-              businesses: [],
-              region: {},
-            }
-          : aggregatedRestaurantData.restaurantsData;
-      await restaurantDispatch({
-        type: dispatchType,
-        payload: {
-          restaurantsData: dispatchContent.businesses,
-          region: dispatchContent.region,
-        },
-      });
+        await restaurantDispatch({
+          type: UPDATE_RESTAURANTS,
+          restaurantsData: aggregatedRestaurantData.businesses,
+        });
 
-      await backgroundDispatch({
-        type: DISPATCH,
-        payload: {
-          data: { data: dispatchContent, email: userState.email },
-          apiInterface: "Users",
-          store: "User",
-          func: API_Interface.Users.updateCurrentUser,
-        },
-      });
-
-      return resolve();
+        return resolve("data sent to database and global state");
+      }
     });
   };
 
   const handleDecideForMeButtonClick = async () => {
     await handleSubmitData("game");
     navigate("/MultiDecisionMaker", { replace: true });
-    // await navigationDispatch({
-    //   type: NAVIGATE,
-    //   payload: {
-    //     shouldNavigate: true,
-    //     destination: "/MultiDecisioinMaker",
-    //     options: { replace: true },
-    //   },
-    // });
   };
 
   const handleGoButtonClick = async () => {
     await handleSubmitData("normal");
     navigate("/Restaurants");
-    // await navigationDispatch({
-    //   type: NAVIGATE,
-    //   payload: {
-    //     shouldNavigate: true,
-    //     destination: "/Restaurants",
-    //   },
-    // });
   };
 
   return (

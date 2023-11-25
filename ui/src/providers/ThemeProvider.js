@@ -18,6 +18,9 @@ const GlobalTheme = createTheme({
       light: palette.palette.augmentColor({
         color: { main: attributes.backgroundColor },
       }),
+      // light: palette.palette.augmentColor({
+      //   color: { main: grey[100] },
+      // }),
       dark: palette.palette.augmentColor({
         color: { main: "#3B464A" },
       }),
@@ -36,6 +39,18 @@ const GlobalTheme = createTheme({
       paper: palette.palette.augmentColor({
         color: { main: "#E48A85" },
       }),
+    },
+  },
+  components: {
+    MuiInputBase: {
+      styleOverrides: {
+        input: {
+          color: "white",
+          "&::before": {
+            border: `1px solid white`,
+          },
+        },
+      },
     },
   },
 });

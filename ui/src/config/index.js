@@ -20,4 +20,18 @@ const attributes = {
   },
 };
 
+const textStyle = {
+  main: {
+    title: {
+      color: "white",
+    },
+    options: {
+      color: "black",
+    },
+    buttons: {
+      color: "white",
+    },
+  },
+};
+
 export default attributes;

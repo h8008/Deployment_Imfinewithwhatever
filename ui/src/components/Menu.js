@@ -9,13 +9,14 @@ import styled from "@emotion/styled";
 import { useTheme } from "@mui/material";
 
 import { UserContext } from "../providers/UserProvider";
+import SwipeableDrawer from "../ui_components/SwipeableDrawer";
 
 const MenuComponent = styled(Grid)((props) => ({
   width: "100%",
   height: "5vh",
   display: "flex",
   flexDirection: "row",
-  justifyContent: "flex-end",
+  justifyContent: "flex-start",
   alignItems: "center",
   backgroundColor: props.color,
   zIndex: 1,
@@ -24,6 +25,11 @@ const MenuComponent = styled(Grid)((props) => ({
 const LinkComponent = styled(Link)((props) => ({
   width: "50px",
   height: "50px",
+  textDecoration: "none",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  marginRight: "50px",
 }));
 
 const getOptions = (loggedIn, dest) => {
@@ -41,6 +47,13 @@ const getDest = (to, loggedIn) => {
 
 const intializeOptions = (names, loggedIn) => Object.values(names).map((name, idx) => getDest(name, loggedIn));
 
+const getLinkComponents = (props) =>
+  props.options.map((option, index) => (
+    <LinkComponent key={index} to={option} color={props.palette.primary.contrastText}>
+      <Text text={getName(option)} color={props.palette.primary.contrastText} />
+    </LinkComponent>
+  ));
+
 const Menu = (props) => {
   const { palette } = useTheme();
   const { userState, userDispatch } = useContext(UserContext);
@@ -56,14 +69,13 @@ const Menu = (props) => {
   }, [userState.loggedIn]);
 
   return (
-    <MenuComponent color={palette.error.light} data_id="navigation-component">
-      {options.map((option, index) => (
+    <MenuComponent color={palette.primary.dark.main} data_id="navigation-component">
+      <SwipeableDrawer items={getLinkComponents({ options, palette })} drawerWidth={250} />
+      {/* {options.map((option, index) => (
         <LinkComponent key={index} to={option} color={palette.primary.contrastText}>
-          <Box key={index} sx={{ marginRight: "20px" }}>
-            <Text text={getName(option)} color={palette.primary.contrastText} />
-          </Box>
+          <Text text={getName(option)} color={palette.primary.contrastText} />
         </LinkComponent>
-      ))}
+      ))} */}
     </MenuComponent>
   );
 };

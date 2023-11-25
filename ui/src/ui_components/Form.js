@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  InputLabel,
-  Select,
-  Switch,
-  styled,
-  useTheme,
-} from "@mui/material";
+import { FormControl, FormControlLabel, FormGroup, InputLabel, Select, Switch, styled, useTheme } from "@mui/material";
 
 import Box from "./Box";
 
@@ -16,7 +7,7 @@ import Box from "./Box";
 import GridRow from "./GridRow";
 import CustomBox from "./Box";
 
-const SwitchComponent = styled(Switch)((props) => ({
+const SwitchComponent = styled(Switch)(({ theme }) => ({
   width: 42,
   height: 26,
   marginRight: 10,
@@ -58,6 +49,7 @@ const SwitchComponent = styled(Switch)((props) => ({
 const Form = (props) => {
   const { fullWidth, color, focused, options, onClick } = props;
   const [checked, setChecked] = useState(options.map(() => false));
+  // const theme = useTheme();
 
   const onSlideCallback = (optionIdx) => {
     console.log(optionIdx);
@@ -81,9 +73,7 @@ const Form = (props) => {
           <GridRow>
             <Box>
               <FormControlLabel
-                control={
-                  <SwitchComponent color="error" checked={checked[index]} />
-                }
+                control={<SwitchComponent color={"error"} checked={checked[index]} />}
                 label={option}
                 onClick={() => onSlideCallback(index)}
               />

@@ -1,10 +1,6 @@
 import * as React from "react";
-import { useState } from "react";
-
-import { styled } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import MUISwipeableDrawer from "@mui/material/SwipeableDrawer";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -14,48 +10,32 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import InputTwoToneIcon from "@mui/icons-material/InputTwoTone";
 
-const SlideOutComponent = styled(InputTwoToneIcon)(({ theme }) => ({}));
-
-const SideMenuComponent = styled(Grid)({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  alignItems: "center",
-});
-
-export default function SwipeableDrawer(props) {
-  const { data, items, drawerWidth } = props;
-  const [state, setState] = useState({
+export default function SwipeableTemporaryDrawer() {
+  const [state, setState] = React.useState({
     top: false,
     left: false,
     bottom: false,
     right: false,
   });
-  const [anchor, setAnchor] = useState("left");
-  const onSelectMenuItemCallback = props.onSelectMenuItemCallback ? props.onSelectMenuItemCallback : () => {};
-
-  const width = drawerWidth ? drawerWidth : anchor === "top" || anchor === "bottom" ? "auto" : 600;
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event && event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
   const list = (anchor) => (
     <Box
-      sx={{ backgroundColor: "white", width: width, height: "100%" }}
+      sx={{ backgroundColor: "white", width: anchor === "top" || anchor === "bottom" ? "auto" : 250, height: "100%" }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {items.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={() => onSelectMenuItemCallback(index)}>
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem key={text} color={"black"} disablePadding>
             <ListItemButton>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
@@ -64,8 +44,8 @@ export default function SwipeableDrawer(props) {
         ))}
       </List>
       <Divider />
-      {/* <List>
-        {["Messages"].map((text, index) => (
+      <List>
+        {["All mail", "Trash", "Spam"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
@@ -73,23 +53,25 @@ export default function SwipeableDrawer(props) {
             </ListItemButton>
           </ListItem>
         ))}
-      </List> */}
+      </List>
     </Box>
   );
 
   return (
     <div>
-      <SideMenuComponent>
-        <Button onClick={toggleDrawer(anchor, true)}>{<SlideOutComponent />}</Button>
-        <MUISwipeableDrawer
-          anchor={anchor}
-          open={state[anchor]}
-          onClose={toggleDrawer(anchor, false)}
-          onOpen={toggleDrawer(anchor, true)}
-        >
-          {list(anchor)}
-        </MUISwipeableDrawer>
-      </SideMenuComponent>
+      {["left", "right", "top", "bottom"].map((anchor) => (
+        <React.Fragment key={anchor}>
+          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <SwipeableDrawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+            onOpen={toggleDrawer(anchor, true)}
+          >
+            {list(anchor)}
+          </SwipeableDrawer>
+        </React.Fragment>
+      ))}
     </div>
   );
 }
