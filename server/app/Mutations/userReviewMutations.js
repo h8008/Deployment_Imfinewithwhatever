@@ -1,6 +1,6 @@
 const { UserReview } = require('../../database/models');
 
-const UPDATE_REVIEW = async ({ restaurantID, review }) =>
+const UPDATE_REVIEW = async ({ email, restaurantID, review }) =>
   await UserReview.updateOne({
     review: review,
   }).where({
@@ -23,7 +23,7 @@ const ADD_REVIEW = async ({
     rating,
   });
 
-const DELETE_REVIEW = async ({ restaurantID, email }) =>
+const DELETE_REVIEW = async ({ email, restaurantID }) =>
   await UserReview.deleteOne({
     restaurant_id: restaurantID,
     email: email,

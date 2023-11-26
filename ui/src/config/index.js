@@ -7,6 +7,29 @@ import backdropFive from "../Assets/Profiles/jojo-yuen-sharemyfoodd-0Rz4GzuBOVc-
 import backdropSix from "../Assets/Profiles/jon-spectacle-ho24w5XM0sw-unsplash.jpg";
 import backdropFour from "../Assets/Logo.png";
 
+const colors = {
+  pages: {
+    main: {
+      title: {
+        color: "white",
+      },
+    },
+    profile: {
+      background: {
+        color: "#dddddd",
+      },
+    },
+  },
+  components: {
+    options: {
+      color: "black",
+    },
+    buttons: {
+      color: "white",
+    },
+  },
+};
+
 const attributes = {
   app: "Fine With Whatever",
   games: {
@@ -18,20 +41,7 @@ const attributes = {
     home: backdropFour,
     restaurants: backdropFour,
   },
-};
-
-const textStyle = {
-  main: {
-    title: {
-      color: "white",
-    },
-    options: {
-      color: "black",
-    },
-    buttons: {
-      color: "white",
-    },
-  },
+  colors: colors,
 };
 
 export default attributes;

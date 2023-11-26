@@ -3,10 +3,7 @@ import { Grid, styled, useTheme } from "@mui/material";
 
 import Preferences from "../../components/Preferences";
 import SideMenu from "../../components/SideMenu";
-import Text from "../../ui_components/Text";
 import Box from "../../ui_components/Box";
-import BorderedBox from "../../ui_components/BorderedBox";
-import RowComponent from "../../ui_components/RowComponent";
 
 import API from "../../API_Interface";
 
@@ -16,6 +13,9 @@ import { MessageContext } from "../../providers/MessageProvider";
 
 import quicksort from "../../utils/Sorting/Quicksort";
 import Reviews from "../../components/Reviews";
+import attributes from "../../config";
+import icons from "../../icons/foods";
+import RandomPositions from "../../components/RandomPositions";
 
 const ProfileComponent = styled(Grid)({
   height: "90vh",
@@ -23,27 +23,24 @@ const ProfileComponent = styled(Grid)({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
+  // backgroundColor: attributes.colors.pages.profile.background.color,
 });
 
-const DefaultComponent = styled(Grid)((props) => ({
+const DefaultStyledComponent = styled(Grid)((props) => ({
   height: "100%",
   width: "80%",
-  backgroundImage: `url(${props.backdrop})`,
+  // backgroundImage: `url(${props.backdrop})`,
   backgroundPosition: "center",
   backgroundSize: "contain",
   backgroundRepeat: "no-repeat",
 }));
 
-const HeaderComponent = styled(Grid)({
-  gridRow: true,
-  container: true,
-  width: "100%",
-  height: "10%",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-});
+const DefaultComponent = (props) => {
+  const { backdrop } = props;
+
+  // return <DefaultStyledComponent backdrop={backdrop}>{/* <RandomPositions /> */}</DefaultStyledComponent>;
+  return <DefaultStyledComponent />;
+};
 
 const BodyComponent = styled(Grid)({
   container: true,
@@ -96,11 +93,7 @@ const ReviewsComponent = (props) => {
 const PreferencesComponent = (props) => {
   const { preferences } = props;
 
-  return (
-    // <PreferencesStyledComponent data_id={"preferences_component"}>
-    <Preferences preferences={preferences} />
-    // </PreferencesStyledComponent>
-  );
+  return <Preferences preferences={preferences} />;
 };
 
 const useGetPreferences = (email) => {
@@ -214,7 +207,7 @@ const useGetComponentProps = (props) => {
         cp[i] = p;
       }
     });
-    const update = cp.filter((p, i) => p != componentProps[i]).length > 0;
+    const update = cp.filter((p, i) => p !== componentProps[i]).length > 0;
     if (update) {
       setComponentProps(cp);
     }

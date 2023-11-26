@@ -55,7 +55,7 @@ export default function SwipeableDrawer(props) {
     >
       <List>
         {items.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={() => onSelectMenuItemCallback(index)}>
+          <ListItem key={index} disablePadding onClick={() => onSelectMenuItemCallback(index)}>
             <ListItemButton>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />

@@ -16,11 +16,8 @@ const GlobalTheme = createTheme({
       main: grey[600],
       contrastText: grey[400],
       light: palette.palette.augmentColor({
-        color: { main: attributes.backgroundColor },
+        color: { main: attributes.colors.pages.profile.background.color },
       }),
-      // light: palette.palette.augmentColor({
-      //   color: { main: grey[100] },
-      // }),
       dark: palette.palette.augmentColor({
         color: { main: "#3B464A" },
       }),
@@ -41,18 +38,18 @@ const GlobalTheme = createTheme({
       }),
     },
   },
-  components: {
-    MuiInputBase: {
-      styleOverrides: {
-        input: {
-          color: "white",
-          "&::before": {
-            border: `1px solid white`,
-          },
-        },
-      },
-    },
-  },
+  // components: {
+  //   MuiInputBase: {
+  //     styleOverrides: {
+  //       input: {
+  //         color: "black",
+  //         "&::before": {
+  //           border: `1px solid white`,
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
 });
 
 // const ThemeProvider = (props) => {

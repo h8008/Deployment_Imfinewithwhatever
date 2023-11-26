@@ -331,8 +331,6 @@ const Feedback = (props) => {
           preference: preference,
         };
 
-        console.log("params", params);
-
         // res = await API.Users.addRestaurantPreference(Object.values(params));
         res = await API.Users.updateRestaurantPreference(params);
         API.apiResHandling(res, messageDispatch, res.message);

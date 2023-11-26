@@ -94,7 +94,7 @@ const getData = (chartData) => {
 };
 
 const options = (title) => ({
-  responsive: true,
+  // responsive: true,
   maintainAspectRatio: false,
   plugins: {
     legend: {
@@ -108,7 +108,7 @@ const options = (title) => ({
 });
 
 const PieChart = ({ chartData, title, ...otherProps }) => {
-  console.log("chart data", chartData);
+  // console.log("chart data", chartData);
   const [data, setData] = useState(getData(chartData));
 
   return <Fragment>{data && <Pie {...otherProps} data={data} options={options(title)} />}</Fragment>;

@@ -253,9 +253,9 @@ const Restaurants = (props) => {
       {/* {activeRestaurant && (
         <MapBox coordinates={activeRestaurant.coordinates} style={{ width: "500px", height: "500px" }} />
       )} */}
-      {/* <RoundButton onClick={handleDoneSettingPreference}>
+      <RoundButton onClick={handleDoneSettingPreference}>
         <Text text="Done" />
-      </RoundButton> */}
+      </RoundButton>
     </RestaurantsComponent>
   );
 };

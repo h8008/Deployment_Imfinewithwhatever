@@ -4,10 +4,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 const Checkboxes = (props) => {
-  const { labels, onSelectGameCallback, checked } = props;
+  const { labels, onSelectGameCallback, checked, style } = props;
 
   return (
-    <FormGroup>
+    <FormGroup style={style}>
       {/* <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
       <FormControlLabel required control={<Checkbox />} label="Required" />
       <FormControlLabel disabled control={<Checkbox />} label="Disabled" /> */}

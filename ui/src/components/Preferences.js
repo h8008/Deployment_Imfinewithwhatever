@@ -13,11 +13,11 @@ const PreferenceComponent = styled(Grid)({
   width: "80%",
   margin: "auto",
   display: "flex",
-  flexDirection: "column",
+  flex: "100%",
+  flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
   container: true,
-  rowGap: 50,
 });
 
 const BarChartComponent = styled(Grid)({
@@ -29,25 +29,27 @@ const BarChartComponent = styled(Grid)({
   alignItems: "center",
 });
 
-const PieChartComponentTopLeft = styled(Grid)({
-  width: "100%",
+const PieChartComponentTopLeft = styled(Grid)((props) => ({
+  // width: "100%",
+  width: props.width,
   height: "100%",
   gridRow: true,
   display: "flex",
   flexDirection: "row",
-  justifyContent: "flex-start",
+  justifyContent: "center",
   alignItems: "center",
-});
+}));
 
-const PieChartComponentBottomRight = styled(Grid)({
-  width: "100%",
+const PieChartComponentBottomRight = styled(Grid)((props) => ({
+  // width: "100%",
+  width: props.width,
   height: "100%",
   gridRow: true,
   display: "flex",
   flexDirection: "row",
-  justifyContent: "flex-end",
+  justifyContent: "center",
   alignItems: "center",
-});
+}));
 
 const Preferences = (props) => {
   const { preferences } = props;
@@ -55,11 +57,11 @@ const Preferences = (props) => {
 
   return (
     <PreferenceComponent>
-      <PieChartComponentTopLeft>
-        <PieChart title={"Your Most Liked"} chartData={likes} height={300} width={300} />
+      <PieChartComponentTopLeft width={"30%"}>
+        <PieChart title={"Your Most Liked"} chartData={likes} height={200} width={200} />
       </PieChartComponentTopLeft>
-      <PieChartComponentBottomRight>
-        <PieChart title={"Perhaps you don't like these"} chartData={dislikes} height={300} width={300} />
+      <PieChartComponentBottomRight width={"30%"}>
+        <PieChart title={"Perhaps you don't like these"} chartData={dislikes} height={200} width={200} />
       </PieChartComponentBottomRight>
     </PreferenceComponent>
   );

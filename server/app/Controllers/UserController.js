@@ -8,9 +8,11 @@ const {
 const {
   SIGNUP,
   UPDATE_CURRENT_USER,
-  ADD_RESTAURANT_PREFERENCE,
   UPDATE_RESTAURANT_PREFERENCE,
 } = require('../Mutations/userMutations');
+
+const { ADD_PREFERENCE } = require('../Mutations/preference');
+
 const setAccessToken = require('../../config/setAccessToken');
 
 const bcrypt = require('bcrypt');
@@ -124,7 +126,7 @@ const logout = async (ctx) => {
 const addRestaurantPreference = async (ctx) => {
   try {
     const params = ctx.request.body;
-    const res = await ADD_RESTAURANT_PREFERENCE(params);
+    const res = await ADD_PREFERENCE(params);
     if (res) {
       ctx.body = {
         message: `PREFERENCE SAVED`,

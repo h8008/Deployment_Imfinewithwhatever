@@ -142,7 +142,9 @@ function Main(props) {
     if (response.status === 'OK') {
       dispatch({
         type: UPDATE_RESTAURANTS,
-        restaurantsData: response.restaurantsData,
+        payload: {
+          restaurantsData: response.restaurantsData,
+        },
       });
       navigate('/Restaurants');
     }

@@ -35,29 +35,30 @@ const GridRowStyle = (display) => {
   };
 };
 
-const RowGridComponent = styled(Grid)(({ theme }) => ({
+const RowGridComponent = styled(Grid)(({ children, ...otherProps }) => ({
   container: true,
   gridRow: true,
-  rowGap: theme.rowGap,
+  ...otherProps,
   width: "100%",
-  height: theme.height,
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
 }));
 
-const RowComponent = styled(Grid)(({ display }) => ({
+const RowComponent = styled(Grid)((props) => ({
   gridRow: true,
   color: "primary",
   display: "flex",
   width: "100%",
-  ...GridRowStyle(display),
+  flexDirection: props.flexDirection ? props.flexDirection : "row",
+  justifyContent: props.flexDirection ? props.flexDirection : "center",
+  alignItems: "center",
   data_id: "row-component",
   columnGap: 20,
 }));
 
-const RestaurantsInputComponent = styled(FormControl)({
+const RestaurantsInputComponent = styled(Grid)({
   gridRow: true,
   container: true,
   rowGap: 20,
@@ -65,21 +66,23 @@ const RestaurantsInputComponent = styled(FormControl)({
 });
 
 const RestaurantsInput = (props) => {
-  const { restaurantInputs, handleChange, handleAddRestaurantInput, handleRemoveRestaurantInput, restaurants } = props;
+  const { restaurantInputs, handleChange, handleAddRestaurantInput, handleRemoveRestaurantInput, restaurants, flex } =
+    props;
 
   return (
-    <RowGridComponent theme={{ height: "30%", rowGap: 20 }}>
+    <RowGridComponent flex={flex} rowGap={20}>
       <RowComponent>
         <Text text={"Enter Restaurants"} />
       </RowComponent>
-      <Scrollbar style={{ width: 900, height: 500 }}>
-        <RestaurantsInputComponent>
-          {restaurantInputs.map((_, index) => (
-            <RowComponent>
-              <Text text={index + 1} />
-              <Dropdown index={index} options={restaurants} handleChange={handleChange} />
-            </RowComponent>
-          ))}
+      <Scrollbar style={{ width: 1000, height: 900 }}>
+        <RestaurantsInputComponent autoFocus={true}>
+          {/* {restaurantInputs.map((_, index) => (
+            // <RowComponent>
+            // <Text text={index + 1} /> */}
+          {/* <Dropdown index={index} options={restaurants} handleChange={handleChange} /> */}
+          {/* // </RowComponent>
+          ))} */}
+          <Dropdown inputs={restaurantInputs} options={restaurants} handleChange={handleChange} />
           <RowComponent>
             <RowComponent onClick={() => handleAddRestaurantInput()}>
               <Text text={"+"} />
@@ -97,17 +100,22 @@ const RestaurantsInput = (props) => {
 };
 
 const GamesInputComponent = (props) => {
-  const { games, checked, onSelectGameCallback } = props;
+  const { games, checked, onSelectGameCallback, flex } = props;
 
   return (
-    <GridRow>
-      <GridRow>
+    <RowComponent flex={flex} flexDirection={"column"}>
+      <RowComponent>
         <Text text={"Select Game"} />
-      </GridRow>
-      <GridRow>
-        <Checkboxes labels={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
-      </GridRow>
-    </GridRow>
+      </RowComponent>
+      <RowComponent>
+        <Checkboxes
+          labels={games}
+          checked={checked}
+          onSelectGameCallback={onSelectGameCallback}
+          style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}
+        />
+      </RowComponent>
+    </RowComponent>
   );
 };
 
@@ -116,8 +124,8 @@ const GamesInputComponent = (props) => {
 const MultiDecisionMakerComponent = styled(Grid)(() => ({
   container: true,
   rowGap: 20,
-  height: "900px",
-  width: "800px",
+  height: "90vh",
+  width: "width",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-evenly",
@@ -232,13 +240,14 @@ const MultiDecisionMaker = (props) => {
   return (
     <MultiDecisionMakerComponent>
       <RestaurantsInput
+        flex={"70%"}
         restaurantInputs={restaurantInputs}
         handleChange={handleRestaurantChange}
         handleAddRestaurantInput={handleAddRestaurantInput}
         handleRemoveRestaurantInput={handleRemoveRestaurantInput}
         restaurants={restaurantState.restaurantsData}
       />
-      <GamesInputComponent games={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
+      <GamesInputComponent flex={"20%"} games={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
       <RowComponent>
         <RowComponent display={{ justifyContent: "center" }}>
           <RoundButton onClick={handleGoButtonClick}>

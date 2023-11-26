@@ -100,9 +100,10 @@ class ReviewsClassComponent extends React.Component {
   }
 
   advanceIdx(swipableReviewIdx) {
-    let newIdx = swipableReviewIdx + 1;
-    newIdx = newIdx === this.state.reviews.length ? 0 : newIdx;
-    return newIdx;
+    // let newIdx = swipableReviewIdx + 1;
+    // newIdx = newIdx === this.state.reviews.length ? 0 : newIdx;
+    // return newIdx;
+    return 0;
   }
 
   onTinderSwipe() {
@@ -113,7 +114,8 @@ class ReviewsClassComponent extends React.Component {
     const swipedReviewIdx = this.state.activeReviewIdx;
     const newActiveReviewIdx = this.advanceIdx(swipedReviewIdx);
     const newSwipableReviews = [...this.state.swipableReviews];
-    const head = this.state.swipableReviews[0];
+    // const head = this.state.swipableReviews[0];
+    const head = newSwipableReviews[0];
     newSwipableReviews.shift();
     newSwipableReviews.push(head);
 
