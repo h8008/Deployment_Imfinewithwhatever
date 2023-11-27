@@ -253,7 +253,9 @@ function Main(props) {
 
         await restaurantDispatch({
           type: UPDATE_RESTAURANTS,
-          restaurantsData: aggregatedRestaurantData.businesses,
+          payload: {
+            restaurantsData: aggregatedRestaurantData.businesses,
+          },
         });
 
         return resolve("data sent to database and global state");

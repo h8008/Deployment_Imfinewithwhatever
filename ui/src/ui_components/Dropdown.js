@@ -1,42 +1,65 @@
 import { useState } from "react";
 import FormControl from "@mui/material/FormControl";
-import { InputLabel, Select, MenuItem } from "@mui/material";
+import { InputLabel, Select, MenuItem, Grid, styled } from "@mui/material";
 import { Fragment } from "react";
 
-const Dropdown = (props) => {
-  const { index: dropDownIndex, options, handleChange, inputs } = props;
-  const [value, setValue] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+const DropdownComponent = styled(Grid)((props) => ({
+  container: true,
+  rowGap: 20,
+}));
 
-  const handleOptionClick = (index, option) => {
-    setValue(index);
-    setSelectedOption(option);
-    handleChange(dropDownIndex, option);
+const DropdownItemComponent = styled(Grid)((props) => ({
+  gridRow: true,
+}));
+
+const Options = (props) => {
+  const { options } = props;
+  const [value, setValue] = useState("");
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
   };
 
   return (
-    <Fragment>
+    <DropdownItemComponent>
+      <FormControl focused={true} color="primary" fullWidth>
+        <InputLabel id="dropdown-menu">Restaurant</InputLabel>
+        <Select
+          labelId="dropdown-menu-label"
+          id="dropdown-menu-select"
+          label="restaurant"
+          value={value}
+          onChange={(e) => handleChange(e)}
+          inputProps={{
+            MenuProps: {
+              PaperProps: {},
+            },
+          }}
+        >
+          {options != null &&
+            options.length > 0 &&
+            options.map((option, index) => {
+              return (
+                <MenuItem height={"100px"} sx={{ backgroundColor: "grey" }} value={index}>
+                  {option.name}
+                </MenuItem>
+              );
+            })}
+        </Select>
+      </FormControl>
+    </DropdownItemComponent>
+  );
+};
+
+const Dropdown = (props) => {
+  const { inputs, options } = props;
+
+  return (
+    <DropdownComponent>
       {inputs.map((input) => (
-        <FormControl focused={true} color="primary" fullWidth>
-          <InputLabel id="dropdown-menu">Restaurant</InputLabel>
-          <Select labelId="dropdown-menu-label" id="dropdown-menu-select" value={value} label="restaurant">
-            {options != null &&
-              options.length > 0 &&
-              options.map((option, index) => {
-                return (
-                  <MenuItem
-                    sx={{ backgroundColor: "grey" }}
-                    value={index}
-                    onClick={() => handleOptionClick(index, option)}
-                  >
-                    {option.name}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </FormControl>
+        <Options options={options} />
       ))}
-    </Fragment>
+    </DropdownComponent>
   );
 };
 

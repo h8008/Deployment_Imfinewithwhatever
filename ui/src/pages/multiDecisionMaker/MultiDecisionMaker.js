@@ -59,9 +59,9 @@ const RowComponent = styled(Grid)((props) => ({
 }));
 
 const RestaurantsInputComponent = styled(Grid)({
-  gridRow: true,
+  // gridRow: true,
   container: true,
-  rowGap: 20,
+  rowGap: 30,
   width: "100%",
 });
 
@@ -74,14 +74,8 @@ const RestaurantsInput = (props) => {
       <RowComponent>
         <Text text={"Enter Restaurants"} />
       </RowComponent>
-      <Scrollbar style={{ width: 1000, height: 900 }}>
+      <Scrollbar style={{ width: 900, height: 500 }}>
         <RestaurantsInputComponent autoFocus={true}>
-          {/* {restaurantInputs.map((_, index) => (
-            // <RowComponent>
-            // <Text text={index + 1} /> */}
-          {/* <Dropdown index={index} options={restaurants} handleChange={handleChange} /> */}
-          {/* // </RowComponent>
-          ))} */}
           <Dropdown inputs={restaurantInputs} options={restaurants} handleChange={handleChange} />
           <RowComponent>
             <RowComponent onClick={() => handleAddRestaurantInput()}>
