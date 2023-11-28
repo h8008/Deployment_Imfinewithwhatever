@@ -6,7 +6,7 @@ import { RestaurantsContext } from "../../../providers/RestaurantsProvider";
 import { GameContext } from "../../../providers/GameProvider";
 import { UPDATE_CUISINE, UPDATE_RESTAURANTS } from "../../../reducer/Main/actions";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MessageContext } from "../../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../../reducer/Message/MessageAction";
 
@@ -144,14 +144,26 @@ const mapSlotsToOptions = (optionsData) => {
   return newContainerWidths;
 };
 
+const useRunGame = (ball) => {
+  useEffect(() => {
+    if (ball !== null) {
+      setTimeout(() => {
+        console.log(ball.position);
+      }, 500);
+    }
+  }, [ball, ball.position]);
+};
+
 // Get a list of restaurants as props from MultiDecisionMaker
 const Plinko = (props) => {
+  const location = useLocation();
   const { restaurantDispatch } = useContext(RestaurantsContext);
   const { gameState } = useContext(GameContext);
   const { messageDispatch } = useContext(MessageContext);
 
   // const { allCuisines: cuisines } = restaurantState;
-  const { restaurants } = gameState;
+  // const { restaurants } = gameState;
+  const restaurants = location.state.restaurants;
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -164,7 +176,7 @@ const Plinko = (props) => {
     Matter.Bodies.circle(ballConfig.x, ballConfig.y, ballConfig.ballSize, {
       restitution: ballElastity,
       render: {
-        fillStyle: "white",
+        fillStyle: "grey",
       },
     })
   );
@@ -227,7 +239,6 @@ const Plinko = (props) => {
           if (prevSlotPos <= slotPos && curSlotPos >= slotPos) {
             slotIdx = curDestIdx - 1;
           }
-          // setSelectedOption(slotIdx);
           return slotIdx;
         }, 0);
 
@@ -236,7 +247,7 @@ const Plinko = (props) => {
         console.log("The ball landed in slot: ", slotIdx);
       }
     }
-  }, [dest, dests]);
+  }, [dest, dests, messageDispatch, navigate, restaurantDispatch, restaurants]);
 
   useEffect(() => {
     const setup = () => {
@@ -256,7 +267,6 @@ const Plinko = (props) => {
         options: {
           width: worldWidth,
           height: worldHeight,
-          // background: "rgba(255, 0, 0, 0.5)",
           background: theme.palette.primary.light,
           wireframes: false,
         },
@@ -273,18 +283,20 @@ const Plinko = (props) => {
       Composite.add(engine.world, pins);
       Composite.add(engine.world, bars);
 
-      Engine.run(engine);
+      Matter.Runner.run(engine);
 
       Events.on(engine, "collisionEnd", function (event) {
         var pairs = event.pairs;
         for (var i = 0; i < pairs.length; i++) {
           var pair = pairs[i];
           pair.bodyA.render.fillStyle = "#fff";
-          pair.bodyB.render.fillStyle = "#fff";
+          pair.bodyB.render.fillStyle = "black";
           if (pair.bodyA.position.y >= worldHeight - floorHeight - 16) {
             console.log("hit the floor");
             setDest(pair.bodyA.position);
           }
+          const newDests = [...dests, pair.bodyA.position];
+          setDests(newDests);
         }
       });
 
@@ -293,7 +305,7 @@ const Plinko = (props) => {
     if (pins.length > 0 && bars.length > 0 && ball != null) {
       setup();
     }
-  }, [pins, ball, bars, theme.palette.primary.light]);
+  }, [pins, ball, bars, theme.palette.primary.light, dests]);
 
   useEffect(() => {
     const getPins = async () => {
@@ -301,7 +313,7 @@ const Plinko = (props) => {
       setPins(pins);
     };
     getPins();
-  }, []);
+  }, [theme.palette.error.main]);
 
   useEffect(() => {
     const getBars = async () => {
@@ -309,16 +321,7 @@ const Plinko = (props) => {
       setBars(bars);
     };
     getBars();
-  }, []);
-
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      console.log(ball.position);
-    }, 500);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [ball, ball.position, World]);
+  }, [restaurants.length, theme.palette.error.main]);
 
   return (
     <div

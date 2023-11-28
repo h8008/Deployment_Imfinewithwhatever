@@ -12,12 +12,27 @@ const DropdownItemComponent = styled(Grid)((props) => ({
   gridRow: true,
 }));
 
-const Options = (props) => {
-  const { options } = props;
-  const [value, setValue] = useState("");
+const initializeStyle = (num) =>
+  Array(num)
+    .fill(true)
+    .map(() => ({ backgroundColor: "grey" }));
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
+const Options = (props) => {
+  const { options, handleChange, slot } = props;
+  const [value, setValue] = useState("");
+  const [style, setStyle] = useState(() => initializeStyle(options.length));
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleSelect = (e) => {
+    const index = slot;
+    const value = selectedOption;
+    setValue(index);
+    handleChange(index, value);
+  };
+
+  const handleHover = (idx, option) => {
+    setSelectedOption(option);
+    return style.map((s, i) => (i === idx ? { ...s, backgroundColor: "red" } : { ...s }));
   };
 
   return (
@@ -29,18 +44,20 @@ const Options = (props) => {
           id="dropdown-menu-select"
           label="restaurant"
           value={value}
-          onChange={(e) => handleChange(e)}
-          inputProps={{
-            MenuProps: {
-              PaperProps: {},
-            },
-          }}
+          onChange={(e) => handleSelect(e)}
         >
           {options != null &&
             options.length > 0 &&
             options.map((option, index) => {
               return (
-                <MenuItem height={"100px"} sx={{ backgroundColor: "grey" }} value={index}>
+                <MenuItem
+                  key={index}
+                  index={index}
+                  height={"100px"}
+                  sx={{ ...style[index] }}
+                  value={index}
+                  onMouseEnter={() => handleHover(index, option)}
+                >
                   {option.name}
                 </MenuItem>
               );
@@ -52,12 +69,12 @@ const Options = (props) => {
 };
 
 const Dropdown = (props) => {
-  const { inputs, options } = props;
+  const { inputs, options, handleChange } = props;
 
   return (
     <DropdownComponent>
-      {inputs.map((input) => (
-        <Options options={options} />
+      {inputs.map((_, availableSlot) => (
+        <Options options={options} handleChange={handleChange} slot={availableSlot} />
       ))}
     </DropdownComponent>
   );

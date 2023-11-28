@@ -25,6 +25,26 @@ import API from "../../API_Interface";
 import { Box, useTheme } from "@mui/material";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
+import { UPDATE_RESTAURANTS_FOR_GAMES } from "../../reducer/Game/GameActions";
+import { GameContext } from "../../providers/GameProvider";
+
+const useHandleTransitionToRestaurants = (restaurants, next) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (restaurants && next === "Restaurants") {
+      navigate("/Restaurants", { state: { restaurants: restaurants } });
+    }
+  }, [navigate, next, restaurants]);
+};
+
+const useHandleTransitionToGames = (restaurants, next) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (restaurants && next === "Games") {
+      navigate("/MultiDecisionMaker", { state: { restaurants: restaurants } });
+    }
+  }, [navigate, next, restaurants]);
+};
 
 const getFoodPreferences = (categories) => {
   const lowercased_categories = categories.map((category) => {
@@ -52,16 +72,6 @@ const CuisineSliders = (props) => {
 };
 
 const MultipleIdeas = (props) => {
-  // const boxStyle = {
-  //   display: "flex",
-  //   flexDirection: "row",
-  //   justifyContent: "space-between",
-  //   alignItems: "center",
-  //   border: "2px solid black",
-  //   borderRadius: "5px",
-  //   height: "66px",
-  // };
-
   const rowStyle = {
     width: "100%",
   };
@@ -146,11 +156,6 @@ const MainComponent = styled(Grid)(({ theme }) => ({
   invisible: false,
 }));
 
-// const LocationInputComponent = styled(TextField)(({ theme }) => ({
-//   // variant: theme.palette.primary.light.main,
-//   border: `1px solid black`,
-// }));
-
 const GameInputComponent = styled(Box)(({ theme, chidlren, ...otherProps }) => ({
   color: theme.palette.primary.light.main,
   display: "flex",
@@ -179,7 +184,8 @@ function Main(props) {
 
   const games = ["Plinko", "Wheel", "Coin"];
 
-  const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
+  const { restaurantDispatch } = useContext(RestaurantsContext);
+  const { gameDispatch } = useContext(GameContext);
 
   const { messageDispatch } = useContext(MessageContext);
 
@@ -187,9 +193,10 @@ function Main(props) {
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
   const [selectedCuisines, setSelectedCuisines] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
-  const [shouldNavigate, setShouldNavigate] = useState(false);
+  const [next, setNext] = useState("");
 
-  const navigate = useNavigate();
+  useHandleTransitionToGames(restaurants, next);
+  useHandleTransitionToRestaurants(restaurants, next);
 
   const handleLocationChange = (event) => {
     const location = event.target.value;
@@ -207,7 +214,7 @@ function Main(props) {
     setSelectedCuisines(newSelectedCuisines);
   };
 
-  const handleSubmitData = (mode) => {
+  const handleSubmitData = () => {
     return new Promise(async (resolve, reject) => {
       if (location === "" && selectedCuisines.length === 0) {
         messageDispatch({
@@ -255,22 +262,38 @@ function Main(props) {
           type: UPDATE_RESTAURANTS,
           payload: {
             restaurantsData: aggregatedRestaurantData.businesses,
+            location: location,
           },
         });
-
-        return resolve("data sent to database and global state");
+        return resolve();
       }
     });
   };
 
+  // const handleTransitionToRestaurants = () => {
+  //   return new Promise((resolve, reject) => {
+  //     navigate("/Restaurants", { state: { restaurants: restaurants } });
+  //     return resolve();
+  //   });
+  // };
+
+  // const handleTransitionToGames = () => {
+  //   return new Promise((resolve, reject) => {
+  //     navigate("/MultiDecisionMaker", { replace: true, state: { restaurants: restaurants } });
+  //     return resolve();
+  //   });
+  // };
+
   const handleDecideForMeButtonClick = async () => {
-    await handleSubmitData("game");
-    navigate("/MultiDecisionMaker", { replace: true });
+    await handleSubmitData();
+    // await handleTransitionToGames();
+    setNext("Games");
   };
 
   const handleGoButtonClick = async () => {
-    await handleSubmitData("normal");
-    navigate("/Restaurants");
+    await handleSubmitData();
+    // await handleTransitionToRestaurants();
+    setNext("Restaurants");
   };
 
   return (

@@ -1,4 +1,4 @@
-export default class UserPreferences {
+export default class Preference {
   constructor(axiosAgent) {
     this.axiosAgent = axiosAgent;
     this.name = "Preference";

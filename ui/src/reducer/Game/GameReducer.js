@@ -1,7 +1,4 @@
-import {
-  UPDATE_RESTAURANTS_FOR_GAMES,
-  UPDATE_SELECTED_RESTAURANT,
-} from "./GameActions";
+import { UPDATE_RESTAURANTS_FOR_GAMES, UPDATE_SELECTED_RESTAURANT } from "./GameActions";
 
 const initialGameState = {
   restaurants: [],
@@ -12,22 +9,28 @@ const initialGameState = {
 const gameReducer = (state = initialGameState, action) => {
   switch (action.type) {
     case UPDATE_RESTAURANTS_FOR_GAMES:
+      // return {
+      //   ...state,
+      //   restaurants: [...action.restaurants],
+      //   onGameEndCallback:
+      //     action.onGameEndCallback == null
+      //       ? initialGameState.onGameEndCallback
+      //       : action.onGameEndCallback,
+      // };
       return {
         ...state,
-        restaurants: [...action.restaurants],
+        restaurants: action.payload.restaurantsData,
         onGameEndCallback:
-          action.onGameEndCallback == null
+          action.payload.onGameEndCallback == null
             ? initialGameState.onGameEndCallback
-            : action.onGameEndCallback,
+            : action.payload.onGameEndCallback,
       };
     case UPDATE_SELECTED_RESTAURANT:
       return {
         ...state,
         restaurant: action.restaurant,
         onGameEndCallback:
-          action.onGameEndCallback == null
-            ? initialGameState.onGameEndCallback
-            : action.onGameEndCallback,
+          action.onGameEndCallback == null ? initialGameState.onGameEndCallback : action.onGameEndCallback,
       };
     default:
       return state;

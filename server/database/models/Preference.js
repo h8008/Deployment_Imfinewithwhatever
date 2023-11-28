@@ -8,9 +8,9 @@ const preferenceSchema = new Schema({
   email: {
     type: String,
   },
-  // food_prefs: {
-  //   type: String,
-  // },
+  location: {
+    type: String,
+  },
   categories: {
     type: [String],
   },

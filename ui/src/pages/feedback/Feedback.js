@@ -236,7 +236,7 @@ const Feedback = (props) => {
     console.log("comments", comments);
 
     await handleAddOrUpdateReview();
-    await handleAddOrUpdatePreference(wouldGoAgain);
+    // await handleAddOrUpdatePreference(wouldGoAgain);
     setReviewed(true);
   };
 
@@ -254,7 +254,7 @@ const Feedback = (props) => {
         restaurantID: params.restaurantID,
         email: params.email,
       });
-      const review = API.apiResHandling(res, messageDispatch, res.message);
+      const review = await API.apiResHandling(res, messageDispatch, res.message);
       if (review == null) {
         let res = await API.UserReviews.addReview(params);
         API.apiResHandling(res, messageDispatch, res.message);
@@ -297,47 +297,51 @@ const Feedback = (props) => {
         review: comments,
       };
 
-      let preference = getFoodPreferences(restaurantState.restaurant.preference);
-      let like = wouldGoAgain ? "YES" : "NO";
+      // let preference = getFoodPreferences(restaurantState.restaurant.preference);
+      // let like = wouldGoAgain ? "YES" : "NO";
+      const like = wouldGoAgain;
+      const location = restaurantState.location;
+      const preference = restaurantState.restaurant.categories;
 
       params = {
         restaurantID: restaurantState.restaurant.id,
         email: userState.email,
-        preference: preference,
-        like: like,
+        preference,
+        location,
+        like,
       };
-      let res = await API.Users.getRestaurantPreferences({
-        restaurantID: params.restaurantID,
-        email: params.email,
-      });
-      const preference_db = API.apiResHandling(res, messageDispatch, res.message);
-      if (preference_db != null) {
-        // Merge the new preference with the preference from local database for the current user
-        // If the user would go again add the current preference to the previous preferences for the restaurant
-        if (preference !== preference_db && wouldGoAgain) {
-          let mergedPreferenceArray = (preference + ", " + preference_db).split(", ");
-          mergedPreferenceArray = Object.values(
-            Object.fromEntries(mergedPreferenceArray.map((element) => [element, element]))
-          );
-          preference = getFoodPreferences(mergedPreferenceArray);
-        }
-        // If not, remove the current preferences from the preferences for the restaurant
-        else if (!wouldGoAgain) {
-          const preferenceArray = preference.split(",");
-          preference = getFoodPreferences(preferenceArray);
-        }
-        params = {
-          ...params,
-          preference: preference,
-        };
+      // let res = await API.Users.getRestaurantPreferences({
+      //   restaurantID: params.restaurantID,
+      //   email: params.email,
+      // });
+      // const preference_db = API.apiResHandling(res, messageDispatch, res.message);
+      // if (preference_db != null) {
+      //   // Merge the new preference with the preference from local database for the current user
+      //   // If the user would go again add the current preference to the previous preferences for the restaurant
+      //   if (preference !== preference_db && wouldGoAgain) {
+      //     let mergedPreferenceArray = (preference + ", " + preference_db).split(", ");
+      //     mergedPreferenceArray = Object.values(
+      //       Object.fromEntries(mergedPreferenceArray.map((element) => [element, element]))
+      //     );
+      //     preference = getFoodPreferences(mergedPreferenceArray);
+      //   }
+      //   // If not, remove the current preferences from the preferences for the restaurant
+      //   else if (!wouldGoAgain) {
+      //     const preferenceArray = preference.split(",");
+      //     preference = getFoodPreferences(preferenceArray);
+      //   }
+      //   params = {
+      //     ...params,
+      //     preference: preference,
+      //   };
 
-        // res = await API.Users.addRestaurantPreference(Object.values(params));
-        res = await API.Users.updateRestaurantPreference(params);
-        API.apiResHandling(res, messageDispatch, res.message);
-      } else {
-        res = await API.Users.addRestaurantPreference(Object.values(params));
-        API.apiResHandling(res, messageDispatch, res.message);
-      }
+      //   // res = await API.Users.addRestaurantPreference(Object.values(params));
+      //   res = await API.Users.updateRestaurantPreference(params);
+      //   API.apiResHandling(res, messageDispatch, res.message);
+      // } else {
+      //   res = await API.Users.addRestaurantPreference(Object.values(params));
+      //   API.apiResHandling(res, messageDispatch, res.message);
+      // }
       return resolve();
     });
   };
@@ -365,8 +369,6 @@ const Feedback = (props) => {
   };
 
   return (
-    // <Grid rowGap={5} style={theme}>
-    // <FeedbackComponent rowGap={5} theme={theme} />
     <FeedbackComponent rowGap={5} theme={theme}>
       <RaterComponent>
         <TextComponent text={"Rate you food:"} />

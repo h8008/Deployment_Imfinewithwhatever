@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FormControl, Grid, Tabs, Tab } from "@mui/material";
 import { Scrollbar } from "react-scrollbars-custom";
 
@@ -135,12 +135,13 @@ const createInitialRestaurants = (num) => {
 const MultiDecisionMaker = (props) => {
   const games = attributes.games.names;
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { messageState, messageDispatch } = useContext(MessageContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
   const { gameState, gameDispatch } = useContext(GameContext);
 
-  // console.log("restaurants", restaurantState.restaurantsData);
+  const { restaurants } = location.state;
 
   const [numRestaurants, setNumRestaurants] = useState(3);
   const [restaurantInputs, setRestaurantInputs] = useState(createInitialRestaurants(numRestaurants));
@@ -153,10 +154,6 @@ const MultiDecisionMaker = (props) => {
       if (index !== gameIndex) return false;
       return bool;
     });
-
-    // const newGames = games.map((game, index) =>
-    //   newChecked[index] ? game : ""
-    // );
 
     setChecked(newChecked);
     setSelectedGame(game);
@@ -185,7 +182,6 @@ const MultiDecisionMaker = (props) => {
 
       const handleGameEndCallback = (selectedItem) => {
         // Note the selectedItem returned by the games is a restaurant data object
-
         restaurantDispatch({
           type: UPDATE_RESTAURANTS,
           payload: {
@@ -202,12 +198,19 @@ const MultiDecisionMaker = (props) => {
 
       gameDispatch({
         type: UPDATE_RESTAURANTS_FOR_GAMES,
-        restaurants: filteredRestaurantInputs,
-        onGameEndCallback: handleGameEndCallback,
+        payload: {
+          restaurants: filteredRestaurantInputs,
+          onGameEndCallback: handleGameEndCallback,
+        },
       });
 
       console.log("game started");
-      navigate(`/Games/${selectedGame}`);
+      navigate(`/Games/${selectedGame}`, {
+        state: {
+          restaurants: filteredRestaurantInputs,
+          // onGameEndCallback: handleGameEndCallback,
+        },
+      });
     }
   };
 
@@ -217,7 +220,8 @@ const MultiDecisionMaker = (props) => {
     setRestaurantInputs(newRestaurantInputs);
   };
 
-  const handleAddRestaurantInput = () => {
+  const handleAddRestaurantInput = (input) => {
+    // const newRestaurantInputs = [...restaurantInputs, [""]];
     const newRestaurantInputs = [...restaurantInputs, [""]];
     setRestaurantInputs(newRestaurantInputs);
   };
@@ -239,7 +243,8 @@ const MultiDecisionMaker = (props) => {
         handleChange={handleRestaurantChange}
         handleAddRestaurantInput={handleAddRestaurantInput}
         handleRemoveRestaurantInput={handleRemoveRestaurantInput}
-        restaurants={restaurantState.restaurantsData}
+        // restaurants={restaurantState.restaurantsData}
+        restaurants={restaurants}
       />
       <GamesInputComponent flex={"20%"} games={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
       <RowComponent>

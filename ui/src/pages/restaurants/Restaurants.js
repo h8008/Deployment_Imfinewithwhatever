@@ -49,16 +49,6 @@ const ButtonsComponent = styled(Grid)({
   flexDirection: "row",
 });
 
-const RestaurantComponent = styled(Grid)({
-  width: "60%",
-  height: "75%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flexDirection: "column",
-  backgroundColor: "white",
-});
-
 // Filters the list of restaurants from Yelp API based on the blacklist stored
 // in the User global state which was retrieved from the database at login
 const filterRestaurantsByBlackList = (blacklist, restaurants) => {
@@ -99,7 +89,7 @@ const initializeVerdicts = (restaurants, pos, v) => {
 
 const initializeMessage = () => "";
 
-const useRecordVerdictsOnPageChange = (verdicts, restaurants, email, ready) => {
+const useRecordVerdictsOnPageChange = (verdicts, restaurants, email, location, ready) => {
   const getCategories = (categories) => categories.map((cat) => cat.title);
   useEffect(() => {
     if (ready) {
@@ -107,10 +97,12 @@ const useRecordVerdictsOnPageChange = (verdicts, restaurants, email, ready) => {
         const res = await API.Preference.add({
           restaurant_id: restaurant.id,
           categories: getCategories(restaurant.categories),
-          email: email,
+          location,
+          email,
           like: verdict,
         });
         if (res.status !== "OK") {
+          // console.log("error ")
         }
       };
       verdicts
@@ -119,7 +111,7 @@ const useRecordVerdictsOnPageChange = (verdicts, restaurants, email, ready) => {
           add(v, restaurants[idx], email);
         });
     }
-  }, [email, restaurants, verdicts, ready]);
+  }, [email, restaurants, verdicts, ready, location]);
 };
 
 const updateVerdicts = (verdicts, activeRestaurantIdx, verdict) => {
@@ -138,6 +130,7 @@ const Restaurants = (props) => {
 
   const restaurantsData = restaurantState.restaurantsData;
   const blacklistData = userState.preferences;
+  const location = restaurantState.location;
 
   const [message, setMessage] = useState(initializeMessage());
   const [preference, setPreference] = useState(null);
@@ -150,7 +143,7 @@ const Restaurants = (props) => {
   const [dispatchVerdicts, setDispatchVerdicts] = useState(false);
 
   // useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, restaurantsData == [], "/Main");
-  useRecordVerdictsOnPageChange(verdicts, restaurants, userState.email, dispatchVerdicts);
+  useRecordVerdictsOnPageChange(verdicts, restaurants, userState.email, location, dispatchVerdicts);
   useDispatchMessage(message);
 
   const onShowRestaurantLocationCallback = () => {
