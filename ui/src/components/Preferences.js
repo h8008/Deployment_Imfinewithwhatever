@@ -8,43 +8,39 @@ import PieChart from "./PieChart/PieChart";
 
 import { Fragment } from "react";
 
-const PreferenceComponent = styled(Grid)({
-  height: "80%",
-  width: "80%",
+const PreferenceComponent = styled(Grid)(({ children, ...otherProps }) => ({
+  container: true,
+  height: "50%",
+  width: "100%",
   margin: "auto",
   display: "flex",
-  flex: "100%",
   flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  container: true,
-});
-
-const BarChartComponent = styled(Grid)({
-  width: "100%",
-  gridRow: true,
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-});
+  justifyContent: "flex-start",
+  ...otherProps,
+}));
 
 const PieChartComponentTopLeft = styled(Grid)((props) => ({
-  // width: "100%",
-  width: props.width,
+  // width: props.width,
   height: "100%",
+  width: "60%",
   gridRow: true,
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
+  // display: "flex",
+  // flexDirection: "row",
+  // justifyContent: "flex-start",
 }));
 
 const PieChartComponentBottomRight = styled(Grid)((props) => ({
-  // width: "100%",
-  width: props.width,
+  width: "60%",
   height: "100%",
   gridRow: true,
+  // display: "flex",
+  // flexDirection: "row",
+  // justifyContent: "center",
+}));
+
+const PieChartTitleComponent = styled(Grid)((props) => ({
+  width: "40%",
+  height: "100%",
   display: "flex",
   flexDirection: "row",
   justifyContent: "center",
@@ -56,14 +52,24 @@ const Preferences = (props) => {
   const { likes, dislikes, totalDataLength } = preferences;
 
   return (
-    <PreferenceComponent>
-      <PieChartComponentTopLeft width={"30%"}>
-        <PieChart title={"Your Most Liked"} chartData={likes} height={200} width={200} />
-      </PieChartComponentTopLeft>
-      <PieChartComponentBottomRight width={"30%"}>
-        <PieChart title={"Perhaps you don't like these"} chartData={dislikes} height={200} width={200} />
-      </PieChartComponentBottomRight>
-    </PreferenceComponent>
+    <Fragment>
+      <PreferenceComponent>
+        <PieChartComponentTopLeft alignItems={"flex-start"}>
+          <PieChart chartData={likes} style={{ height: "100%", width: "100%" }} />
+        </PieChartComponentTopLeft>
+        <PieChartTitleComponent>
+          <Text text={"Your Most Liked"} fontSize={"300%"} />
+        </PieChartTitleComponent>
+      </PreferenceComponent>
+      <PreferenceComponent alignItems={"flex-end"}>
+        <PieChartTitleComponent>
+          <Text text={"You didn't like these"} fontSize={"300%"} />
+        </PieChartTitleComponent>
+        <PieChartComponentBottomRight>
+          <PieChart chartData={dislikes} style={{ height: "100%", width: "100%" }} />
+        </PieChartComponentBottomRight>
+      </PreferenceComponent>
+    </Fragment>
   );
 };
 

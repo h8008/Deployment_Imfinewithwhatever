@@ -56,7 +56,7 @@ const getLinkComponents = (props) =>
 
 const Menu = (props) => {
   const { palette } = useTheme();
-  const { userState, userDispatch } = useContext(UserContext);
+  const { userState } = useContext(UserContext);
 
   const options = useMemo(() => {
     const names = {

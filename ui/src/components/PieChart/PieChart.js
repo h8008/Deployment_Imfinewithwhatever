@@ -1,7 +1,7 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useMemo } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Chart } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { border } from "@mui/system";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -93,8 +93,7 @@ const getData = (chartData) => {
   };
 };
 
-const options = (title) => ({
-  // responsive: true,
+const getOptions = (props) => ({
   maintainAspectRatio: false,
   plugins: {
     legend: {
@@ -102,16 +101,55 @@ const options = (title) => ({
     },
     title: {
       display: false,
-      text: title,
     },
   },
+  scales: {
+    height: props.height,
+    width: props.width,
+  },
 });
+
+// const useDrawPieChart = (width, height, radius, data, options) => {
+//   const pie = useMemo(() => {
+//     return new Chart("canvas", {
+//       type: "pie",
+//       plugins: [
+//         {
+//           beforeDraw: (chart) => {
+//             const ctx = chart.chart.ctx;
+//             ctx.save();
+//             ctx.beginPath();
+//             ctx.shadowColor = "black";
+//             // const x = chart.chart.width / 2;
+//             // const y = chart.chart.height / 2 + 15;
+//             const x = width;
+//             const y = height;
+//             ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+//             ctx.fill();
+//             ctx.restore();
+//           },
+//         },
+//       ],
+//       data: {
+//         labels: data.labels,
+//         datasets: data.dataSets,
+//       },
+//       options: data.options,
+//     });
+//   }, [data.labels, data.dataSets, data.options, width, height, radius]);
+
+//   return pie;
+// };
 
 const PieChart = ({ chartData, title, ...otherProps }) => {
   // console.log("chart data", chartData);
   const [data, setData] = useState(getData(chartData));
+  const { width, height, radius } = otherProps;
+  // useDrawPieChart(width, height, radius, data, options)
 
-  return <Fragment>{data && <Pie {...otherProps} data={data} options={options(title)} />}</Fragment>;
+  return (
+    <Fragment>{data && <Pie style={{ height, width }} data={data} options={getOptions({ width, height })} />}</Fragment>
+  );
 };
 
 export default PieChart;
