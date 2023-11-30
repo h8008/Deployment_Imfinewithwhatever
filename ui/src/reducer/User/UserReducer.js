@@ -15,8 +15,8 @@ import Cookies from "js-cookie";
 // };
 
 const initialUserState = {
-  loggedIn: Cookies.get("loggedIn") || false,
-  email: Cookies.get("email") || "",
+  loggedIn: Cookies.get("loggedIn") == null ? false : Cookies.get("loggedIn"),
+  email: Cookies.get("email") == null ? "" : Cookies.get("email"),
   preferences: [],
   data: null,
 };

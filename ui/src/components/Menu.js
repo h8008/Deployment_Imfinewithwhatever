@@ -1,11 +1,12 @@
 import { useCallback, useContext, useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
 import Text from "../ui_components/Text";
 import Box from "../ui_components/Box";
 
 import styled from "@emotion/styled";
+import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
 
 import { UserContext } from "../providers/UserProvider";
@@ -22,15 +23,25 @@ const MenuComponent = styled(Grid)((props) => ({
   zIndex: 1,
 }));
 
-const LinkComponent = styled(Link)((props) => ({
-  width: "50px",
+const LinkComponent = styled(NavLink)((props) => ({
+  width: "100%",
   height: "50px",
   textDecoration: "none",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  marginRight: "50px",
 }));
+
+const LinkNameComponent = styled(Typography)(({ theme, children, ...otherProps }) => ({
+  color: theme.palette.primary.dark.main,
+  textAlign: "center",
+  alignItems: "center",
+  ...otherProps,
+}));
+
+const handleNavigate = (to, navigate) => {
+  navigate(to);
+};
 
 const getOptions = (loggedIn, dest) => {
   return dest === "Login" && loggedIn ? "Logout" : dest;
@@ -49,14 +60,27 @@ const intializeOptions = (names, loggedIn) => Object.values(names).map((name, id
 
 const getLinkComponents = (props) =>
   props.options.map((option, index) => (
-    <LinkComponent key={index} to={option} color={props.palette.primary.contrastText}>
-      <Text text={getName(option)} color={props.palette.primary.contrastText} />
+    <LinkComponent
+      key={index}
+      to={option}
+      onClick={() => handleNavigate(option, props.navigate)}
+      color={props.palette.primary.contrastText}
+      height={"100px"}
+    >
+      <LinkNameComponent width={"100%"} fontSize={"200%"}>
+        {getName(option)}
+      </LinkNameComponent>
     </LinkComponent>
   ));
 
 const Menu = (props) => {
+  console.log("Menu Component");
+
   const { palette } = useTheme();
   const { userState } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  // console.log("logged in?", userState.loggedIn);
 
   const options = useMemo(() => {
     const names = {
@@ -70,12 +94,7 @@ const Menu = (props) => {
 
   return (
     <MenuComponent color={palette.primary.dark.main} data_id="navigation-component">
-      <SwipeableDrawer items={getLinkComponents({ options, palette })} drawerWidth={250} />
-      {/* {options.map((option, index) => (
-        <LinkComponent key={index} to={option} color={palette.primary.contrastText}>
-          <Text text={getName(option)} color={palette.primary.contrastText} />
-        </LinkComponent>
-      ))} */}
+      <SwipeableDrawer items={getLinkComponents({ options, palette, navigate })} drawerWidth={250} />
     </MenuComponent>
   );
 };

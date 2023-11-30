@@ -69,29 +69,40 @@ const TextComponent = styled(GridRow)((children, ...otherProps) => ({
   ...otherProps,
 }));
 
-const MainDetailsComponent = (props) => {
-  const { details, flex } = props;
-  const style = {
-    display: "flex",
-    height: "100%",
-    width: "100%",
-    padding: 0,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    flex: flex,
-  };
+// const MainDetailsComponent = (props) => {
+//   const { details, flex } = props;
+//   const style = {
+//     display: "flex",
+//     height: "100%",
+//     width: "100%",
+//     padding: 0,
+//     flexDirection: "column",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     flex: flex,
+//   };
 
-  return (
-    <CardContent style={style}>
-      {/* <BorderedBox style={{ border: "4px dashed black" }}> */}
-      {/* {details !== "" && details.map((detail, index) => detail)} */}
-      {/* <Content /> */}
-      {details}
-      {/* </BorderedBox> */}
-    </CardContent>
-  );
-};
+//   return (
+//     <CardContent style={style}>
+//       {/* <BorderedBox style={{ border: "6px dashed black" }}> */}
+//       {/* {details !== "" && details.map((detail, index) => detail)} */}
+//       {/* <Content /> */}
+//       {details}
+//       {/* </BorderedBox> */}
+//     </CardContent>
+//   );
+// };
+
+const MainDetailsComponent = styled(CardContent)(({ children, ...otherProps }) => ({
+  display: "flex",
+  height: "100%",
+  width: "100%",
+  padding: 0,
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  ...otherProps,
+}));
 
 const TextStyle = {
   alignItems: "center",
@@ -113,11 +124,9 @@ const getDescription = async (description) => {
           array.map(async (element) => {
             if (Array.isArray(element)) {
               const str = await arrayToString(element);
-              //   console.log(str);
               return str;
             } else if (typeof element === "object") {
               const str = await objectToString(element);
-              //   console.log(str);
               return str;
             }
             return element;
@@ -201,7 +210,7 @@ const getAttributes = (attributes, data) => {
         } else {
           const component = (
             <TextComponent width={"100%"} height={"15%"}>
-              <Text key={index} style={TextStyle} text={data[attribute]} />;
+              <Text key={index} style={TextStyle} text={data[attribute]} />
             </TextComponent>
           );
           return component;
@@ -209,7 +218,7 @@ const getAttributes = (attributes, data) => {
       })
     ).then((result) => result);
 
-    return resolve(<GridRow width={"100%"}>{attributesComponent}</GridRow>);
+    return resolve(<Grid width={"60%"}>{attributesComponent}</Grid>);
   });
 };
 
@@ -297,7 +306,7 @@ const Restaurant = (props) => {
           {reviews.length > 0 && <SwipeableDrawer items={reviews.map((r) => r.text)} />}
           <TopComponent flexDirection={"row"} justifyContent={"flex-start"}>
             <CardMediaComponent image={data.image_url} src={"img"} flex={"60%"} />
-            <MainDetailsComponent flex={"40%"} details={mainDetails} />
+            <MainDetailsComponent flex={"40%"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
           <MapComponent>
             {otherDetails !== "" && otherDetails !== LOCATION_MASK_MESSAGE && (

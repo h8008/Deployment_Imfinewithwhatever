@@ -1,4 +1,3 @@
-import { ThemeProvider as MUIThemeProvider } from "styled-components";
 import { createTheme } from "@mui/material";
 import { green, grey, red } from "@mui/material/colors";
 import attributes from "../config";

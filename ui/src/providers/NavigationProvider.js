@@ -1,16 +1,16 @@
-import { createContext, useContext, useReducer } from "react";
-import { initialState, reducer } from "../reducer/Navigation/reducer";
+// import { createContext, useContext, useReducer } from "react";
+// import { initialState, reducer } from "../reducer/Navigation/reducer";
 
-const NavigationContext = createContext();
+// const NavigationContext = createContext();
 
-const NavigationProvider = (props) => {
-  const [navigationState, navigationDispatch] = useReducer(reducer, initialState);
+// const NavigationProvider = (props) => {
+//   const [navigationState, navigationDispatch] = useReducer(reducer, initialState);
 
-  return (
-    <NavigationContext.Provider value={{ navigationState, navigationDispatch }}>
-      {props.children}
-    </NavigationContext.Provider>
-  );
-};
+//   return (
+//     <NavigationContext.Provider value={{ navigationState, navigationDispatch }}>
+//       {props.children}
+//     </NavigationContext.Provider>
+//   );
+// };
 
-export { NavigationContext, NavigationProvider };
+// export { NavigationContext, NavigationProvider };

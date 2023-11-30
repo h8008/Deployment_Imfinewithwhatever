@@ -237,6 +237,8 @@ const useGetBackdropOfTheDay = (assets) => {
 };
 
 const Profile = (props) => {
+  console.log("Profile Page");
+
   const theme = useTheme();
   const { assets } = useContext(AssetsContext);
   const { userState, userDispatch } = useContext(UserContext);

@@ -5,30 +5,26 @@ import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import styled from "@emotion/styled";
 import RoundButton from "../../ui_components/RoundButton";
-import Text from "../../ui_components/Text";
-import SwipeableTemporaryDrawer from "../../ui_components/SwipeableDrawer2";
 
 import Restaurant from "../../components/Restaurant";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { UserContext } from "../../providers/UserProvider";
-import { NavigationContext } from "../../providers/NavigationProvider";
 
 import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
-import { NAVIGATE } from "../../reducer/Navigation/actions";
 
-import { RESTAURANTS_DATA_EMPTY_MESSAGE } from "../../constants/Messages";
-
-import useDetectEmptyData from "../../hooks/useDetectEmptyData";
 import useDispatchMessage from "../../hooks/useDispatchMessage";
 
 import API from "../../API_Interface";
-import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchProvider";
+// import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchProvider";
 import { AssetsContext } from "../../providers/AssetsProvider";
 
 import { useTheme } from "@mui/material";
+import { MdLocalDining } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantsComponent = styled(Grid)(({ theme }) => ({
+  container: true,
   width: "90%",
   height: "90vh",
   margin: "auto",
@@ -37,6 +33,7 @@ const RestaurantsComponent = styled(Grid)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   flexWrap: "wrap",
+  rowGap: 10,
   backgroundColor: theme.palette.background.default,
 }));
 
@@ -122,10 +119,12 @@ const updateVerdicts = (verdicts, activeRestaurantIdx, verdict) => {
 
 const Restaurants = (props) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
   const { assets } = useContext(AssetsContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
-  const { navigationState, navigationDispatch } = useContext(NavigationContext);
-  const { backgroundDispatch } = useContext(BackgroundDispatchContext);
+  // const { navigationState, navigationDispatch } = useContext(NavigationContext);
+  // const { backgroundDispatch } = useContext(BackgroundDispatchContext);
   const { userState, userDispatch } = useContext(UserContext);
 
   const restaurantsData = restaurantState.restaurantsData;
@@ -152,12 +151,13 @@ const Restaurants = (props) => {
 
   const handleDoneSettingPreference = () => {
     setDispatchVerdicts(true);
-    navigationDispatch({
-      type: NAVIGATE,
-      payload: {
-        destination: "/Feedback",
-      },
-    });
+    navigate("/Feedback");
+    // navigationDispatch({
+    //   type: NAVIGATE,
+    //   payload: {
+    //     destination: "/Feedback",
+    //   },
+    // });
   };
 
   const onDecisionCallback = async (preference) => {
@@ -243,11 +243,8 @@ const Restaurants = (props) => {
           onDecisionCallback={onDecisionCallback}
         />
       )}
-      {/* {activeRestaurant && (
-        <MapBox coordinates={activeRestaurant.coordinates} style={{ width: "500px", height: "500px" }} />
-      )} */}
-      <RoundButton onClick={handleDoneSettingPreference}>
-        <Text text="Done" />
+      <RoundButton onClick={handleDoneSettingPreference} border={`6px solid white`}>
+        <MdLocalDining size={"large"} color={theme.palette.primary.main} />
       </RoundButton>
     </RestaurantsComponent>
   );

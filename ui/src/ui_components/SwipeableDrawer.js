@@ -25,6 +25,24 @@ const SideMenuComponent = styled(Grid)({
   alignItems: "center",
 });
 
+const ListItemComponent = styled(ListItem)((children, ...otherProps) => ({
+  ...otherProps,
+}));
+
+const itemToListItem = (item, index, onSelectMenuItemCallback) => {
+  // const Item = typeof item === React.Component ? React.cloneElement(item) : ListItemComponent;
+  return (
+    // <Item key={index} disablePadding>
+    //   <ListItemButton>
+    //     <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+    //   </ListItemButton>
+    // </Item>
+    <ListItem key={index} disablePadding>
+      {item}
+    </ListItem>
+  );
+};
+
 export default function SwipeableDrawer(props) {
   const { data, items, drawerWidth } = props;
   const [state, setState] = useState({
@@ -53,27 +71,8 @@ export default function SwipeableDrawer(props) {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {items.map((text, index) => (
-          <ListItem key={index} disablePadding onClick={() => onSelectMenuItemCallback(index)}>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <List>{items.map((item, index) => itemToListItem(item, index, onSelectMenuItemCallback))}</List>
       <Divider />
-      {/* <List>
-        {["Messages"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
     </Box>
   );
 

@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Text from "../../ui_components/Text";
 import API_Interface from "../../API_Interface";
-import useNavigation from "../../hooks/useNavigation";
 import { UserContext } from "../../providers/UserProvider";
 import { LOGOUT } from "../../reducer/User/UserActions";
 import useNavigator from "../../hooks/useNavigator";
@@ -31,10 +30,6 @@ const Logout = (props) => {
   const [loggedOut, setLoggedOut] = useLogout();
 
   useNavigator({ dest: "/", cond: loggedOut });
-
-  // loggedOut ? Navigate("/")
-  // const navigator = useNavigator();
-  // navigator("/", loggedOut);
 
   return (
     <Grid>

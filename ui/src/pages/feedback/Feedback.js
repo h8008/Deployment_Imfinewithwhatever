@@ -4,57 +4,58 @@ import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import MUIGrid from "@mui/material/Grid";
-import { Box, styled } from "@mui/material";
+import MUITextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material";
 
 import Grid from "../../ui_components/Grid";
 import Text from "../../ui_components/Text";
-import GridRow from "../../ui_components/GridRow";
 import GridItem from "../../ui_components/GridItem";
-import TextField from "../../ui_components/TextField";
 import RoundButton from "../../ui_components/RoundButton";
-import RowComponent from "../../ui_components/RowComponent";
 
 import { main_config } from "../../styles/shared";
 
 import { UserContext } from "../../providers/UserProvider";
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { MessageContext } from "../../providers/MessageProvider";
-import { NavigationContext } from "../../providers/NavigationProvider";
-import { NAVIGATE } from "../../reducer/Navigation/actions";
 
 import API from "../../API_Interface";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
-import { getFoodPreferences } from "../../utils/Functions";
+
+import Stars from "../../components/Stars";
+import { useTheme } from "styled-components";
 
 const calcCellWidth = (addon = 0) => {
-  const cellBorderWidth = 1;
-  const width = parseInt(main_config.width.slice(0, -3)) - cellBorderWidth * 2 + addon + "px";
+  const cellBorderWidth = 3;
+  const totalWidth = parseInt(main_config.pages.feedback.rater.width.slice(0, -2));
+  const width = Math.round(totalWidth / 10) - cellBorderWidth * 2 + addon + "px";
   return width;
 };
 
 const barCellConfig = {
-  height: "30px",
+  height: main_config.pages.feedback.rater.height,
   width: calcCellWidth(),
-  border: "1px solid black",
+  border: "5px solid black",
   margin: "0px",
   backgroundColor: "white",
   overflow: "hidden",
 };
 
-const TextComponent = (props) => {
-  const style = {
-    width: "100%",
-    height: "30px",
-    display: "flex",
-    justifyContent: "flex-start",
-  };
+const RowComponent = styled(Grid)(({ theme }) => ({
+  gridRow: true,
+  width: "100%",
+  height: "30px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
 
-  return (
-    <GridRow style={style}>
-      <Text text={props.text} />
-    </GridRow>
-  );
-};
+const TextComponent = styled(Typography)(({ children, ...otherProps }) => ({
+  width: "30%",
+  margin: "auto",
+  ...otherProps,
+}));
 
 const BarComponent = (props) => {
   const calcRowWidth = (numCells) => {
@@ -69,8 +70,15 @@ const BarComponent = (props) => {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    border: "2px solid black",
-    width: calcRowWidth(10),
+  };
+
+  const barStyle = {
+    display: "flex",
+    // flex: "70%",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-start",
   };
 
   const Cells = (props) => {
@@ -101,17 +109,12 @@ const BarComponent = (props) => {
   };
 
   return (
-    <Grid data_id="bar-component" style={{}}>
-      <GridRow style={rowStyle} data_id={"bar-component-cells"}>
-        <Cells
-          cells={props.bar}
-          onBarCellHoverCallback={props.onBarCellHoverCallback}
-          onBarCellClickCallback={props.onBarCellClickCallback}
-        />
-      </GridRow>
-      <GridRow style={() => ({ ...rowStyle, border: undefined })} data_id={"bar-component-cells-index"}>
-        <CellsIndex cellsIndex={props.barIndex} />
-      </GridRow>
+    <Grid data_id="bar-component" style={barStyle}>
+      <Stars
+        rating={props.bar}
+        onBarCellHoverCallback={props.onBarCellHoverCallback}
+        onBarCellClickCallback={props.onBarCellClickCallback}
+      />
     </Grid>
   );
 };
@@ -142,17 +145,27 @@ const createInitialBar = () => {
     .map(() => createInitialCell());
 };
 
-const FeedbackComponent = styled(MUIGrid)((props) => ({
+const FeedbackComponent = styled(MUIGrid)(({ children, theme, ...otherProps }) => ({
   container: true,
-  width: "80%",
+  width: "60%",
   height: "90vh",
   margin: "auto",
-  theme: props.theme,
-  rowGap: props.rowGap,
+  ...otherProps,
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "cetner",
+  backgroundColor: theme.palette.background.default,
+}));
+
+const ButtonsComponent = styled(MUIGrid)(({ children, ...otherProps }) => ({
+  container: true,
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  ...otherProps,
+  justifyContent: "space-evenly",
+  alignItems: "center",
 }));
 
 const RaterComponent = (props) => {
@@ -171,43 +184,44 @@ const RaterComponent = (props) => {
   );
 };
 
-const CommentsComponent = (props) => {
-  const style = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    height: "20%",
-  };
+const CommentsComponent = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "50%",
+  color: theme.palette.primary.light.main,
+  margin: "auto",
+  container: true,
+  rowGap: 10,
+}));
 
-  return (
-    <Grid rowGap={3} style={style} data_id={"comments-component"}>
-      {props.children}
-    </Grid>
-  );
-};
+const CommentBoxComponent = styled(MUITextField)(({ theme, comments, handleCommentsChange, ...otherProps }) => ({
+  gridRow: true,
+  width: "60%",
+  color: theme.palette.primary.light.main,
+  border: `6px solid white`,
+  borderRadius: "6px",
+  overflow: "hidden",
+  margin: "auto",
+  value: comments,
+  // handleChange: handleCommentsChange,
+  ...otherProps,
+}));
 
-const CommentBoxComponent = (props) => {
-  const style = {
-    // border: '3px solid black',
-    rows: 10,
-    width: parseInt(props.style.width.slice(0, -2)) - 6 + "px",
-    overflow: "hidden",
-  };
-
-  return <TextField value={props.comments} handleChange={props.handleCommentsChange} style={style} />;
-};
-
-const DecisionComponent = styled(GridRow)(() => ({
+const DecisionComponent = styled(MUIGrid)(() => ({
   display: "flex",
   flexDirection: "column",
-  justifyContent: "flex-start",
+  // justifyContent: "space-between",
+  justifyContent: "center",
   alignItems: "center",
   height: "20%",
 }));
 
 const Feedback = (props) => {
-  const { theme } = props;
+  const { theme: style } = props;
+  const theme = useTheme();
+
   const [bar, setBar] = useState(createInitialBar());
   const [barIndex, setBarIndex] = useState(createInitialBarIndex());
   const [curRating, setCurRating] = useState(-1);
@@ -221,20 +235,16 @@ const Feedback = (props) => {
   const { userState, userDispatch } = useContext(UserContext);
   const { messageState, messageDispatch } = useContext(MessageContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
-  const { navigationDispatch } = useContext(NavigationContext);
+  // const { navigationDispatch } = useContext(NavigationContext);
 
   const handleCommentsChange = (event) => {
     // const newComments = comments.split().join();
     const newComments = event.target.value;
-    console.log("new comments", newComments);
     setComments(newComments);
   };
 
   const handleSubmiteReview = async (wouldGoAgain) => {
     if (rating === -1) return;
-    console.log("rating", rating);
-    console.log("comments", comments);
-
     await handleAddOrUpdateReview();
     // await handleAddOrUpdatePreference(wouldGoAgain);
     setReviewed(true);
@@ -270,24 +280,24 @@ const Feedback = (props) => {
   };
 
   useEffect(() => {
-    const handleReviewEndNavigate = () => {
-      navigationDispatch({
-        type: NAVIGATE,
-        payload: {
-          destination: "/Profile",
-        },
-      });
-    };
+    // const handleReviewEndNavigate = () => {
+    //   navigationDispatch({
+    //     type: NAVIGATE,
+    //     payload: {
+    //       destination: "/Profile",
+    //     },
+    //   });
+    // };
 
     if (reviewed) {
       setReviewed(false);
       messageDispatch({
         type: UPDATE_MESSAGE,
         message: `Thank you for the review.`,
-        onModalClick: handleReviewEndNavigate,
+        onModalClick: () => navigate("/Profile"),
       });
     }
-  }, [messageDispatch, navigationDispatch, reviewed]);
+  }, [messageDispatch, navigate, reviewed]);
 
   const handleAddOrUpdatePreference = (wouldGoAgain) => {
     return new Promise(async (resolve, reject) => {
@@ -346,12 +356,15 @@ const Feedback = (props) => {
     });
   };
 
+  const getCurrentRating = (cellIndex) => {
+    return cellIndex * 2;
+  };
+
   const onBarCellClickCallback = () => {
-    setRating(curRating + 1);
+    setRating(curRating);
   };
 
   const onBarCellHoverCallback = (cellIndex) => {
-    // console.log("index", cellIndex);
     if (curRating === cellIndex) return;
     const newBar = bar.map((cell, index) => {
       if (index <= cellIndex) {
@@ -365,13 +378,16 @@ const Feedback = (props) => {
       return createInitialCell(index);
     });
     setBar(newBar);
-    setCurRating(cellIndex);
+    setCurRating(getCurrentRating(cellIndex));
   };
 
   return (
     <FeedbackComponent rowGap={5} theme={theme}>
       <RaterComponent>
-        <TextComponent text={"Rate you food:"} />
+        {/* <TextComponent text={"Rate you food:"} /> */}
+        <RowComponent>
+          <TextComponent fontSize={"200%"}>{"Rate your food: "}</TextComponent>
+        </RowComponent>
         <BarComponent
           bar={bar}
           barIndex={barIndex}
@@ -380,19 +396,30 @@ const Feedback = (props) => {
         />
       </RaterComponent>
       <CommentsComponent>
-        <TextComponent text={"Comments:"} />
-        <CommentBoxComponent style={theme} comments={comments} handleCommentsChange={handleCommentsChange} />
+        <RowComponent>
+          <TextComponent fontSize={"200%"}>{"Comments: "}</TextComponent>
+        </RowComponent>
+        <CommentBoxComponent
+          fullWidth
+          multiline
+          rows={5}
+          comments={comments}
+          // handleCommentsChange={() => handleCommentsChange}
+          onChange={(e) => handleCommentsChange(e)}
+        />
       </CommentsComponent>
       <DecisionComponent>
-        <TextComponent text={"Would you go again?"} />
-        <RowComponent theme={{ justifyContent: "space-between", alignItems: "center" }}>
+        <RowComponent>
+          <TextComponent fontSize={"200%"}>{"Would You Go Again?"}</TextComponent>
+        </RowComponent>
+        <ButtonsComponent>
           <RoundButton onClick={() => handleSubmiteReview(false)}>
             <CloseIcon />
           </RoundButton>
           <RoundButton onClick={() => handleSubmiteReview(true)}>
             <CheckIcon />
           </RoundButton>
-        </RowComponent>
+        </ButtonsComponent>
       </DecisionComponent>
     </FeedbackComponent>
   );

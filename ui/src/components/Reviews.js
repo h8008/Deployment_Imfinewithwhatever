@@ -8,12 +8,10 @@ import Grid from "@mui/material/Grid";
 import UpArrow from "@mui/icons-material/KeyboardArrowUp";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-import API from "../API_Interface";
 import { MessageContext } from "../providers/MessageProvider";
-import { NavigationContext } from "../providers/NavigationProvider";
-
 import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
-import { NAVIGATE } from "../reducer/Navigation/actions";
+
+import API from "../API_Interface";
 
 const ReviewsComponent = styled(Grid)({
   container: true,
@@ -21,13 +19,6 @@ const ReviewsComponent = styled(Grid)({
   columnGap: 20,
   display: "flex",
   flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
-const RowComponent = styled(Grid)({
-  gridRow: true,
-  display: "row",
   justifyContent: "center",
   alignItems: "center",
 });
@@ -42,16 +33,15 @@ const ColumnComponent = styled(Grid)((props) => ({
   alignItems: "center",
 }));
 
-const EMPYT_DATA_MESSAGE = "Go explore and don't forget to leave some reviews!";
+// const EMPYT_DATA_MESSAGE = "Go explore and don't forget to leave some reviews!";
 
 const Reviews = (props) => {
   const { messageDispatch } = React.useContext(MessageContext);
-  const { navigationDispatch } = React.useContext(NavigationContext);
 
   return (
     <ReviewsClassComponent
       messageDispatch={messageDispatch}
-      navigationDispatch={navigationDispatch}
+      // navigationDispatch={navigationDispatch}
       reviews={props.reviews}
     />
   );
@@ -75,21 +65,6 @@ class ReviewsClassComponent extends React.Component {
     this.advanceIdx = this.advanceIdx.bind(this);
   }
 
-  onEmptyData() {
-    this.props.messageDispatch({
-      type: UPDATE_MESSAGE,
-      message: EMPYT_DATA_MESSAGE,
-      onModalClick: () =>
-        this.props.navigationDispatch({
-          type: NAVIGATE,
-          payload: {
-            destination: "/Main",
-            options: { replace: true },
-          },
-        }),
-    });
-  }
-
   componentDidMount() {
     if (this.state.reviews == null || this.state.reviews.length === 0) this.onEmptyData();
     if (this.state.reviews != null || this.state.swipableReviews.length !== this.state.reviews.length)
@@ -100,9 +75,6 @@ class ReviewsClassComponent extends React.Component {
   }
 
   advanceIdx(swipableReviewIdx) {
-    // let newIdx = swipableReviewIdx + 1;
-    // newIdx = newIdx === this.state.reviews.length ? 0 : newIdx;
-    // return newIdx;
     return 0;
   }
 
@@ -114,8 +86,8 @@ class ReviewsClassComponent extends React.Component {
     const swipedReviewIdx = this.state.activeReviewIdx;
     const newActiveReviewIdx = this.advanceIdx(swipedReviewIdx);
     const newSwipableReviews = [...this.state.swipableReviews];
-    // const head = this.state.swipableReviews[0];
     const head = newSwipableReviews[0];
+
     newSwipableReviews.shift();
     newSwipableReviews.push(head);
 

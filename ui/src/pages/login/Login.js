@@ -144,6 +144,7 @@ const SignUpButton = (props) => {
 };
 
 const Login = (props) => {
+  console.log("login page");
   const [formState, setFormState] = useState({
     email: "",
     firstname: "",

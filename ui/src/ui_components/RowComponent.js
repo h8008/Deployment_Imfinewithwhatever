@@ -1,9 +1,10 @@
 import { styled } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
-const RowComponent = styled(Grid)(({ theme }) => ({
+const RowComponent = styled(Grid)(({ children, theme, ...otherProps }) => ({
   gridRow: true,
   display: "flex",
+  ...otherProps,
   flexDirection: "row",
   justifyContent: theme == null ? "flex-start" : theme.justifyContent,
   alignItems: theme == null ? "flex-start" : theme.alignItems,

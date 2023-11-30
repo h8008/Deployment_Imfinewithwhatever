@@ -168,6 +168,8 @@ const GameInputComponent = styled(Box)(({ theme, chidlren, ...otherProps }) => (
 }));
 
 function Main(props) {
+  console.log("Main Page");
+
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
   const cuisines = [
     "Mexican",
@@ -210,7 +212,7 @@ function Main(props) {
         [...selectedCuisines, cuisines[selectedCuisineIdx]].map((cuisine, index) => [cuisine, cuisine])
       )
     );
-    console.log("selected cuisines", newSelectedCuisines);
+    // console.log("selected cuisines", newSelectedCuisines);
     setSelectedCuisines(newSelectedCuisines);
   };
 
@@ -237,6 +239,7 @@ function Main(props) {
       let params = { term: "restaurant", location: location };
       let restaurant_by_location_response = await API.YelpAPI.getRestaurantsByLocation(params);
       let restaurantsByLocationData = {};
+
       if (restaurant_by_location_response.status === "OK") {
         restaurantsByLocationData = await {
           ...restaurantsByLocationData,
@@ -292,7 +295,6 @@ function Main(props) {
 
   const handleGoButtonClick = async () => {
     await handleSubmitData();
-    // await handleTransitionToRestaurants();
     setNext("Restaurants");
   };
 

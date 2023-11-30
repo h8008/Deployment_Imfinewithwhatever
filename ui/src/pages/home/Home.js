@@ -38,6 +38,7 @@ const LogoComponent = styled(CardMedia)({
 });
 
 const Home = (props) => {
+  console.log("Home Page");
   const theme = useTheme();
 
   return (
