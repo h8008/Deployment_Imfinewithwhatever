@@ -9,6 +9,9 @@ module.exports = (min_type) => {
     console.log('In Authorize. ctx.state = ', ctx.state);
     console.log('In Authorize. ctx.state.jwtdata = ', ctx.state.jwtdata);
 
+    console.log('ctx.body', ctx.body);
+    console.log('ctx.body.data', ctx.body.data);
+
     const user = ctx.body.data;
     setAccessToken(ctx, user);
     return next();
