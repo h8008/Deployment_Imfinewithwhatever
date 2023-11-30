@@ -30,13 +30,7 @@ const ListItemComponent = styled(ListItem)((children, ...otherProps) => ({
 }));
 
 const itemToListItem = (item, index, onSelectMenuItemCallback) => {
-  // const Item = typeof item === React.Component ? React.cloneElement(item) : ListItemComponent;
   return (
-    // <Item key={index} disablePadding>
-    //   <ListItemButton>
-    //     <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-    //   </ListItemButton>
-    // </Item>
     <ListItem key={index} disablePadding>
       {item}
     </ListItem>

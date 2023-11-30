@@ -11,7 +11,7 @@ import { AssetsContext } from "../../providers/AssetsProvider";
 import { UserContext } from "../../providers/UserProvider";
 import { MessageContext } from "../../providers/MessageProvider";
 
-import quicksort from "../../utils/Sorting/Quicksort";
+import quicksort from "../../utils/Quicksort";
 import Reviews from "../../components/Reviews";
 import attributes from "../../config";
 import icons from "../../icons/foods";
