@@ -90,7 +90,7 @@ const signup = async (ctx) => {
   }
 };
 
-const login = async (ctx, next) => {
+const login = async (ctx) => {
   try {
     console.log('user login called');
     console.log(ctx.request.body);
@@ -104,19 +104,20 @@ const login = async (ctx, next) => {
           return;
         }
       });
-      // console.log('from user record. About to return ', res);
       ctx.body = {
         status: 'OK',
         message: LOGGED_IN,
         data: res.email,
       };
+
+      console.log('from user record. About to return ', ctx.body);
     }
   } catch (err) {
     console.log('Error while logging in: ', err);
     throw err;
   }
 
-  return await next();
+  // return await next();
 };
 
 const logout = async (ctx) => {
