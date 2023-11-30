@@ -93,12 +93,11 @@ const signup = async (ctx) => {
 const login = async (ctx) => {
   try {
     console.log('user login called');
-    console.log(ctx.request.body);
     let params = ctx.request.body;
     const res = await FIND_USER(params.email);
+    console.log('res', res);
     if (res) {
       bcrypt.compare(params.password, res.password, function (err, result) {
-        console.log('result', result);
         if (err) {
           console.log('Error while logging in');
           return;
