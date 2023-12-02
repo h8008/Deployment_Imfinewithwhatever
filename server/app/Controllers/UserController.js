@@ -94,7 +94,7 @@ const login = async (ctx) => {
   try {
     console.log('user login called');
     let params = ctx.request.body;
-    const res = await FIND_USER(params.email);
+    const res = await FIND_USER(params);
     console.log('res', res);
     if (res) {
       bcrypt.compare(params.password, res.password, function (err, result) {

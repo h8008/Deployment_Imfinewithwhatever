@@ -25,7 +25,7 @@ const {
 //   query: `SELECT * FROM user_reviews WHERE restaurantID = "${restaurantID}" and email="${email}"`,
 // });
 
-const FIND_USER = (email) => User.findOne().where('email').equals(email);
+const FIND_USER = ({ email }) => User.findOne().where('email').equals(email);
 
 const GET_CURRENT_USER_YELP_DATA = async ({ email }) => {
   const user = await User.findOne().where('email').equals(email);

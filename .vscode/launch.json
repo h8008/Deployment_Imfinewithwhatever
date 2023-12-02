@@ -14,9 +14,18 @@
     },
 
     {
-      "name": "Debug Server",
+      "name": "Debug Development Server",
       "request": "launch",
       "runtimeArgs": ["run-script", "debug-development-server"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
+
+    {
+      "name": "Debug Production Server",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "start-production-server"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "type": "node"
