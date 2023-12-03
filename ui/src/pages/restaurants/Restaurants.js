@@ -16,7 +16,6 @@ import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/action
 import useDispatchMessage from "../../hooks/useDispatchMessage";
 
 import API from "../../API_Interface";
-// import { BackgroundDispatchContext } from "../../providers/BackgroundDispatchProvider";
 import { AssetsContext } from "../../providers/AssetsProvider";
 
 import { useTheme } from "@mui/material";
@@ -26,10 +25,10 @@ import { useNavigate } from "react-router-dom";
 const RestaurantsComponent = styled(Grid)(({ theme }) => ({
   container: true,
   width: "90%",
-  height: "90vh",
+  height: "80%",
   margin: "auto",
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
   flexWrap: "wrap",
@@ -39,7 +38,7 @@ const RestaurantsComponent = styled(Grid)(({ theme }) => ({
 
 const ButtonsComponent = styled(Grid)({
   container: true,
-  width: "60%",
+  width: "10%",
   display: "flex",
   justifyContent: "flex-end",
   alignItems: "center",
@@ -123,8 +122,6 @@ const Restaurants = (props) => {
 
   const { assets } = useContext(AssetsContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
-  // const { navigationState, navigationDispatch } = useContext(NavigationContext);
-  // const { backgroundDispatch } = useContext(BackgroundDispatchContext);
   const { userState, userDispatch } = useContext(UserContext);
 
   const restaurantsData = restaurantState.restaurantsData;
@@ -152,12 +149,6 @@ const Restaurants = (props) => {
   const handleDoneSettingPreference = () => {
     setDispatchVerdicts(true);
     navigate("/Feedback");
-    // navigationDispatch({
-    //   type: NAVIGATE,
-    //   payload: {
-    //     destination: "/Feedback",
-    //   },
-    // });
   };
 
   const onDecisionCallback = async (preference) => {
@@ -222,14 +213,6 @@ const Restaurants = (props) => {
 
   return (
     <RestaurantsComponent backdrop={assets[5]}>
-      <ButtonsComponent>
-        <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={handleViewPrevRestaurant}>
-          <KeyboardDoubleArrowLeftIcon />
-        </Icon>
-        <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={handleViewNextRestaurant}>
-          <KeyboardDoubleArrowRightIcon />
-        </Icon>
-      </ButtonsComponent>
       {activeRestaurant != null && (
         <Restaurant
           index={activeRestaurantIdx}
@@ -241,11 +224,11 @@ const Restaurants = (props) => {
           updateActiveRestaurant={updateActiveRestaurant}
           toggleModal={toggleModal}
           onDecisionCallback={onDecisionCallback}
+          onViewPrevCallback={handleViewPrevRestaurant}
+          onViewNextCallback={handleViewNextRestaurant}
+          onDoneSettingPreferenceCallback={handleDoneSettingPreference}
         />
       )}
-      <RoundButton onClick={handleDoneSettingPreference} border={`6px solid white`}>
-        <MdLocalDining size={"large"} color={theme.palette.primary.main} />
-      </RoundButton>
     </RestaurantsComponent>
   );
 };

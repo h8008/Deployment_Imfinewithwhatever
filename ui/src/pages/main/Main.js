@@ -169,6 +169,7 @@ const GameInputComponent = styled(Box)(({ theme, chidlren, ...otherProps }) => (
 
 function Main(props) {
   console.log("Main Page");
+  const navigate = useNavigate();
 
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
   const cuisines = [
@@ -206,7 +207,7 @@ function Main(props) {
   };
 
   const handleCuisinesChange = (selectedCuisineIdx) => {
-    console.log("selected cuisines", cuisines[selectedCuisineIdx]);
+    // console.log("selected cuisines", cuisines[selectedCuisineIdx]);
     const newSelectedCuisines = Object.keys(
       Object.fromEntries(
         [...selectedCuisines, cuisines[selectedCuisineIdx]].map((cuisine, index) => [cuisine, cuisine])
@@ -216,7 +217,7 @@ function Main(props) {
     setSelectedCuisines(newSelectedCuisines);
   };
 
-  const handleSubmitData = () => {
+  const handleSubmitData = (next) => {
     return new Promise(async (resolve, reject) => {
       if (location === "" && selectedCuisines.length === 0) {
         messageDispatch({
@@ -259,43 +260,31 @@ function Main(props) {
           ...restaurant_by_cuisine_response.restaurantsData,
         };
 
-        setRestaurants(aggregatedRestaurantData.businesses);
+        const restaurants = aggregatedRestaurantData.businesses;
+        setRestaurants(restaurants);
 
         await restaurantDispatch({
           type: UPDATE_RESTAURANTS,
           payload: {
-            restaurantsData: aggregatedRestaurantData.businesses,
+            restaurantsData: restaurants,
             location: location,
           },
         });
+
+        const dest = "/" + next;
+        navigate(dest, { state: { restaurants } });
+
         return resolve();
       }
     });
   };
 
-  // const handleTransitionToRestaurants = () => {
-  //   return new Promise((resolve, reject) => {
-  //     navigate("/Restaurants", { state: { restaurants: restaurants } });
-  //     return resolve();
-  //   });
-  // };
-
-  // const handleTransitionToGames = () => {
-  //   return new Promise((resolve, reject) => {
-  //     navigate("/MultiDecisionMaker", { replace: true, state: { restaurants: restaurants } });
-  //     return resolve();
-  //   });
-  // };
-
   const handleDecideForMeButtonClick = async () => {
-    await handleSubmitData();
-    // await handleTransitionToGames();
-    setNext("Games");
+    await handleSubmitData("MultiDecisionMaker");
   };
 
   const handleGoButtonClick = async () => {
-    await handleSubmitData();
-    setNext("Restaurants");
+    await handleSubmitData("Restaurants");
   };
 
   return (

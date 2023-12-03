@@ -30,7 +30,7 @@ export default class YelpAPI {
 
   async getRestaurantsByCuisine(params) {
     const { term, location, categories } = params;
-    return this.axiosAgent({
+    return await this.axiosAgent({
       url: `yelp/restaurants/${term}/${location}/${categories}`,
       method: "get",
     })

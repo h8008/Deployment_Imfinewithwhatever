@@ -34,7 +34,7 @@
     {
       "name": "Debug UI",
       "request": "launch",
-      "type": "chrome",
+      "type": "msedge",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/ui/src"
     }

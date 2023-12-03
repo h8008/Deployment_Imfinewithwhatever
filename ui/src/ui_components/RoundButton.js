@@ -6,9 +6,8 @@ const defaultBorder = "6px solid black";
 const RoundButton = styled(Button)((props) => ({
   border: props.border ? props.border : defaultBorder,
   borderRadius: "50%",
-  height: "64px",
-  width: "64px",
-  // marginTop: "100px",
+  height: props.height ? props.height : "64px",
+  width: props.width ? props.width : "64px",
 }));
 
 export default RoundButton;

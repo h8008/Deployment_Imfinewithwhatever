@@ -20,22 +20,15 @@ const PreferenceComponent = styled(Grid)(({ children, ...otherProps }) => ({
 }));
 
 const PieChartComponentTopLeft = styled(Grid)((props) => ({
-  // width: props.width,
   height: "100%",
   width: "60%",
   gridRow: true,
-  // display: "flex",
-  // flexDirection: "row",
-  // justifyContent: "flex-start",
 }));
 
 const PieChartComponentBottomRight = styled(Grid)((props) => ({
   width: "60%",
   height: "100%",
   gridRow: true,
-  // display: "flex",
-  // flexDirection: "row",
-  // justifyContent: "center",
 }));
 
 const PieChartTitleComponent = styled(Grid)((props) => ({
@@ -49,7 +42,7 @@ const PieChartTitleComponent = styled(Grid)((props) => ({
 
 const Preferences = (props) => {
   const { preferences } = props;
-  const { likes, dislikes, totalDataLength } = preferences;
+  const { likes, dislikes } = preferences;
 
   return (
     <Fragment>

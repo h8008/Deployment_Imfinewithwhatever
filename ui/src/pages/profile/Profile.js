@@ -53,14 +53,6 @@ const BodyComponent = styled(Grid)({
   alignItems: "center",
 });
 
-const ColumnComponent = styled(Grid)({
-  gridRow: true,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
 const ReviewsStyledComponent = styled(Box)({
   gridRow: true,
   display: "flex",
@@ -239,10 +231,9 @@ const useGetBackdropOfTheDay = (assets) => {
 const Profile = (props) => {
   console.log("Profile Page");
 
-  const theme = useTheme();
   const { assets } = useContext(AssetsContext);
   const { userState, userDispatch } = useContext(UserContext);
-  const { messageState, messageDispatch } = useContext(MessageContext);
+  // const { messageState, messageDispatch } = useContext(MessageContext);
 
   const [backdrop] = useGetBackdropOfTheDay(assets);
   const [reviews] = useGetReviews(userState.email);
@@ -261,35 +252,7 @@ const Profile = (props) => {
   return (
     <ProfileComponent data_id={"Profile-Page"}>
       <SideMenu user={{ ...userState }} items={componentNames} onSelectMenuItemCallback={onSelectMenuItemCallback} />
-      {/* <HeaderComponent>
-        <ColumnComponent> */}
-      {/* <Text text={"User Page"} />
-          <RowComponent>
-            <Text text={"Email: "} style={{ marginRight: "5px" }} />
-            <Text text={userState.email} style={{ textDecoration: "underline" }} />
-          </RowComponent> */}
-      {/* </ColumnComponent> */}
-      {/* <ColumnComponent>
-          <Text text={"Reset Preferences?"} />
-          <BorderedBox
-            style={{
-              backgroundColor: theme.palette.error.main,
-              border: `6px solid black`,
-              borderRadius: `10px`,
-              width: "70px",
-            }}
-          >
-            <Text text={"Reset"} />
-          </BorderedBox>
-        </ColumnComponent> */}
-      {/* // </HeaderComponent> */}
-      <BodyComponent>
-        {/* <DefaultComponent image={assets.backdrops[0]} /> */}
-        {/* <PreferencesComponent>
-          {Object.keys(sortedPreferences).length > 0 && <Preferences preferences={sortedPreferences} />}
-        </PreferencesComponent> */}
-        {components != null && getActiveComponent(activeComponentIdx, components)}
-      </BodyComponent>
+      <BodyComponent>{components != null && components[activeComponentIdx]}</BodyComponent>
     </ProfileComponent>
   );
 };

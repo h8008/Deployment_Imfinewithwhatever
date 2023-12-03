@@ -2,8 +2,6 @@ import { useCallback, useContext, useState, useMemo } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
-import Text from "../ui_components/Text";
-import Box from "../ui_components/Box";
 
 import styled from "@emotion/styled";
 import Typography from "@mui/material/Typography";
@@ -79,8 +77,6 @@ const Menu = (props) => {
   const { palette } = useTheme();
   const { userState } = useContext(UserContext);
   const navigate = useNavigate();
-
-  // console.log("logged in?", userState.loggedIn);
 
   const options = useMemo(() => {
     const names = {

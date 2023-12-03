@@ -1,4 +1,5 @@
-import { CardContent, CardMedia, styled } from "@mui/material";
+import { CardContent, CardMedia, Card, Grid, styled } from "@mui/material";
+import Icon from "@mui/material/Icon";
 import { useEffect, useState, Fragment } from "react";
 
 import Text from "../ui_components/Text";
@@ -6,23 +7,18 @@ import GridRow from "../ui_components/GridRow";
 import RoundButton from "../ui_components/RoundButton";
 import SwipeableDrawer from "../ui_components/SwipeableDrawer";
 
-import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
+// import Card from "@mui/material/Card";
+// import Grid from "@mui/material/Grid";
 
 import API from "../API_Interface";
 
 import { LOCATION_MASK_MESSAGE } from "../constants/Messages";
 import BusinessLocator from "../components/Maps/Google_Maps/BusinessLocator";
-import { useGetRestaurantReviews } from "../hooks/API/Yelp";
 
-import SwipeableTemporaryDrawer from "../ui_components/SwipeableDrawer2";
-
-const CardMediaComponent = styled(CardMedia)((props) => ({
-  component: "img",
-  alt: "card background img",
-  height: "100%",
-  flex: props.flex,
-}));
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import { MdLocalDining } from "react-icons/md";
+import { useTheme } from "@emotion/react";
 
 const CardContainer = styled(Card)({
   display: "flex",
@@ -69,30 +65,6 @@ const TextComponent = styled(GridRow)((children, ...otherProps) => ({
   ...otherProps,
 }));
 
-// const MainDetailsComponent = (props) => {
-//   const { details, flex } = props;
-//   const style = {
-//     display: "flex",
-//     height: "100%",
-//     width: "100%",
-//     padding: 0,
-//     flexDirection: "column",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     flex: flex,
-//   };
-
-//   return (
-//     <CardContent style={style}>
-//       {/* <BorderedBox style={{ border: "6px dashed black" }}> */}
-//       {/* {details !== "" && details.map((detail, index) => detail)} */}
-//       {/* <Content /> */}
-//       {details}
-//       {/* </BorderedBox> */}
-//     </CardContent>
-//   );
-// };
-
 const MainDetailsComponent = styled(CardContent)(({ children, ...otherProps }) => ({
   display: "flex",
   height: "100%",
@@ -107,7 +79,6 @@ const MainDetailsComponent = styled(CardContent)(({ children, ...otherProps }) =
 const TextStyle = {
   alignItems: "center",
   borderBottom: "2px solid black",
-  // height: "15%",
   textAlign: "left",
 };
 
@@ -253,8 +224,12 @@ const Restaurant = (props) => {
     updateActiveRestaurant,
     onShowRestaurantLocationCallback,
     showLocation,
+    onViewPrevCallback,
+    onViewNextCallback,
+    onDoneSettingPreferenceCallback,
   } = props;
 
+  const theme = useTheme();
   const [data, setData] = useState({});
   const [mainDetails, setMainDetails] = useState(``);
   const [otherDetails, setOtherDetails] = useState({
@@ -304,9 +279,11 @@ const Restaurant = (props) => {
       {data != null && (
         <CardContainer>
           {reviews.length > 0 && <SwipeableDrawer items={reviews.map((r) => r.text)} />}
-          <TopComponent flexDirection={"row"} justifyContent={"flex-start"}>
-            <CardMediaComponent image={data.image_url} src={"img"} flex={"60%"} />
-            <MainDetailsComponent flex={"40%"}>{mainDetails}</MainDetailsComponent>
+          <TopComponent flexDirection={"row"} justifyContent={"center"}>
+            {/* <CardMediaComponent image={data.image_url} src={"img"} flex={"60%"} width={"60%"} height={"200px"} /> */}
+            <CardMedia image={data.image_url} component={"img"} src={"img"} flex={"55%"} height={"300px"} />
+            {/* <ImageComponent src={data.image_url} alt="restaurant-image" flex={"60%"} height={"200px"} /> */}
+            <MainDetailsComponent flex={"45%"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
           <MapComponent>
             {otherDetails !== "" && otherDetails !== LOCATION_MASK_MESSAGE && (
@@ -317,6 +294,9 @@ const Restaurant = (props) => {
             </CardContent>
           </MapComponent>
           <ButtonsComponent flexDirection={"row"} justifyContent={"space-evenly"}>
+            <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={onViewPrevCallback}>
+              <KeyboardDoubleArrowLeftIcon />
+            </Icon>
             <RoundButton onClick={() => onDecisionCallback(false)}>
               <Text text={"no"} />
             </RoundButton>
@@ -326,6 +306,12 @@ const Restaurant = (props) => {
             <RoundButton onClick={() => onDecisionCallback(true)}>
               <Text text={"yes"} />
             </RoundButton>
+            <RoundButton onClick={onDoneSettingPreferenceCallback}>
+              <MdLocalDining size={"large"} color={theme.palette.primary.main} />
+            </RoundButton>
+            <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={onViewNextCallback}>
+              <KeyboardDoubleArrowRightIcon />
+            </Icon>
           </ButtonsComponent>
         </CardContainer>
       )}
