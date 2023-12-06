@@ -4,6 +4,7 @@ import UserReviews from "./User_Review_Interface";
 import Preference from "./Preference_Interface";
 import YelpAPI from "./External_API_Interface";
 import axiosBaseUrl from "../utils/AxiosBaseUrl";
+import Restaurants from "./Restaurant_Interface";
 
 const AxiosConfigured = () => {
   // // Indicate to the API that all requests for this app are AJAX
@@ -35,6 +36,7 @@ class APIInterface {
     this.UserReviews = new UserReviews(axiosAgent);
     this.Preference = new Preference(axiosAgent);
     this.YelpAPI = new YelpAPI(axiosAgent);
+    this.Restaurants = new Restaurants(axiosAgent);
   }
 
   getInterface(interfaceName) {
@@ -51,4 +53,6 @@ class APIInterface {
   }
 }
 
-export default new APIInterface();
+const API = new APIInterface();
+
+export default API;

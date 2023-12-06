@@ -1,8 +1,6 @@
 import { Fragment, useState, useContext, useEffect } from "react";
-import { Navigate } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 import { useNavigate } from "react-router";
-// import TextField from "../../ui_components/TextField";
+
 import GridRow from "../../ui_components/GridRow";
 import GridItem from "../../ui_components/GridItem";
 import Text from "../../ui_components/Text";
@@ -15,9 +13,7 @@ import MultiDecisionMaker from "../multiDecisionMaker/MultiDecisionMaker";
 
 import { main_config } from "../../styles/shared";
 import styled from "@emotion/styled";
-
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-
 import { UPDATE_CUISINE, UPDATE_LOCATION, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
@@ -25,14 +21,16 @@ import API from "../../API_Interface";
 import { Box, useTheme } from "@mui/material";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
-import { UPDATE_RESTAURANTS_FOR_GAMES } from "../../reducer/Game/GameActions";
 import { GameContext } from "../../providers/GameProvider";
+
+import useStealRestaurantsFromYelp from "../../hooks/API/Restaurants";
+import { getRestaurantsByCuisines, getRestaurantsByLocations } from "../../utils/axios/restaurants";
 
 const useHandleTransitionToRestaurants = (restaurants, next) => {
   const navigate = useNavigate();
   useEffect(() => {
-    if (restaurants && next === "Restaurants") {
-      navigate("/Restaurants", { state: { restaurants: restaurants } });
+    if (Object.keys(restaurants).length > 0 && restaurants.businesses.length > 0 && next === "Restaurants") {
+      navigate("/Restaurants", { state: { restaurants: restaurants.businesses } });
     }
   }, [navigate, next, restaurants]);
 };
@@ -40,8 +38,8 @@ const useHandleTransitionToRestaurants = (restaurants, next) => {
 const useHandleTransitionToGames = (restaurants, next) => {
   const navigate = useNavigate();
   useEffect(() => {
-    if (restaurants && next === "Games") {
-      navigate("/MultiDecisionMaker", { state: { restaurants: restaurants } });
+    if (Object.keys(restaurants).length > 0 && restaurants.businesses.length > 0 && next === "Games") {
+      navigate("/MultiDecisionMaker", { state: { restaurants: restaurants.businesses } });
     }
   }, [navigate, next, restaurants]);
 };
@@ -195,9 +193,10 @@ function Main(props) {
   const [location, setLocation] = useState("");
   const [cuisineIdx, setCuisineIdx] = useState(undefined);
   const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState({});
   const [next, setNext] = useState("");
 
+  useStealRestaurantsFromYelp(restaurants);
   useHandleTransitionToGames(restaurants, next);
   useHandleTransitionToRestaurants(restaurants, next);
 
@@ -213,7 +212,6 @@ function Main(props) {
         [...selectedCuisines, cuisines[selectedCuisineIdx]].map((cuisine, index) => [cuisine, cuisine])
       )
     );
-    // console.log("selected cuisines", newSelectedCuisines);
     setSelectedCuisines(newSelectedCuisines);
   };
 
@@ -227,6 +225,62 @@ function Main(props) {
         return;
       }
 
+      // await restaurantDispatch({
+      //   type: UPDATE_CUISINE,
+      //   cuisines: selectedCuisines,
+      // });
+
+      // await restaurantDispatch({
+      //   type: UPDATE_LOCATION,
+      //   location: location,
+      // });
+
+      // const location_params = { term: "restaurant", location: location };
+      // const restaurant_by_location_response = await API.YelpAPI.getRestaurantsByLocation(location_params);
+      // let restaurantsByLocationData = {};
+      // if (restaurant_by_location_response.status === "OK") {
+      //   restaurantsByLocationData = await {
+      //     ...restaurantsByLocationData,
+      //     ...restaurant_by_location_response.restaurantsData,
+      //   };
+      // }
+
+      // const cuisin_params = {
+      //   term: "food",
+      //   location: location,
+      //   categories: await getFoodPreferences(selectedCuisines),
+      // };
+      // let restaurant_by_cuisine_response = await API.YelpAPI.getRestaurantsByCuisine(cuisin_params);
+      // if (restaurant_by_cuisine_response.status === "OK") {
+      //   const aggregatedRestaurantData = await {
+      //     ...restaurantsByLocationData,
+      //     ...restaurant_by_cuisine_response.restaurantsData,
+      //   };
+
+      //   const restaurants = aggregatedRestaurantData.businesses;
+      //   setRestaurants(restaurants);
+
+      //   await restaurantDispatch({
+      //     type: UPDATE_RESTAURANTS,
+      //     payload: {
+      //       restaurantsData: restaurants,
+      //       location: location,
+      //     },
+      //   });
+      // }
+
+      const locationRes = await getRestaurantsByLocations(location);
+      const cuisinesRes = await getRestaurantsByCuisines(selectedCuisines, location);
+      const aggregatedRestaurantData = await {
+        ...locationRes,
+        ...cuisinesRes,
+      };
+      // const restaurants = aggregatedRestaurantData.businesses;
+      const restaurants = aggregatedRestaurantData;
+      setRestaurants(restaurants);
+
+      // console.log("restaurants", aggregatedRestaurantData);
+
       await restaurantDispatch({
         type: UPDATE_CUISINE,
         cuisines: selectedCuisines,
@@ -237,45 +291,7 @@ function Main(props) {
         location: location,
       });
 
-      let params = { term: "restaurant", location: location };
-      let restaurant_by_location_response = await API.YelpAPI.getRestaurantsByLocation(params);
-      let restaurantsByLocationData = {};
-
-      if (restaurant_by_location_response.status === "OK") {
-        restaurantsByLocationData = await {
-          ...restaurantsByLocationData,
-          ...restaurant_by_location_response.restaurantsData,
-        };
-      }
-
-      params = {
-        term: "food",
-        location: location,
-        categories: await getFoodPreferences(selectedCuisines),
-      };
-      let restaurant_by_cuisine_response = await API.YelpAPI.getRestaurantsByCuisine(params);
-      if (restaurant_by_cuisine_response.status === "OK") {
-        const aggregatedRestaurantData = await {
-          ...restaurantsByLocationData,
-          ...restaurant_by_cuisine_response.restaurantsData,
-        };
-
-        const restaurants = aggregatedRestaurantData.businesses;
-        setRestaurants(restaurants);
-
-        await restaurantDispatch({
-          type: UPDATE_RESTAURANTS,
-          payload: {
-            restaurantsData: restaurants,
-            location: location,
-          },
-        });
-
-        const dest = "/" + next;
-        navigate(dest, { state: { restaurants } });
-
-        return resolve();
-      }
+      return resolve();
     });
   };
 
