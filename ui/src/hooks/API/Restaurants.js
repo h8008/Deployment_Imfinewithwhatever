@@ -6,7 +6,6 @@ const useStealRestaurantsFromYelp = (restaurants) => {
     const steal = async () => {
       const res = await stealRestaurantsFromYelp({ restaurants });
       if (res.status === "OK") {
-        // handle error
         console.log("Stole restaurants from Yelp");
       }
     };

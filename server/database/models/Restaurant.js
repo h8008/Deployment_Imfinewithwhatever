@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const Restaurant = new Schema({
+const RestaurantEntity = new Schema({
   yelp_id: String,
   name: String,
   alias: String,
-  categories: [String],
+  categories: [{ alias: String, title: String }],
   coordinates: {
     longitude: Number,
     latitude: Number,
@@ -23,4 +23,4 @@ const Restaurant = new Schema({
   transactions: [String],
 });
 
-module.exports = mongoose.model('Restaurant', Restaurant);
+module.exports = mongoose.model('RestaurantEntity', RestaurantEntity);

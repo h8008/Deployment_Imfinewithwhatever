@@ -306,7 +306,7 @@ const Restaurant = (props) => {
             <RoundButton onClick={() => onDecisionCallback(true)}>
               <Text text={"yes"} />
             </RoundButton>
-            <RoundButton onClick={onDoneSettingPreferenceCallback}>
+            <RoundButton onClick={() => onDoneSettingPreferenceCallback()}>
               <MdLocalDining size={"large"} color={theme.palette.primary.main} />
             </RoundButton>
             <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={onViewNextCallback}>

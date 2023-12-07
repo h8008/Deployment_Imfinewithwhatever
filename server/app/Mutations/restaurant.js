@@ -4,7 +4,12 @@ const Restaurants = require('../../database/models/Restaurants');
 
 const getBusinesses = (restaurants) =>
   new Promise((resolve, reject) =>
-    resolve(restaurants.map((r) => ({ ...r, yelp_id: r.id })))
+    resolve(
+      restaurants.map((r) => {
+        delete r['id'];
+        return { ...r, yelp_id: r.id };
+      })
+    )
   );
 
 const getDatabaseReadyBusinesses = (businesses) =>
@@ -18,61 +23,49 @@ const getDatabaseReadyBusinesses = (businesses) =>
     return resolve(object);
   });
 
-const getBusinessModels = (businesses) =>
-  new Promise((resolve, reject) => {
-    return resolve(
-      businesses.map(async (b) => {
-        const restaurant = await Restaurant.create({ ...b });
-        await restaurant.save();
-        return restaurant;
-      })
-    );
-  });
+// const getBusinessModels = (businesses) =>
+//   new Promise((resolve, reject) => {
+//     return resolve(
+//       new Promise(
+//         async (res, rej) =>
+//           await businesses.map(async (b) => {
+//             const restaurant = await Restaurant.create({ ...b });
+//             await restaurant.save();
+//             return res(restaurant._id);
+//           })
+//       )
+//     );
+//   });
+
+const createBusinessSchemas = async (businesses) => {
+  const ids = [];
+  for (let i in businesses) {
+    const restaurant = await Restaurant.create({ ...businesses[i] });
+    await restaurant.save();
+    ids.push(restaurant._id);
+  }
+  return ids;
+};
 
 const createRestaurantsModel = (restaurants, businessModels) => {
-  return new Promise((resolve, reject) => {
-    const model = Restaurants.create({
+  return new Promise(async (resolve, reject) => {
+    const model = await Restaurants.create({
       ...restaurants,
-      businesses: businessModels.map((b) => b.id),
+      businesses: businessModels.map((b) => b),
     });
-    model.save();
-    return resolve();
+    await model.save();
+    return resolve(model);
   });
 };
 
 const ADD_RESTAURANTS = async ({ restaurants }) => {
-  // Adds a "yelp_id" field to the business object
-  // const businesses = await restaurants.businesses.map((r) => ({
-  //   ...r,
-  //   yelp_id: r.id,
-  // }));
-
-  // const businesses = await getBusinesses(restaurants)
-
-  // Removes the id property from the businesses object
-  // const databaseReadyBusinesses = await businesses.map((b) =>
-  //   Object.fromEntries(
-  //     Object.entries(b)
-  //       .map((key, val) => (key === 'id' ? null : [key, val]))
-  //       .filter((entry) => entry !== null)
-  //   )
-  // );
-
-  // const businessModels = databaseReadyBusinesses.map(async (b) => {
-  //   const restaurant = await Restaurant.create({ ...b });
-  //   await restaurant.save();
-  // });
-
-  // const model = await Restaurants.create({
-  //   ...restaurants,
-  //   businesses: businessModels.map((b) => b.id),
-  // });
-  // model.save();
-
   const businesses = await getBusinesses(restaurants.businesses);
-  const databaseReadyBusinesses = await getDatabaseReadyBusinesses(businesses);
-  const businessModels = await getBusinessModels(databaseReadyBusinesses);
-  await createRestaurantsModel(restaurants, businessModels);
+  const businessesSchema = await createBusinessSchemas(businesses);
+  const restaurantsSchema = await createRestaurantsModel(
+    restaurants,
+    businessesSchema
+  );
+  return restaurantsSchema;
 };
 
 module.exports = {

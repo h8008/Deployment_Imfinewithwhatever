@@ -19,8 +19,7 @@ import API from "../../API_Interface";
 import { AssetsContext } from "../../providers/AssetsProvider";
 
 import { useTheme } from "@mui/material";
-import { MdLocalDining } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const RestaurantsComponent = styled(Grid)(({ theme }) => ({
   container: true,
@@ -116,15 +115,29 @@ const updateVerdicts = (verdicts, activeRestaurantIdx, verdict) => {
   return v;
 };
 
+const useTransition = (cond, next) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (cond) {
+      const dest = "/" + next;
+      navigate(dest);
+    }
+  }, [cond, navigate, next]);
+};
+
 const Restaurants = (props) => {
   const theme = useTheme();
+  const locationState = useLocation();
   const navigate = useNavigate();
 
   const { assets } = useContext(AssetsContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
-  const { userState, userDispatch } = useContext(UserContext);
+  const { userState } = useContext(UserContext);
 
-  const restaurantsData = restaurantState.restaurantsData;
+  // const restaurantsData = restaurantState.restaurantsData;
+
+  const restaurantsData = locationState.state.restaurants;
+
   const blacklistData = userState.preferences;
   const location = restaurantState.location;
 
@@ -138,9 +151,9 @@ const Restaurants = (props) => {
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
   const [dispatchVerdicts, setDispatchVerdicts] = useState(false);
 
-  // useDetectEmptyData(RESTAURANTS_DATA_EMPTY_MESSAGE, restaurantsData, restaurantsData == [], "/Main");
   useRecordVerdictsOnPageChange(verdicts, restaurants, userState.email, location, dispatchVerdicts);
   useDispatchMessage(message);
+  useTransition(dispatchVerdicts, "Feedback");
 
   const onShowRestaurantLocationCallback = () => {
     setShowActiveRestaurantLocation(true);
@@ -148,7 +161,7 @@ const Restaurants = (props) => {
 
   const handleDoneSettingPreference = () => {
     setDispatchVerdicts(true);
-    navigate("/Feedback");
+    // navigate("/Feedback");
   };
 
   const onDecisionCallback = async (preference) => {

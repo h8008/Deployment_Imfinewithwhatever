@@ -44,6 +44,16 @@ const useHandleTransitionToGames = (restaurants, next) => {
   }, [navigate, next, restaurants]);
 };
 
+const useHandleTransition = (restaurants, next) => {
+  const dest = "/" + next;
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (Object.keys(restaurants).length > 0 && restaurants.businesses.length > 0) {
+      navigate(dest, { state: { restaurants: restaurants.businesses } });
+    }
+  }, [dest, navigate, next, restaurants]);
+};
+
 const getFoodPreferences = (categories) => {
   const lowercased_categories = categories.map((category) => {
     const charArray = category.split().map((char, index) => {
@@ -197,8 +207,7 @@ function Main(props) {
   const [next, setNext] = useState("");
 
   useStealRestaurantsFromYelp(restaurants);
-  useHandleTransitionToGames(restaurants, next);
-  useHandleTransitionToRestaurants(restaurants, next);
+  useHandleTransition(restaurants, next);
 
   const handleLocationChange = (event) => {
     const location = event.target.value;
@@ -206,7 +215,6 @@ function Main(props) {
   };
 
   const handleCuisinesChange = (selectedCuisineIdx) => {
-    // console.log("selected cuisines", cuisines[selectedCuisineIdx]);
     const newSelectedCuisines = Object.keys(
       Object.fromEntries(
         [...selectedCuisines, cuisines[selectedCuisineIdx]].map((cuisine, index) => [cuisine, cuisine])
@@ -278,7 +286,7 @@ function Main(props) {
       // const restaurants = aggregatedRestaurantData.businesses;
       const restaurants = aggregatedRestaurantData;
       setRestaurants(restaurants);
-
+      setNext(next);
       // console.log("restaurants", aggregatedRestaurantData);
 
       await restaurantDispatch({

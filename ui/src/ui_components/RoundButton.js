@@ -3,11 +3,12 @@ import { Button } from "@mui/material";
 
 const defaultBorder = "6px solid black";
 
-const RoundButton = styled(Button)((props) => ({
-  border: props.border ? props.border : defaultBorder,
+const RoundButton = styled(Button)((children, ...otherProps) => ({
+  border: otherProps.border ? otherProps.border : defaultBorder,
   borderRadius: "50%",
-  height: props.height ? props.height : "64px",
-  width: props.width ? props.width : "64px",
+  height: otherProps.height ? otherProps.height : "64px",
+  width: otherProps.width ? otherProps.width : "64px",
+  ...otherProps,
 }));
 
 export default RoundButton;

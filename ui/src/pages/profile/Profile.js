@@ -94,6 +94,7 @@ const useGetPreferences = (email) => {
     const getPreferences = async () => {
       const res = await API.Preference.getAllForCurrentUser({ email: email });
       if (res.status === "OK") {
+        console.log("preferences", res.data);
         setPreferences([...res.data]);
       }
     };
@@ -123,6 +124,9 @@ const useGetReviews = (email) => {
 };
 
 const sortObject = async (dict) => {
+  if (Object.keys(dict).length === 0) {
+    return [];
+  }
   const input = Object.entries(dict).map((key) => [key[0], key[1]]);
   const sorted = await quicksort(input, 0, input.length - 1);
   return sorted;
