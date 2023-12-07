@@ -23,6 +23,7 @@ const GlobalTheme = createTheme({
     },
     error: {
       main: red.A100,
+      dark: red[400],
       light: palette.palette.augmentColor({
         color: { main: "#E48A85" },
       }),

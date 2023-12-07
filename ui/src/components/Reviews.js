@@ -13,29 +13,53 @@ import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
 
 import API from "../API_Interface";
 
-// const SwipeComponent = styled(Grid)({
+// const ReviewsComponent = styled("div")(({ theme, children, ...otherProps }) => ({
 //   container: true,
-//   position: "absolute",
-//   columnGap: 20,
+//   height: "100%",
+//   width: "100%",
+//   backgroundColor: theme.palette.primary.dark.main,
+//   zIndex: -2,
+//   position: "relative",
 //   display: "flex",
 //   flexDirection: "row",
 //   justifyContent: "center",
 //   alignItems: "center",
-// });
+//   ...otherProps,
+// }));
 
-const ReviewsComponent = styled("div")(({ theme, children, ...otherProps }) => ({
-  container: true,
-  height: "100%",
-  width: "100%",
-  backgroundColor: theme.palette.primary.dark.main,
-  zIndex: -2,
-  position: "relative",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  ...otherProps,
-}));
+const ReviewComponent = ({ children, theme, ...otherProps }) => {
+  const style = {
+    height: "100%",
+    backgroundColor: "white",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    borderRadius: "20px",
+    ...otherProps,
+  };
+
+  return <BorderedBox style={style}>{children}</BorderedBox>;
+};
+
+const ReviewsComponent = ({ children, theme, ...otherProps }) => {
+  const style = {
+    container: true,
+    height: "100%",
+    width: "100%",
+    backgroundColor: theme.palette.primary.dark.main,
+    zIndex: -2,
+    position: "relative",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "20px",
+    ...otherProps,
+  };
+
+  return <BorderedBox style={style}>{children}</BorderedBox>;
+};
 
 const SwipeComponent = styled(Grid)((props) => ({
   container: true,
@@ -83,11 +107,12 @@ class ReviewsClassComponent extends React.Component {
       swipableReviews: [...this.props.reviews],
       activeReviewIdx: 0,
     };
-    this.theme = props.theme;
     this.Tinder = null;
     this.onTinderSwipe = this.onTinderSwipe.bind(this);
     this.onDeleteReview = this.onDeleteReview.bind(this);
     this.advanceIdx = this.advanceIdx.bind(this);
+    this.theme = props.theme;
+    this.messageDispatch = this.props.messageDispatch.bind(this);
   }
 
   componentDidMount() {
@@ -139,23 +164,25 @@ class ReviewsClassComponent extends React.Component {
   }
 
   async onDeleteReview() {
-    if (this.state.reviews.length === 0) return;
-    const { restaurant_id, email } = this.state.reviews[this.state.activeReviewIdx];
-    const res = await API.UserReviews.deleteReview({
-      restaurantID: restaurant_id,
-      email: email,
+    this.messageDispatch({
+      type: UPDATE_MESSAGE,
+      message: `Disclaimer: You are unable to delete what you wrote on our site.`,
     });
-    const newReviews = this.state.reviews.filter((review, index) => index !== this.state.activeReviewIdx);
-
-    this.setState({
-      ...this.state,
-      reviews: [...newReviews],
-      swipableReviews: [...newReviews],
-    });
-
-    if (res.status === "OK") {
-      console.log(res.message);
-    }
+    // if (this.state.reviews.length === 0) return;
+    // const { restaurant_id, email } = this.state.reviews[this.state.activeReviewIdx];
+    // const res = await API.UserReviews.deleteReview({
+    //   restaurantID: restaurant_id,
+    //   email: email,
+    // });
+    // const newReviews = this.state.reviews.filter((review, index) => index !== this.state.activeReviewIdx);
+    // this.setState({
+    //   ...this.state,
+    //   reviews: [...newReviews],
+    //   swipableReviews: [...newReviews],
+    // });
+    // if (res.status === "OK") {
+    //   console.log(res.message);
+    // }
   }
 
   render() {
@@ -163,18 +190,10 @@ class ReviewsClassComponent extends React.Component {
 
     return (
       <React.Fragment>
-        <ReviewsComponent />
+        <ReviewsComponent theme={this.theme} />
         <SwipeComponent>
           {this.state.swipableReviews != null && this.state.swipableReviews.length > 0 && (
             <React.Fragment>
-              {/* <ColumnComponent numItems={2}>
-                <ButtonComponent onClick={this.onTinderSwipe}>
-                  <UpArrow />
-                </ButtonComponent>
-                <ButtonComponent onClick={this.onTinderSwipe}>
-                  <DeleteForeverIcon />
-                </ButtonComponent>
-              </ColumnComponent> */}
               <TinderLikeCard
                 images={this.state.swipableReviews}
                 width="800"
@@ -188,27 +207,14 @@ class ReviewsClassComponent extends React.Component {
                   flexDirection: "column",
                 }}
               >
-                <BorderedBox
-                  style={{
-                    height: "100%",
-                    backgroundColor: "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Review review={this.state.swipableReviews[activeReviewIdx]} onTinderSwipe={this.onTinderSwipe} />
-                </BorderedBox>
+                <ReviewComponent>
+                  <Review
+                    review={this.state.swipableReviews[activeReviewIdx]}
+                    onTinderSwipe={this.onTinderSwipe}
+                    onDeleteReview={this.onDeleteReview}
+                  />
+                </ReviewComponent>
               </TinderLikeCard>
-              {/* <ColumnComponent numItems={2}>
-                <ButtonComponent onClick={this.onTinderSwipe}>
-                  <UpArrow />
-                </ButtonComponent>
-                <ButtonComponent onClick={this.onTinderSwipe}>
-                  <DeleteForeverIcon />
-                </ButtonComponent>
-              </ColumnComponent> */}
             </React.Fragment>
           )}
         </SwipeComponent>

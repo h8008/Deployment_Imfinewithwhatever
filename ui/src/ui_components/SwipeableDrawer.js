@@ -12,9 +12,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import SendIcon from "@mui/icons-material/Send";
-import InputTwoToneIcon from "@mui/icons-material/InputTwoTone";
 
-const SlideOutComponent = styled(InputTwoToneIcon)(({ theme }) => ({}));
+import InputTwoToneIcon from "@mui/icons-material/InputTwoTone";
+// import { TiThMenuOutline } from "react-icons/ti";
+
+// const SlideOutComponent = styled(InputTwoToneIcon)(({ theme }) => ({}));
+
+const getSlideIcon = (Icon) => (Icon ? <Icon /> : <InputTwoToneIcon />);
 
 const SideMenuComponent = styled(Grid)({
   display: "flex",
@@ -40,7 +44,7 @@ const itemToListItem = (item, index, onSelectMenuItemCallback) => {
 };
 
 export default function SwipeableDrawer(props) {
-  const { data, items, drawerWidth } = props;
+  const { data, items, drawerWidth, slideIcon } = props;
   const [state, setState] = useState({
     top: false,
     left: false,
@@ -75,7 +79,7 @@ export default function SwipeableDrawer(props) {
   return (
     <div>
       <SideMenuComponent>
-        <Button onClick={toggleDrawer(anchor, true)}>{<SlideOutComponent />}</Button>
+        <Button onClick={toggleDrawer(anchor, true)}>{getSlideIcon(slideIcon)}</Button>
         <MUISwipeableDrawer
           anchor={anchor}
           open={state[anchor]}

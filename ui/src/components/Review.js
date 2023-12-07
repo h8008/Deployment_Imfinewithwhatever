@@ -67,27 +67,10 @@ const Review = (props) => {
   const { messageState, messageDispatch } = useContext(MessageContext);
   const [restaurant, setRestaurant] = useState({});
 
-  // useEffect(() => {
-  //   const getRestaurant = async () => {
-  //     const res = await API.YelpAPI.getRestaurantById({
-  //       id: review.restaurantID,
-  //     });
-  //     const restaurant = API.apiResHandling(res, messageDispatch, res.message);
-  //     if (restaurant != null) setRestaurant({ ...restaurant });
-  //   };
-  //   getRestaurant();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("reviewed restaurant", restaurant);
-  // }, [restaurant]);
-
   return (
     <Fragment>
       <ReviewComponent>
-        {/* <RowComponent style={{ justifyContent: "space-between" }}> */}
         <RowComponent style={{ width: "100%", justifyContent: "space-between" }}>
-          {/* <RowComponent style={{ width: "70%" }}> */}
           <RowComponent>
             <Text text="Restaurant: " style={{ marginRight: "5px" }} />
             <Text text={` ${review.restaurant_name} `} style={{ textDecoration: "none" }} />
@@ -99,7 +82,7 @@ const Review = (props) => {
             <ButtonComponent onClick={onTinderSwipe}>
               <UpArrow />
             </ButtonComponent>
-            <ButtonComponent onClick={onTinderSwipe}>
+            <ButtonComponent onClick={() => onDeleteReview()}>
               <DeleteForeverIcon />
             </ButtonComponent>
           </RowComponent>

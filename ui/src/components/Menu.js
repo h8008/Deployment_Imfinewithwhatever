@@ -2,13 +2,21 @@ import { useCallback, useContext, useState, useMemo } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
-
 import styled from "@emotion/styled";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material";
 
 import { UserContext } from "../providers/UserProvider";
 import SwipeableDrawer from "../ui_components/SwipeableDrawer";
+
+import { TiThMenuOutline } from "react-icons/ti";
+
+const IconComponent = styled(TiThMenuOutline)(({ children, theme, ...otherProps }) => ({
+  width: "35px",
+  height: "35px",
+  // color: "white",
+  color: theme.palette.error.light.main,
+}));
 
 const MenuComponent = styled(Grid)((props) => ({
   width: "100%",
@@ -90,7 +98,11 @@ const Menu = (props) => {
 
   return (
     <MenuComponent color={palette.primary.dark.main} data_id="navigation-component">
-      <SwipeableDrawer items={getLinkComponents({ options, palette, navigate })} drawerWidth={250} />
+      <SwipeableDrawer
+        slideIcon={IconComponent}
+        items={getLinkComponents({ options, palette, navigate })}
+        drawerWidth={250}
+      />
     </MenuComponent>
   );
 };

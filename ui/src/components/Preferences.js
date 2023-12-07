@@ -4,7 +4,6 @@ import Text from "../ui_components/Text";
 import Grid from "@mui/material/Grid";
 import PieChart from "./PieChart/PieChart";
 
-import { Fragment } from "react";
 import { Typography, useTheme } from "@mui/material";
 import BorderedBox from "../ui_components/BorderedBox";
 
@@ -33,6 +32,7 @@ const RowComponent = ({ children, theme, ...otherProps }) => {
     flexDirection: "row",
     justifyContent: "flex-start",
     backgroundColor: theme.palette.primary.dark.main,
+    borderRadius: "20px",
   };
   return (
     <Grid sx={style}>
@@ -103,7 +103,6 @@ const Preferences = (props) => {
           <Text text={titles[0]} fontSize={"300%"} />
         </PieChartTitleComponent>
       </RowComponent>
-
       <RowComponent theme={theme} alignItems={"flex-end"}>
         {dislikes.length > 0 && (
           <PieChartTitleComponent>
