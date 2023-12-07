@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled } from "@mui/material";
+import { styled, useTheme } from "@mui/material";
 import { TinderLikeCard } from "react-stack-cards";
 import BorderedBox from "../ui_components/BorderedBox";
 
@@ -13,38 +13,62 @@ import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
 
 import API from "../API_Interface";
 
-const ReviewsComponent = styled(Grid)({
+// const SwipeComponent = styled(Grid)({
+//   container: true,
+//   position: "absolute",
+//   columnGap: 20,
+//   display: "flex",
+//   flexDirection: "row",
+//   justifyContent: "center",
+//   alignItems: "center",
+// });
+
+const ReviewsComponent = styled("div")(({ theme, children, ...otherProps }) => ({
   container: true,
-  position: "absolute",
-  columnGap: 20,
+  height: "100%",
+  width: "100%",
+  backgroundColor: theme.palette.primary.dark.main,
+  zIndex: -2,
+  position: "relative",
   display: "flex",
   flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
-});
+  ...otherProps,
+}));
+
+const SwipeComponent = styled(Grid)((props) => ({
+  container: true,
+  position: "absolute",
+  columnGap: 20,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  zIndex: 1,
+}));
 
 const ColumnComponent = styled(Grid)((props) => ({
   data_id: "column-component",
   gridRow: true,
   heights: `${props.numItems * 50}px`,
   width: `50px`,
-  display: "column",
+  display: "flex",
+  flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
 }));
 
-// const EMPYT_DATA_MESSAGE = "Go explore and don't forget to leave some reviews!";
+const ButtonComponent = styled(Grid)((children, ...otherProps) => ({
+  data_id: "review-interactive-button-component",
+  gridRow: true,
+  ...otherProps,
+}));
 
 const Reviews = (props) => {
+  const theme = useTheme();
   const { messageDispatch } = React.useContext(MessageContext);
-
-  return (
-    <ReviewsClassComponent
-      messageDispatch={messageDispatch}
-      // navigationDispatch={navigationDispatch}
-      reviews={props.reviews}
-    />
-  );
+  return <ReviewsClassComponent theme={theme} messageDispatch={messageDispatch} reviews={props.reviews} />;
 };
 
 class ReviewsClassComponent extends React.Component {
@@ -59,6 +83,7 @@ class ReviewsClassComponent extends React.Component {
       swipableReviews: [...this.props.reviews],
       activeReviewIdx: 0,
     };
+    this.theme = props.theme;
     this.Tinder = null;
     this.onTinderSwipe = this.onTinderSwipe.bind(this);
     this.onDeleteReview = this.onDeleteReview.bind(this);
@@ -137,42 +162,57 @@ class ReviewsClassComponent extends React.Component {
     const activeReviewIdx = this.state.activeReviewIdx;
 
     return (
-      <ReviewsComponent>
-        {this.state.swipableReviews != null && this.state.swipableReviews.length > 0 && (
-          <React.Fragment>
-            <ColumnComponent numItems={2}>
-              <UpArrow onClick={this.onTinderSwipe} />
-              <DeleteForeverIcon onClick={this.onDeleteReview} />
-            </ColumnComponent>
-            <TinderLikeCard
-              images={this.state.swipableReviews}
-              width="800"
-              height="200"
-              direction={this.state.directionTinder}
-              duration={400}
-              ref={(node) => (this.Tinder = node)}
-              className="tinder"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <BorderedBox
+      <React.Fragment>
+        <ReviewsComponent />
+        <SwipeComponent>
+          {this.state.swipableReviews != null && this.state.swipableReviews.length > 0 && (
+            <React.Fragment>
+              {/* <ColumnComponent numItems={2}>
+                <ButtonComponent onClick={this.onTinderSwipe}>
+                  <UpArrow />
+                </ButtonComponent>
+                <ButtonComponent onClick={this.onTinderSwipe}>
+                  <DeleteForeverIcon />
+                </ButtonComponent>
+              </ColumnComponent> */}
+              <TinderLikeCard
+                images={this.state.swipableReviews}
+                width="800"
+                height="200"
+                direction={this.state.directionTinder}
+                duration={400}
+                ref={(node) => (this.Tinder = node)}
+                className="tinder"
                 style={{
-                  height: "100%",
-                  backgroundColor: "white",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
                 }}
               >
-                <Review review={this.state.swipableReviews[activeReviewIdx]} />
-              </BorderedBox>
-            </TinderLikeCard>
-          </React.Fragment>
-        )}
-      </ReviewsComponent>
+                <BorderedBox
+                  style={{
+                    height: "100%",
+                    backgroundColor: "white",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Review review={this.state.swipableReviews[activeReviewIdx]} onTinderSwipe={this.onTinderSwipe} />
+                </BorderedBox>
+              </TinderLikeCard>
+              {/* <ColumnComponent numItems={2}>
+                <ButtonComponent onClick={this.onTinderSwipe}>
+                  <UpArrow />
+                </ButtonComponent>
+                <ButtonComponent onClick={this.onTinderSwipe}>
+                  <DeleteForeverIcon />
+                </ButtonComponent>
+              </ColumnComponent> */}
+            </React.Fragment>
+          )}
+        </SwipeComponent>
+      </React.Fragment>
     );
   }
 }

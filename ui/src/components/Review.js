@@ -4,18 +4,36 @@ import UpArrow from "@mui/icons-material/KeyboardArrowUp";
 import DownArrow from "@mui/icons-material/KeyboardArrowDown";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-import { styled } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import Text from "../ui_components/Text";
 import Stars from "./Stars";
 
-const RowComponent = styled(Grid)(({ theme }) => ({
+import { styled } from "@mui/material";
+import Grid from "@mui/material/Grid";
+
+const ButtonsComponent = styled(Grid)((props) => ({
+  data_id: "column-component",
+  gridRow: true,
+  heights: `${props.numItems * 50}px`,
+  width: `50px`,
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+
+const ButtonComponent = styled(Grid)((children, ...otherProps) => ({
+  data_id: "review-interactive-button-component",
+  gridRow: true,
+  ...otherProps,
+}));
+
+const RowComponent = styled(Grid)(({ theme, style }) => ({
   gridRow: true,
   display: "flex",
   flexDirection: "row",
-  justifyContent: theme == null ? "flex-start" : theme.justifyContent,
-  alignItems: "flex-start",
-  width: theme == null ? "50%" : theme.width,
+  justifyContent: style != null && style.justifyContent != null ? style.justifyContent : "flex-start",
+  alignItems: "center",
+  width: style != null && style.width != null ? style.width : "100%",
 }));
 
 const ColumnComponent = styled(Grid)(({ theme }) => ({
@@ -25,8 +43,27 @@ const ColumnComponent = styled(Grid)(({ theme }) => ({
   alignItems: theme == null ? "center" : theme.alignItems,
 }));
 
+const ReviewContentComponent = styled(Grid)(() => ({
+  gridRow: true,
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  flexWrap: "wrap",
+}));
+
+const ReviewComponent = styled(Grid)(({ theme, ...otherProps }) => ({
+  contain: true,
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+
 const Review = (props) => {
-  const { review, onClick, onDeleteReview } = props;
+  const { review, onClick, onDeleteReview, onTinderSwipe } = props;
   const { messageState, messageDispatch } = useContext(MessageContext);
   const [restaurant, setRestaurant] = useState({});
 
@@ -47,19 +84,31 @@ const Review = (props) => {
 
   return (
     <Fragment>
-      <RowComponent theme={{ width: "50%", justifyContent: "space-between" }}>
-        <RowComponent theme={{ width: "70%" }}>
-          <Text text="Restaurant: " style={{ marginRight: "5px" }} />
-          <Text text={` ${review.restaurant_name} `} style={{ textDecoration: "underline" }} />
+      <ReviewComponent>
+        {/* <RowComponent style={{ justifyContent: "space-between" }}> */}
+        <RowComponent style={{ width: "100%", justifyContent: "space-between" }}>
+          {/* <RowComponent style={{ width: "70%" }}> */}
+          <RowComponent>
+            <Text text="Restaurant: " style={{ marginRight: "5px" }} />
+            <Text text={` ${review.restaurant_name} `} style={{ textDecoration: "none" }} />
+          </RowComponent>
+          <RowComponent style={{ justifyContent: "center" }}>
+            <Stars rating={review.rating} />
+          </RowComponent>
+          <RowComponent style={{ justifyContent: "flex-end" }}>
+            <ButtonComponent onClick={onTinderSwipe}>
+              <UpArrow />
+            </ButtonComponent>
+            <ButtonComponent onClick={onTinderSwipe}>
+              <DeleteForeverIcon />
+            </ButtonComponent>
+          </RowComponent>
         </RowComponent>
-        <RowComponent theme={{ width: "30%", justifyContent: "flex-start" }}>
-          <Stars rating={review.rating} />
-        </RowComponent>
-      </RowComponent>
-      <RowComponent>
-        <Text text={"Review: "} style={{ marginRight: "5px" }} />
-        <Text text={` ${review.review} `} style={{ textDecoration: "underline" }} />
-      </RowComponent>
+        <ReviewContentComponent>
+          <Text text={"Review: "} style={{ marginRight: "5px" }} />
+          <Text text={` ${review.review} `} style={{ textDecoration: "none" }} />
+        </ReviewContentComponent>
+      </ReviewComponent>
     </Fragment>
   );
 };
