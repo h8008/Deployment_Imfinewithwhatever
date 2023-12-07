@@ -1,6 +1,6 @@
 import { styled, Box as MUIBox } from "@mui/material";
 
-const BorderedBox = styled(MUIBox)(({ style }) => ({
+const BorderedBox = styled(MUIBox)(({ style = {} }) => ({
   ...style,
   width: style.width == null ? "100%" : style.width,
   height: style.height == null ? "100%" : style.height,

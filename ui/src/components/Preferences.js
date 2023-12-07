@@ -5,18 +5,41 @@ import Grid from "@mui/material/Grid";
 import PieChart from "./PieChart/PieChart";
 
 import { Fragment } from "react";
-import { Typography } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
+import BorderedBox from "../ui_components/BorderedBox";
 
-const PreferenceComponent = styled(Grid)(({ children, ...otherProps }) => ({
+const PreferenceComponent = styled(Grid)(({ children, theme, ...otherProps }) => ({
   container: true,
-  height: "50%",
-  width: "100%",
+  height: "100%",
+  width: "85%",
   margin: "auto",
   display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
+  rowGap: 25,
+  flexDirection: "column",
+  justifyContent: "center",
   ...otherProps,
 }));
+
+const RowComponent = ({ children, theme, ...otherProps }) => {
+  const style = {
+    container: true,
+    height: "50%",
+    width: "100%",
+    margin: "auto",
+    ...otherProps,
+  };
+  const boxStyle = {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    backgroundColor: theme.palette.primary.dark.main,
+  };
+  return (
+    <Grid sx={style}>
+      <BorderedBox style={boxStyle}>{children}</BorderedBox>
+    </Grid>
+  );
+};
 
 const PieChartComponentTopLeft = styled(Grid)((props) => ({
   height: "100%",
@@ -37,6 +60,7 @@ const PieChartTitleComponent = styled(Grid)((props) => ({
   flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
+  color: "white",
 }));
 
 const EmptyContentComponent = styled(Typography)((props) => ({
@@ -51,50 +75,46 @@ const useInitializeTitle = (props) => {
   const { numLikes, numDislikes } = props;
 
   const titles = useMemo(() => {
-    const choices = ["You have no liks", "Some of your favorites", "You like everything", "You don't like these"];
+    const choices = ["You have no likes", "Some of your favorites", "You like everything", "You don't like these"];
     const dataEmpty = [numLikes, numDislikes];
-    return Array(dataEmpty.length)
-      .fill()
-      .map((empty, i) => (empty === 0 ? choices[i + (i % choices.length)] : choices[i + (i % choices.length) + 1]));
+    return dataEmpty.map((empty, i) =>
+      empty === 0 ? choices[i + (i % choices.length)] : choices[i + (i % choices.length) + 1]
+    );
   }, [numLikes, numDislikes]);
 
   return titles;
 };
 
 const Preferences = (props) => {
+  const theme = useTheme();
   const { preferences } = props;
   const { likes, dislikes } = preferences;
   const titles = useInitializeTitle({ numLikes: likes.length, numDislikes: dislikes.length });
 
-  console.log("titles", titles);
-
-  // const titles = useMemo(() => {
-  //   const titles = ["You have no liks", "Some of your favorites", "You like everything", "You don't like these"]
-  //   const dataEmpty = [likes.length, dislikes.length]
-  //   return Array(dataEmpty.length).fill().map((empty, i) => (
-  //     !empty ? titles[i + i % titles.length] : titles[i + i % titles.length + 1]
-  //   ))
-  // }, [likes, dislikes])
-
   return (
-    <Fragment>
-      <PreferenceComponent>
-        <PieChartComponentTopLeft alignItems={"flex-start"}>
-          {likes.length > 0 && <PieChart chartData={likes} style={{ height: "100%", width: "100%" }} />}
-        </PieChartComponentTopLeft>
+    <PreferenceComponent>
+      <RowComponent theme={theme} alignItems={"flex-start"}>
+        {likes.length > 0 && (
+          <PieChartComponentTopLeft>
+            <PieChart chartData={likes} style={{ height: "85%", width: "100%" }} />
+          </PieChartComponentTopLeft>
+        )}
         <PieChartTitleComponent>
-          <Text text={"Your Most Liked"} fontSize={"300%"} />
+          <Text text={titles[0]} fontSize={"300%"} />
         </PieChartTitleComponent>
-      </PreferenceComponent>
-      <PreferenceComponent alignItems={"flex-end"}>
-        <PieChartTitleComponent>
-          <Text text={"You didn't like these"} fontSize={"300%"} />
-        </PieChartTitleComponent>
+      </RowComponent>
+
+      <RowComponent theme={theme} alignItems={"flex-end"}>
+        {dislikes.length > 0 && (
+          <PieChartTitleComponent>
+            <Text text={titles[1]} fontSize={"300%"} />
+          </PieChartTitleComponent>
+        )}
         <PieChartComponentBottomRight>
-          <PieChart chartData={dislikes} style={{ height: "100%", width: "100%" }} />
+          <PieChart chartData={dislikes} style={{ height: "85%", width: "100%" }} />
         </PieChartComponentBottomRight>
-      </PreferenceComponent>
-    </Fragment>
+      </RowComponent>
+    </PreferenceComponent>
   );
 };
 
