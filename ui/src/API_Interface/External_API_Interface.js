@@ -1,8 +1,3 @@
-// import * as dotenv from 'dotenv'
-// dotenv.config({ path: '../../.env'})
-// import webpack from 'webpack'
-// import dotenv from 'dotenv'
-
 export default class YelpAPI {
   constructor(axiosAgent) {
     this.axiosAgent = axiosAgent;
@@ -15,7 +10,7 @@ export default class YelpAPI {
   }
 
   async getRestaurantsByLocation(params) {
-    return this.axiosAgent({
+    return await this.axiosAgent({
       url: `yelp/restaurants/${params.term}/${params.location}`,
       method: "get",
     })

@@ -21,6 +21,9 @@ import { AssetsContext } from "../../providers/AssetsProvider";
 import { useTheme } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { fetchRestaurantsFromYelp } from "../../utils/axios/restaurants";
+import { useFetchYelpRestaurants, useSelectRestaurantsByLocation } from "../../hooks/API/Restaurants";
+
 const RestaurantsComponent = styled(Grid)(({ theme }) => ({
   container: true,
   width: "90%",
@@ -53,8 +56,25 @@ const filterRestaurantsByBlackList = (blacklist, restaurants) => {
   return restaurants.filter((restaurant) => blacklistObject[restaurant.id] == null);
 };
 
+// const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
+//   const initializeRestaurants = useMemo(() => {
+//     if (initialRestaurants == null) return [];
+//     if (intialBlacklist.length > 0 && initialRestaurants.length > 0) {
+//       return filterRestaurantsByBlackList([...intialBlacklist], [...initialRestaurants]);
+//     }
+//     if (initialRestaurants.length > 0) {
+//       return [...initialRestaurants];
+//     }
+//     return [];
+//   }, [intialBlacklist, initialRestaurants]);
+
+//   const restaurantsData = initializeRestaurants;
+//   return [restaurantsData];
+// };
+
 const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
-  const initializeRestaurants = useMemo(() => {
+  const initializeRestaurants = () => {
+    if (initialRestaurants == null) return [];
     if (intialBlacklist.length > 0 && initialRestaurants.length > 0) {
       return filterRestaurantsByBlackList([...intialBlacklist], [...initialRestaurants]);
     }
@@ -62,18 +82,25 @@ const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
       return [...initialRestaurants];
     }
     return [];
-  }, [intialBlacklist, initialRestaurants]);
+  };
 
-  const restaurantsData = initializeRestaurants;
-  return [restaurantsData];
+  const [restaurants, setRestaurants] = useState({});
+  return [restaurants, setRestaurants];
 };
 
 const useInitializeActiveRestaurant = (restaurants, activeRestaurantIdx) => {
   const restaurant = useMemo(
-    () => (restaurants == null ? undefined : restaurants[activeRestaurantIdx]),
+    () => (restaurants == null || restaurants.length === 0 ? undefined : restaurants[activeRestaurantIdx]),
     [restaurants, activeRestaurantIdx]
   );
   return [restaurant];
+};
+
+const useUpdateRestaurants = (newRestaurants, recordedRestaurants) => {
+  return useMemo(
+    () => (newRestaurants.length > 0 ? newRestaurants : recordedRestaurants),
+    [newRestaurants, recordedRestaurants]
+  );
 };
 
 const initializeVerdicts = (restaurants, pos, v) => {
@@ -97,7 +124,6 @@ const useRecordVerdictsOnPageChange = (verdicts, restaurants, email, location, r
           like: verdict,
         });
         if (res.status !== "OK") {
-          // console.log("error ")
         }
       };
       verdicts
@@ -134,20 +160,26 @@ const Restaurants = (props) => {
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
   const { userState } = useContext(UserContext);
 
-  // const restaurantsData = restaurantState.restaurantsData;
+  // const restaurantsData = locationState.state.restaurants;
 
-  const restaurantsData = locationState.state.restaurants;
-
-  const blacklistData = userState.preferences;
+  // const blacklistData = userState.preferences || [];
   const location = restaurantState.location;
+  const region = restaurantState.region;
+
+  const [newRestaurants, setNewRestaurants] = useInitializeRestaurants(
+    userState.preferences || [],
+    locationState.state ? locationState.state.restaurants : []
+  );
+
+  const [restaurants] = useFetchYelpRestaurants(newRestaurants, setNewRestaurants, region);
 
   const [message, setMessage] = useState(initializeMessage());
   const [preference, setPreference] = useState(null);
   const [modelOpen, setModalOpen] = useState(preference);
   const [activeRestaurantIdx, setActiveRestaurantIdx] = useState(0);
-  const [restaurants] = useInitializeRestaurants(blacklistData, restaurantsData);
-  const [activeRestaurant] = useInitializeActiveRestaurant(restaurantsData, activeRestaurantIdx);
-  const [verdicts, setVerdicts] = useState(initializeVerdicts(restaurants, activeRestaurantIdx, preference));
+
+  const [activeRestaurant] = useInitializeActiveRestaurant(restaurants.businesses, activeRestaurantIdx);
+  const [verdicts, setVerdicts] = useState(initializeVerdicts(restaurants.businesses, activeRestaurantIdx, preference));
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
   const [dispatchVerdicts, setDispatchVerdicts] = useState(false);
 
@@ -161,7 +193,6 @@ const Restaurants = (props) => {
 
   const handleDoneSettingPreference = () => {
     setDispatchVerdicts(true);
-    // navigate("/Feedback");
   };
 
   const onDecisionCallback = async (preference) => {
@@ -208,12 +239,14 @@ const Restaurants = (props) => {
 
   const handleViewPrevRestaurant = () => {
     const newActiveRestaurantIdx = activeRestaurantIdx - 1 <= -1 ? restaurants.length - 1 : activeRestaurantIdx - 1;
-    updateActiveRestaurant(newActiveRestaurantIdx);
+    // updateActiveRestaurant(newActiveRestaurantIdx);
+    setActiveRestaurantIdx(newActiveRestaurantIdx);
   };
 
   const handleViewNextRestaurant = () => {
     const newActiveRestaurantIdx = (activeRestaurantIdx + 1) % restaurants.length;
-    updateActiveRestaurant(newActiveRestaurantIdx);
+    // updateActiveRestaurant(newActiveRestaurantIdx);
+    setActiveRestaurantIdx(newActiveRestaurantIdx);
   };
 
   const advanceActiveRestaurantIdx = (activeRestaurantIdx) => {

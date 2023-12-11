@@ -6,12 +6,10 @@ import Text from "../ui_components/Text";
 import GridRow from "../ui_components/GridRow";
 import RoundButton from "../ui_components/RoundButton";
 import SwipeableDrawer from "../ui_components/SwipeableDrawer";
-
-// import Card from "@mui/material/Card";
-// import Grid from "@mui/material/Grid";
+import BorderedBox from "../ui_components/BorderedBox";
 
 import API from "../API_Interface";
-
+import { useGetRestaurantReviews } from "../hooks/API/Yelp";
 import { LOCATION_MASK_MESSAGE } from "../constants/Messages";
 import BusinessLocator from "../components/Maps/Google_Maps/BusinessLocator";
 
@@ -30,6 +28,9 @@ const CardContainer = styled(Card)({
   backgroundColor: "white",
   id: "restaurant-container",
   border: "8px solid black",
+  borderRadius: "20px",
+  padding: "20px",
+  margin: "20px",
 });
 
 const MapComponent = styled(Grid)((props) => ({
@@ -40,6 +41,21 @@ const MapComponent = styled(Grid)((props) => ({
   height: "50%",
   width: "60%",
 }));
+
+const PlaceHolderMapComponent = (props) => {
+  const style = {
+    width: "750px",
+    height: "400px",
+    borderRadius: "20px",
+  };
+
+  return <BorderedBox style={style} />;
+};
+
+const CardMediaComponent = ({ children, ...otherProps }) => {
+  const props = { ...otherProps, style: { borderRadius: "20px" } };
+  return <BorderedBox {...props}>{children}</BorderedBox>;
+};
 
 const ButtonsComponent = styled(Grid)((props) => ({
   width: "60%",
@@ -217,11 +233,8 @@ const extractOtherData = (restaurant, showLocation) => ({
 
 const Restaurant = (props) => {
   const {
-    index,
     restaurantData,
-    email,
     onDecisionCallback,
-    updateActiveRestaurant,
     onShowRestaurantLocationCallback,
     showLocation,
     onViewPrevCallback,
@@ -236,23 +249,25 @@ const Restaurant = (props) => {
     location: "",
   });
 
-  // const [reviews] = useGetRestaurantReviews({ id: restaurantData.id });
+  // const [reviews] = useGetRestaurantReviews({ id: restaurantData._id });
   const [reviews, setReviews] = useState([]);
 
-  useEffect(() => {
-    const getPreference = async () => {
-      const params = {
-        restaurantID: restaurantData.id,
-        email: email,
-      };
-      const preferenceData = await API.Users.getRestaurantPreferences(params);
-      if (preferenceData.status === "OK") {
-        const preference = [...preferenceData.preference];
-        updateActiveRestaurant(index, "preference", preference);
-      }
-    };
-    if (restaurantData.preference == null) getPreference();
-  }, [email, index, restaurantData.id, restaurantData.preference, updateActiveRestaurant]);
+  // console.log("reviews", reviews);
+
+  // useEffect(() => {
+  //   const getPreference = async () => {
+  //     const params = {
+  //       restaurantID: restaurantData.id,
+  //       email: email,
+  //     };
+  //     const preferenceData = await API.Users.getRestaurantPreferences(params);
+  //     if (preferenceData.status === "OK") {
+  //       const preference = [...preferenceData.preference];
+  //       updateActiveRestaurant(index, "preference", preference);
+  //     }
+  //   };
+  //   if (restaurantData.preference == null) getPreference();
+  // }, [email, index, restaurantData.id, restaurantData.preference, updateActiveRestaurant]);
 
   useEffect(() => {
     const data = extractData(restaurantData);
@@ -280,14 +295,16 @@ const Restaurant = (props) => {
         <CardContainer>
           {reviews.length > 0 && <SwipeableDrawer items={reviews.map((r) => r.text)} />}
           <TopComponent flexDirection={"row"} justifyContent={"center"}>
-            {/* <CardMediaComponent image={data.image_url} src={"img"} flex={"60%"} width={"60%"} height={"200px"} /> */}
-            <CardMedia image={data.image_url} component={"img"} src={"img"} flex={"55%"} height={"300px"} />
-            {/* <ImageComponent src={data.image_url} alt="restaurant-image" flex={"60%"} height={"200px"} /> */}
+            <CardMediaComponent flex={"55%"}>
+              <CardMedia image={data.image_url} component={"img"} src={"img"} height={"300px"} />
+            </CardMediaComponent>
             <MainDetailsComponent flex={"45%"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
           <MapComponent>
-            {otherDetails !== "" && otherDetails !== LOCATION_MASK_MESSAGE && (
+            {otherDetails !== "" && otherDetails.location !== LOCATION_MASK_MESSAGE ? (
               <BusinessLocator address={otherDetails.location} />
+            ) : (
+              <PlaceHolderMapComponent />
             )}
             <CardContent>
               <Text text={otherDetails.location} />

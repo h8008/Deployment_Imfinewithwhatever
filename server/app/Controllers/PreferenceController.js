@@ -1,7 +1,3 @@
-// const {
-
-// } = require('../Queries/preferenceQueries')
-
 const {
   ADD_PREFERENCE,
   UPDATE_PREFERENCE,
@@ -10,7 +6,8 @@ const {
 
 const {
   GET_PREFERENCES,
-  GET_PREFERENCES_FOR_CURRENT_USER,
+  GET_PREFERENCES_FOR_ONE_USER,
+  GET_PREFERENCES_FOR_OTHER_USERS,
 } = require('../Queries/preference.js');
 
 const add = async (ctx) => {
@@ -38,7 +35,15 @@ const destroy = async (ctx) => {
 
 const getAllForCurrentUser = async (ctx) => {
   const params = ctx.request.query;
-  const res = await GET_PREFERENCES_FOR_CURRENT_USER(params);
+  const res = await GET_PREFERENCES_FOR_ONE_USER(params);
+  ctx.body = res
+    ? { data: res, status: 'OK' }
+    : { data: undefined, status: 'NOT FOUND' };
+};
+
+const getAllForOtherUsers = async (ctx) => {
+  const params = ctx.request.query;
+  const res = await GET_PREFERENCES_FOR_OTHER_USERS(params);
   ctx.body = res
     ? { data: res, status: 'OK' }
     : { data: undefined, status: 'NOT FOUND' };
@@ -58,4 +63,5 @@ module.exports = {
   destroy,
   getAll,
   getAllForCurrentUser,
+  getAllForOtherUsers,
 };

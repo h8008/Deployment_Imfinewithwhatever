@@ -22,6 +22,10 @@ const userSchema = new Schema({
   data: {
     type: String,
   },
+  preference: {
+    type: [mongoose.Types.ObjectId],
+    ref: 'Preference',
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);

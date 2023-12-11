@@ -13,16 +13,6 @@ const getFoodPreferences = (preferences) => {
   return lowercased_categories.reduce((string, category, categoryIdx) => `${string}${category},`, "").slice(0, -1);
 };
 
-// const getRestaurantsByLocations = async (location) => {
-//   let params = { term: "restaurant", location: location };
-//   let restaurant_by_location_response = await API.YelpAPI.getRestaurantsByLocation(params);
-//   //   let restaurantsByLocationData = {};
-//   if (restaurant_by_location_response.status === "OK") {
-//     return restaurant_by_location_response.restaurantsData;
-//   }
-//   return {};
-// };
-
 const getRestaurantsByCuisines = async (cuisines, location = "San Jose") => {
   let params = {
     term: "food",

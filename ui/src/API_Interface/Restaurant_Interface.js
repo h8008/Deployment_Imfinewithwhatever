@@ -20,4 +20,17 @@ export default class Restaurants {
         message: undefined,
       }));
   }
+
+  async get() {
+    return await this.axios({
+      url: `restaurants/get`,
+      method: "get",
+    })
+      .then((restaurantsInfo) => restaurantsInfo.data)
+      .catch((error) => ({
+        error,
+        restaurants: undefined,
+        message: undefined,
+      }));
+  }
 }

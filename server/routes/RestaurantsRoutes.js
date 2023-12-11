@@ -11,4 +11,6 @@ restaurantRouter.get('/', (ctx) => {
 
 restaurantRouter.post('/add', RestaurantController.add);
 
+restaurantRouter.get('/get', RestaurantController.get);
+
 module.exports = restaurantRouter;

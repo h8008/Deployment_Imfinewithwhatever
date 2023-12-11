@@ -20,6 +20,11 @@ preferenceRouter.get(
   PreferenceController.getAllForCurrentUser
 );
 
+preferenceRouter.get(
+  '/otherusers/getall',
+  PreferenceController.getAllForOtherUsers
+);
+
 preferenceRouter.get('/getall', PreferenceController.getAll);
 
 module.exports = preferenceRouter;

@@ -14,7 +14,6 @@ import { TiThMenuOutline } from "react-icons/ti";
 const IconComponent = styled(TiThMenuOutline)(({ children, theme, ...otherProps }) => ({
   width: "35px",
   height: "35px",
-  // color: "white",
   color: theme.palette.error.light.main,
 }));
 

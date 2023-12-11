@@ -23,7 +23,7 @@ import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 import { GameContext } from "../../providers/GameProvider";
 
-import useStealRestaurantsFromYelp from "../../hooks/API/Restaurants";
+import { useStealRestaurantsFromYelp } from "../../hooks/API/Restaurants";
 import { getRestaurantsByCuisines, getRestaurantsByLocations } from "../../utils/axios/restaurants";
 
 const useHandleTransitionToRestaurants = (restaurants, next) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import API_Interface from "../../API_Interface";
 
 export const useGetRestaurantReviews = (params) => {
@@ -6,29 +6,39 @@ export const useGetRestaurantReviews = (params) => {
 
   useEffect(() => {
     const fetch = async () => {
-      setTimeout(async () => {
-        const res = await API_Interface.YelpAPI.getRestaurantReviews(params);
-        if (res.status === "OK") {
-          setReviews(res.restaurantsData.reviews);
-        }
-      }, [2500]);
-    };
-    if (params.id) {
       // setTimeout(async () => {
-      fetch();
-      // }, [2000]);
-    }
-  }, [params, params.id]);
+      const res = await API_Interface.YelpAPI.getRestaurantReviews(params);
+      if (res.status === "OK") {
+        setReviews(res.restaurantsData.reviews);
+      }
+      // }, [2500]);
+    };
+    fetch();
+  }, [params]);
 
   return [reviews];
 };
 
-const fetchRestaurantReviews = async (restaurantID) => {
-  const res = await API_Interface.YelpAPI.getRestaurantReviews({ id: restaurantID });
-  if (res.status === "OK") {
-    return res.restaurantsData.reviews;
-  }
-  return [];
-};
+// export const useGetRestaurantReviews = ({ id }) => {
+//   const reviews = useMemo(() => {
+//     const fetch = async () => {
+//       const res = await API_Interface.YelpAPI.getRestaurantReviews(id);
+//       if (res.status === "OK") {
+//         return res.restaurantsData.reviews;
+//       }
+//       return [];
+//     };
+//     return fetch();
+//   }, [id]);
+//   return [reviews];
+// };
 
-const initializeReviews = (num) => new Array(num).fill(true).map(() => []);
+// const fetchRestaurantReviews = async (restaurantID) => {
+//   const res = await API_Interface.YelpAPI.getRestaurantReviews({ id: restaurantID });
+//   if (res.status === "OK") {
+//     return res.restaurantsData.reviews;
+//   }
+//   return [];
+// };
+
+// const initializeReviews = (num) => new Array(num).fill(true).map(() => []);

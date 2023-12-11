@@ -8,6 +8,7 @@ const catchJWTErrors = require('./app/Middleware/CatchJWTErrors.js');
 const mongoose = require('mongoose');
 const cors = require('kcors');
 const corsOptions = require('./app/Middleware/corsOptions.js');
+const getDevEnvironment = require('./utils/GetDevEnvironment.js');
 
 const app = new Koa();
 const port = process.env.APP_PORT;
@@ -22,6 +23,7 @@ catchJWTErrors(app);
 connectDB();
 
 mongoose.connection.once('open', () => {
+  console.log('development', getDevEnvironment());
   console.log('Connected to MongoDB');
   app.listen(port, () => console.log(`Listening on HTTPS port ${port}`));
 });
