@@ -1,8 +1,9 @@
 import SwipeableDrawer from "../../ui_components/SwipeableDrawer";
 
-const SideMenu = (props) => {
-  const { user, items, onSelectMenuItemCallback } = props;
-  return <SwipeableDrawer data={user} items={items} onSelectMenuItemCallback={onSelectMenuItemCallback} />;
+const SideMenu = ({ children, user, items, onSelectMenuItemCallback, ...otherProps }) => {
+  return (
+    <SwipeableDrawer data={user} items={items} {...otherProps} onSelectMenuItemCallback={onSelectMenuItemCallback} />
+  );
 };
 
 export default SideMenu;

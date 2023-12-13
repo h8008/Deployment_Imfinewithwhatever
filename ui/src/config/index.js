@@ -18,6 +18,9 @@ const colors = {
       background: {
         color: "#dddddd",
       },
+      buttons: {
+        color: "#ffffff",
+      },
     },
   },
   components: {

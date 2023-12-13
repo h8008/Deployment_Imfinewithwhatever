@@ -15,31 +15,39 @@ import quicksort from "../../utils/Quicksort";
 import Reviews from "../../components/Reviews";
 import attributes from "../../config";
 import icons from "../../icons/foods";
-import RandomPositions from "../../components/RandomPositions";
 
-const ProfileComponent = styled(Grid)({
+import RandomPositions from "../../components/RandomPositions";
+import EggYolks from "../../components/Three/EggYolks";
+
+const ProfileComponent = styled("div")({
   height: "90vh",
   width: "100%",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
+  // display: "flex",
+  // flexDirection: "column",
+  // justifyContent: "flex-start",
   // backgroundColor: attributes.colors.pages.profile.background.color,
 });
 
 const DefaultStyledComponent = styled(Grid)((props) => ({
   height: "100%",
   width: "80%",
-  // backgroundImage: `url(${props.backdrop})`,
   backgroundPosition: "center",
   backgroundSize: "contain",
   backgroundRepeat: "no-repeat",
 }));
 
 const DefaultComponent = (props) => {
-  const { backdrop } = props;
+  const style = {
+    position: "relative",
+    zIndex: -1,
+    height: "90vh",
+  };
 
-  // return <DefaultStyledComponent backdrop={backdrop}>{/* <RandomPositions /> */}</DefaultStyledComponent>;
-  return <DefaultStyledComponent />;
+  return (
+    <Grid sx={style}>
+      <EggYolks />
+    </Grid>
+  );
 };
 
 const BodyComponent = styled(Grid)({
@@ -235,6 +243,7 @@ const useGetBackdropOfTheDay = (assets) => {
 const Profile = (props) => {
   console.log("Profile Page");
 
+  const theme = useTheme();
   const { assets } = useContext(AssetsContext);
   const { userState, userDispatch } = useContext(UserContext);
   // const { messageState, messageDispatch } = useContext(MessageContext);
@@ -255,8 +264,16 @@ const Profile = (props) => {
 
   return (
     <ProfileComponent data_id={"Profile-Page"}>
-      <SideMenu user={{ ...userState }} items={componentNames} onSelectMenuItemCallback={onSelectMenuItemCallback} />
-      <BodyComponent>{components != null && components[activeComponentIdx]}</BodyComponent>
+      <BodyComponent>{components != null ? components[activeComponentIdx] : <DefaultComponent />}</BodyComponent>
+      <SideMenu
+        position={"absolute"}
+        sx={{ zIndex: 1 }}
+        user={{ ...userState }}
+        items={componentNames}
+        slideOutButtonColor={theme.palette.primary.light.main}
+        slideOutButtonPos={{ x: "0px", y: "50px" }}
+        onSelectMenuItemCallback={onSelectMenuItemCallback}
+      />
     </ProfileComponent>
   );
 };

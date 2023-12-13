@@ -32,6 +32,8 @@ import Menu from "./components/Menu";
 import GlobalTheme from "./providers/ThemeProvider";
 import BackgroundDispatcher from "./wrappers/BackgroundDispatcher";
 
+import EggYolks from "./components/Three/EggYolks";
+
 function App() {
   return (
     <ThemeProvider theme={GlobalTheme}>
