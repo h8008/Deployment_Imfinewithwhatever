@@ -24,15 +24,14 @@ import { GameProvider } from "./providers/GameProvider";
 import { ThemeProvider } from "@mui/material";
 import { main_config } from "./styles/shared";
 
-import Plinko from "./components/Games/Plinko/Plinko";
+// import Plinko from "./components/Games/Plinko/Plinko2";
+import Plinko from "./components/Games/A_Better_Plinko";
 import SpringModal from "./ui_components/Modal";
 import Wheel from "./components/Games/Wheel/Wheel";
 import Menu from "./components/Menu";
 
 import GlobalTheme from "./providers/ThemeProvider";
 import BackgroundDispatcher from "./wrappers/BackgroundDispatcher";
-
-import EggYolks from "./components/Three/EggYolks";
 
 function App() {
   return (

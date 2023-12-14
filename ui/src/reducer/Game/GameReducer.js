@@ -19,7 +19,7 @@ const gameReducer = (state = initialGameState, action) => {
       // };
       return {
         ...state,
-        restaurants: action.payload.restaurantsData,
+        restaurants: action.payload.restaurants,
         onGameEndCallback:
           action.payload.onGameEndCallback == null
             ? initialGameState.onGameEndCallback

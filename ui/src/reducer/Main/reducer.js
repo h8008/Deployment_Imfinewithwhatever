@@ -49,8 +49,8 @@ const reducer = (state = initialState, action) => {
     case UPDATE_RESTAURANTS: {
       newState = {
         ...newState,
-        restaurantsData: action.payload.restaurantsData,
-        region: action.payload.region,
+        restaurantsData: action.payload.restaurants,
+        region: action.payload.region ? action.payload.region : newState.region,
       };
 
       console.log("new restaurants state", newState);

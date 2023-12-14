@@ -91,8 +91,8 @@ const SpringModal = (props) => {
   return (
     <Modal
       open={messageState.modalOpen}
+      onClick={() => handleClose()}
       onClose={() => {
-        handleClose();
         messageState.onModalClick();
       }}
       aria-labelledby="transition-modal-title"

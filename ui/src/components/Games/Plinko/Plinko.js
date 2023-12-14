@@ -176,13 +176,14 @@ const Plinko = (props) => {
     Matter.Bodies.circle(ballConfig.x, ballConfig.y, ballConfig.ballSize, {
       restitution: ballElastity,
       render: {
-        fillStyle: "grey",
+        fillStyle: "white",
       },
     })
   );
   const [bars, setBars] = useState([]);
   const [dests, setDests] = useState(mapSlotsToOptions(restaurants));
   const [dest, setDest] = useState({});
+  const [pause, setPause] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
 
   // useEffect(() => {
@@ -204,6 +205,8 @@ const Plinko = (props) => {
   //     handleGameEnd();
   //   }
   // }, [restaurants, restaurantDispatch, selectedOption, navigate]);
+
+  useRunGame(ball);
 
   useEffect(() => {
     const handleGameEndNavigate = () => {
@@ -252,6 +255,7 @@ const Plinko = (props) => {
   useEffect(() => {
     const setup = () => {
       let Engine = Matter.Engine;
+      let Runner = Matter.Runner;
       let Render = Matter.Render;
       let World = Matter.World;
       let Bodies = Matter.Bodies;
@@ -259,10 +263,12 @@ const Plinko = (props) => {
       let Events = Matter.Events;
 
       let engine = Engine.create({});
+      let runner = Runner.create({});
 
       let render = Render.create({
         element: boxRef.current,
         engine: engine,
+        runner: runner,
         canvas: canvasRef.current,
         options: {
           width: worldWidth,
@@ -285,13 +291,18 @@ const Plinko = (props) => {
 
       Matter.Runner.run(engine);
 
+      Events.on(engine, "beforeAdd", function (event) {
+        engine.timing.timeScale = 0.1;
+      });
+
       Events.on(engine, "collisionEnd", function (event) {
         var pairs = event.pairs;
         for (var i = 0; i < pairs.length; i++) {
           var pair = pairs[i];
-          pair.bodyA.render.fillStyle = "#fff";
-          pair.bodyB.render.fillStyle = "black";
-          if (pair.bodyA.position.y >= worldHeight - floorHeight - 16) {
+          pair.bodyA.render.fillStyle = "black";
+          pair.bodyB.render.fillStyle = "grey";
+
+          if (pair.bodyA.position.y >= worldHeight - floorHeight - 10) {
             console.log("hit the floor");
             setDest(pair.bodyA.position);
           }
@@ -302,18 +313,20 @@ const Plinko = (props) => {
 
       Render.run(render);
     };
+
     if (pins.length > 0 && bars.length > 0 && ball != null) {
       setup();
     }
-  }, [pins, ball, bars, theme.palette.primary.light, dests]);
+  }, [pins, ball, bars, theme.palette.primary.light, dests, pause]);
 
   useEffect(() => {
     const getPins = async () => {
-      const pins = await generatePins(theme.palette.error.main);
+      // const pins = await generatePins(theme.palette.primary.dark);
+      const pins = await generatePins("white");
       setPins(pins);
     };
     getPins();
-  }, [theme.palette.error.main]);
+  }, [theme.palette.primary.dark]);
 
   useEffect(() => {
     const getBars = async () => {
@@ -329,6 +342,7 @@ const Plinko = (props) => {
       style={{
         width: "100%",
         height: "100%",
+        backgroundColor: "red",
       }}
     >
       <canvas ref={canvasRef} />

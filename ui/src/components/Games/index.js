@@ -1,9 +1,14 @@
-import Plinko from "./Plinko/Plinko";
+import React, { useRef } from "react";
 
-const Game = (props) => {
-  const { name } = props;
+const Canvas = ({ children, ...otherProps }) => {
+  const canvasRef = useRef(null);
+  const context = canvasRef.getContext("2d");
 
-  return <Plinko />;
+  return (
+    <canvas ref={canvasRef} {...otherProps}>
+      {children}
+    </canvas>
+  );
 };
 
-export default Game;
+export default Canvas;

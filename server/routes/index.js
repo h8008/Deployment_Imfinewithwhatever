@@ -8,6 +8,7 @@ const userReviewRouter = require('./UserReviewsRoutes.js');
 const preferenceRouter = require('./PreferencesRoutes.js');
 const yelpRouter = require('./YelpAPIRoutes.js');
 const restaurantRouter = require('./RestaurantsRoutes.js');
+const gameRouter = require('./GameRoutes.js');
 
 const router = require('koa-router')();
 
@@ -24,6 +25,7 @@ router.use(
   userReviewRouter.routes(),
   preferenceRouter.routes(),
   restaurantRouter.routes(),
+  gameRouter.routes(),
   yelpRouter.routes()
 );
 

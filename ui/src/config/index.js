@@ -16,7 +16,8 @@ const colors = {
     },
     profile: {
       background: {
-        color: "#dddddd",
+        light: "#dddddd",
+        red: "#ff0000",
       },
       buttons: {
         color: "#ffffff",

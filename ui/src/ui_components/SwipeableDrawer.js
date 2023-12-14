@@ -21,15 +21,13 @@ import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 
 const getSlideIcon = (Icon, color) => (Icon ? <Icon color={color} /> : <DoubleArrowIcon color={color} />);
 
-const SideMenuComponent = styled(Grid)({
+const SideMenuComponent = styled(Grid)(({ children, ...otherProps }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
   alignItems: "center",
-  position: "absolute",
-  top: "0",
-  left: "0",
-});
+  ...otherProps,
+}));
 
 const itemToListItem = (item, index, onSelectMenuItemCallback) => {
   const packageItem = (item) =>
@@ -47,13 +45,32 @@ const itemToListItem = (item, index, onSelectMenuItemCallback) => {
   );
 };
 
-export default function SwipeableDrawer(props) {
-  const theme = useTheme();
-  const { data, items, drawerWidth, slideIcon } = props;
-  const slideOutButtonPos = props.slideOutButtonPos ? props.slideOutButtonPos : { x: "0px", y: "0px" };
-  const slideOutButtonColor = props.slideOutButtonColor ? props.slideOutButtonColor : theme.palette.error.main;
+const slideOutButtonBaseStyle = {
+  width: "50px",
+  height: "50px",
+};
 
-  console.log("slide out button color", props.slideOutButtonColor);
+export default function SwipeableDrawer({
+  children,
+  data,
+  items,
+  drawerWidth,
+  slideIcon,
+  slideOutButtonPos,
+  slideOutButtonColor,
+  slideOutButtonStyle,
+  style,
+  ...otherProps
+}) {
+  const theme = useTheme();
+  const buttonPos = slideOutButtonPos ? slideOutButtonPos : { x: "0px", y: "0px" };
+  const buttonStyle = slideOutButtonStyle
+    ? { ...slideOutButtonStyle, ...slideOutButtonBaseStyle }
+    : slideOutButtonBaseStyle;
+  const buttonColor = slideOutButtonColor ? slideOutButtonColor : theme.palette.error.main;
+
+  // console.log("slide out button color", otherProps.slideOutButtonColor);
+  console.log("other props", otherProps);
 
   const [state, setState] = useState({
     top: false,
@@ -62,7 +79,7 @@ export default function SwipeableDrawer(props) {
     right: false,
   });
   const [anchor, setAnchor] = useState("left");
-  const onSelectMenuItemCallback = props.onSelectMenuItemCallback ? props.onSelectMenuItemCallback : () => {};
+  const onSelectMenuItemCallback = otherProps.onSelectMenuItemCallback ? otherProps.onSelectMenuItemCallback : () => {};
 
   const width = drawerWidth ? drawerWidth : anchor === "top" || anchor === "bottom" ? "auto" : 600;
 
@@ -87,12 +104,9 @@ export default function SwipeableDrawer(props) {
   );
 
   return (
-    <SideMenuComponent>
-      <Button
-        sx={{ width: "50px", height: "50px", transform: `translateY(${slideOutButtonPos.y})}` }}
-        onClick={toggleDrawer(anchor, true)}
-      >
-        {getSlideIcon(slideIcon, slideOutButtonColor)}
+    <SideMenuComponent sx={style}>
+      <Button sx={slideOutButtonBaseStyle} onClick={toggleDrawer(anchor, true)}>
+        {getSlideIcon(slideIcon, buttonColor)}
       </Button>
       <MUISwipeableDrawer
         anchor={anchor}

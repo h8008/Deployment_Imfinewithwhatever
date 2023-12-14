@@ -35,6 +35,14 @@ const GridRowStyle = (display) => {
   };
 };
 
+const ButtonsComponents = styled(Grid)(() => ({
+  width: "60%",
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+}));
+
 const RowGridComponent = styled(Grid)(({ children, ...otherProps }) => ({
   container: true,
   gridRow: true,
@@ -59,10 +67,12 @@ const RowComponent = styled(Grid)((props) => ({
 }));
 
 const RestaurantsInputComponent = styled(Grid)({
-  // gridRow: true,
+  display: "flex",
+  flexDirection: "column",
   container: true,
-  rowGap: 30,
-  width: "100%",
+  height: "45%",
+  rowGap: 20,
+  width: "95%",
 });
 
 const RestaurantsInput = (props) => {
@@ -75,20 +85,20 @@ const RestaurantsInput = (props) => {
         <Text text={"Enter Restaurants"} />
       </RowComponent>
       <Scrollbar style={{ width: 900, height: 500 }}>
-        <RestaurantsInputComponent autoFocus={true}>
+        <RestaurantsInputComponent autoFocus={true} rowGap={20} data_id={"restaurant-input-component"}>
           <Dropdown inputs={restaurantInputs} options={restaurants} handleChange={handleChange} />
-          <RowComponent>
-            <RowComponent onClick={() => handleAddRestaurantInput()}>
-              <Text text={"+"} />
-              <TextField value={"add more"} />
-            </RowComponent>
-            <RowComponent onClick={() => handleRemoveRestaurantInput()}>
-              <Text text={"-"} />
-              <TextField value={"remove last"} />
-            </RowComponent>
-          </RowComponent>
         </RestaurantsInputComponent>
       </Scrollbar>
+      <ButtonsComponents>
+        <RowComponent onClick={() => handleAddRestaurantInput()}>
+          <Text text={"+"} />
+          <TextField value={"add more"} />
+        </RowComponent>
+        <RowComponent onClick={() => handleRemoveRestaurantInput()}>
+          <Text text={"-"} />
+          <TextField value={"remove last"} />
+        </RowComponent>
+      </ButtonsComponents>
     </RowGridComponent>
   );
 };
@@ -119,7 +129,7 @@ const MultiDecisionMakerComponent = styled(Grid)(() => ({
   container: true,
   rowGap: 20,
   height: "90vh",
-  width: "width",
+  width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-evenly",
@@ -173,7 +183,7 @@ const MultiDecisionMaker = (props) => {
     });
   };
 
-  const handleGameStart = (gameStart) => {
+  const handleGameStart = (gameStart = true) => {
     if (gameStart) {
       if (restaurantInputs.every((restaurant) => restaurant === "")) return;
       if (selectedGame === "") return;
@@ -205,12 +215,7 @@ const MultiDecisionMaker = (props) => {
       });
 
       console.log("game started");
-      navigate(`/Games/${selectedGame}`, {
-        state: {
-          restaurants: filteredRestaurantInputs,
-          // onGameEndCallback: handleGameEndCallback,
-        },
-      });
+      navigate(`/Games/${selectedGame}`, { replace: true });
     }
   };
 
@@ -243,7 +248,6 @@ const MultiDecisionMaker = (props) => {
         handleChange={handleRestaurantChange}
         handleAddRestaurantInput={handleAddRestaurantInput}
         handleRemoveRestaurantInput={handleRemoveRestaurantInput}
-        // restaurants={restaurantState.restaurantsData}
         restaurants={restaurants}
       />
       <GamesInputComponent flex={"20%"} games={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />

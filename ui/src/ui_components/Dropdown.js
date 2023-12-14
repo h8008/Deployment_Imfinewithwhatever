@@ -1,9 +1,12 @@
 import { useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import { InputLabel, Select, MenuItem, Grid, styled } from "@mui/material";
-import { Fragment } from "react";
+import Text from "./Text";
 
 const DropdownComponent = styled(Grid)((props) => ({
+  display: "flex",
+  flexDirection: "column",
+  gridRow: true,
   container: true,
   rowGap: 20,
 }));
@@ -12,10 +15,14 @@ const DropdownItemComponent = styled(Grid)((props) => ({
   gridRow: true,
 }));
 
+const MenuItemComponent = styled(Grid)((props) => ({
+  gridRow: true,
+}));
+
 const initializeStyle = (num) =>
   Array(num)
     .fill(true)
-    .map(() => ({ backgroundColor: "grey" }));
+    .map(() => ({ backgroundColor: "white" }));
 
 const Options = (props) => {
   const { options, handleChange, slot } = props;
@@ -32,11 +39,12 @@ const Options = (props) => {
 
   const handleHover = (idx, option) => {
     setSelectedOption(option);
-    return style.map((s, i) => (i === idx ? { ...s, backgroundColor: "red" } : { ...s }));
+    // const newStyle = style.map((s, i) => (i === idx ? { ...s, backgroundColor: "red" } : { ...s }));
+    // setStyle(newStyle);
   };
 
   return (
-    <DropdownItemComponent>
+    <DropdownItemComponent data_id={"dropdown-item-component"}>
       <FormControl focused={true} color="primary" fullWidth>
         <InputLabel id="dropdown-menu">Restaurant</InputLabel>
         <Select
@@ -54,10 +62,19 @@ const Options = (props) => {
                   key={index}
                   index={index}
                   height={"100px"}
-                  sx={{ ...style[index] }}
+                  width={"100%"}
+                  sx={{
+                    ...style[index],
+                    width: "100%",
+                    backgroundColor: "white",
+                    "&:hover": { backgroundColor: "white" },
+                  }}
                   value={index}
                   onMouseEnter={() => handleHover(index, option)}
+                  // disableGutters={true}
+                  // style={{ backgroundColor: "transparent"}}
                 >
+                  {/* <Text style={{ width: "100%", backgroundColor: "black", margin: "0px" }} text={option.name} /> */}
                   {option.name}
                 </MenuItem>
               );
@@ -72,7 +89,7 @@ const Dropdown = (props) => {
   const { inputs, options, handleChange } = props;
 
   return (
-    <DropdownComponent>
+    <DropdownComponent data_id={"dropdown-component"}>
       {inputs.map((_, availableSlot) => (
         <Options options={options} handleChange={handleChange} slot={availableSlot} />
       ))}

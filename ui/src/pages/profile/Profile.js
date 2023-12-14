@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, cloneElement, useMemo } from "react";
-import { Grid, styled, useTheme } from "@mui/material";
+import { Backdrop, Grid, styled, useTheme } from "@mui/material";
 
 import Preferences from "../../components/Preferences";
 import SideMenu from "../../components/SideMenu";
@@ -20,26 +20,36 @@ import RandomPositions from "../../components/RandomPositions";
 import EggYolks from "../../components/Three/EggYolks";
 
 const ProfileComponent = styled("div")({
-  height: "90vh",
+  height: "100vh",
   width: "100%",
+  // zIndex: -10,
+  // position: "relative",
   // display: "flex",
   // flexDirection: "column",
   // justifyContent: "flex-start",
   // backgroundColor: attributes.colors.pages.profile.background.color,
 });
 
-const DefaultStyledComponent = styled(Grid)((props) => ({
-  height: "100%",
-  width: "80%",
-  backgroundPosition: "center",
-  backgroundSize: "contain",
-  backgroundRepeat: "no-repeat",
-}));
+// const BackdropComponent = styled(Backdrop)(({ theme }) => ({
+//   height: "90vh",
+//   width: "100vw",
+//   zIndex: -1,
+//   position: "relative",
+//   backgroundColor: theme.palette.background.default,
+// }));
+
+// const DefaultStyledComponent = styled(Grid)((props) => ({
+//   height: "100%",
+//   width: "80%",
+//   backgroundPosition: "center",
+//   backgroundSize: "contain",
+//   backgroundRepeat: "no-repeat",
+// }));
 
 const DefaultComponent = (props) => {
   const style = {
     position: "relative",
-    zIndex: -1,
+    zIndex: -3,
     height: "90vh",
   };
 
@@ -50,7 +60,7 @@ const DefaultComponent = (props) => {
   );
 };
 
-const BodyComponent = styled(Grid)({
+const BodyComponent = styled(Grid)(({ theme }) => ({
   container: true,
   rowGap: 50,
   width: "100%",
@@ -59,7 +69,10 @@ const BodyComponent = styled(Grid)({
   flexDirection: "column",
   justifyContent: "space-between",
   alignItems: "center",
-});
+  position: "relative",
+  zIndex: -1,
+  backgroundColor: theme.palette.error.dark.main,
+}));
 
 const ReviewsStyledComponent = styled(Box)({
   gridRow: true,
@@ -246,7 +259,6 @@ const Profile = (props) => {
   const theme = useTheme();
   const { assets } = useContext(AssetsContext);
   const { userState, userDispatch } = useContext(UserContext);
-  // const { messageState, messageDispatch } = useContext(MessageContext);
 
   const [backdrop] = useGetBackdropOfTheDay(assets);
   const [reviews] = useGetReviews(userState.email);
