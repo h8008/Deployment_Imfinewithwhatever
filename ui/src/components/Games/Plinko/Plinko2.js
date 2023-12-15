@@ -184,7 +184,6 @@ const Plinko = (props) => {
             console.log("hit the floor, at x position", pair.bodyA.position.x);
             setDest(pair.bodyA.position);
           }
-          // setBounds(newCollisions);
         }
       });
 

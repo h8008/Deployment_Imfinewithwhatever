@@ -11,7 +11,7 @@ const config = {
   ballElastity: 0.9,
   barsSectionWidth: 900 - 100,
   barWidth: 10,
-  containerWidth: 250,
+  bucketSize: 250,
 };
 
 const pegsConfig = {

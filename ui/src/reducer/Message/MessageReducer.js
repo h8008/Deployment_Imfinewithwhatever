@@ -19,12 +19,7 @@ const messageReducer = (state = initialMessageState, action) => {
         modalOpen: true,
         interactive: action.interactive == null ? initialMessageState.interactive : action.interactive,
       };
-      newState.onModalClick =
-        action.onModalClick == null
-          ? modalClickDefaultBehavior
-          : () => {
-              action.onModalClick();
-            };
+      newState.onModalClick = action.onModalClick == null ? modalClickDefaultBehavior : () => action.onModalClick();
       return newState;
     }
     case UPDATE_MODAL_OPEN: {

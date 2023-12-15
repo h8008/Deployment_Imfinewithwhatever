@@ -13,23 +13,6 @@ const useStealRestaurantsFromYelp = (restaurants) => {
   }, [restaurants]);
 };
 
-// const useFetchYelpRestaurants = (fetchCond, region) => {
-//   // const [restaurants, setRestaurants] = useState({});
-//   const filterRestaurantByRegion = async (restaurants, region) =>
-//     region && Object.keys(region) > 0 ? await restaurants.filter((r) => r.region === region) : restaurants[0];
-
-//   const restaurants = useMemo(() => {
-//     const fetch = async () => {
-//       var res = await fetchRestaurantsFromYelp();
-//       res = await filterRestaurantByRegion(res, region);
-//       return res;
-//     };
-//     if (fetchCond == null || fetchCond.length === 0) fetch();
-//   }, [fetchCond, region]);
-
-//   return [restaurants];
-// };
-
 const useFetchYelpRestaurants = (newRestaurants, region) => {
   const [restaurants, setRestaurants] = useState(newRestaurants);
   const filterRestaurantByRegion = async (restaurants, region) =>

@@ -1,6 +1,6 @@
 // Referenced from MUI documentation at https://codesandbox.io/s/74fq8m?file=/demo.tsx
 
-import { useContext, useState, useEffect, forwardRef, cloneElement, Fragment } from "react";
+import { useContext, useState, useEffect, forwardRef, cloneElement, Fragment, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 import { Backdrop, Box, DialogTitle, List, Dialog, Modal, useThemeProps } from "@mui/material";
@@ -13,7 +13,7 @@ import RoundButton from "./RoundButton";
 import RowComponent from "./RowComponent";
 import Text from "./Text";
 
-import { UPDATE_MODAL_OPEN, BULK_UPDATE } from "../reducer/Message/MessageAction";
+import { UPDATE_MODAL_OPEN, BULK_UPDATE, UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
 import BorderedBox from "./BorderedBox";
 import { useTheme } from "@mui/material";
 
@@ -62,26 +62,20 @@ const ModalContentComponent = (props) => {
 };
 
 const SpringModal = (props) => {
-  const theme = useTheme();
-  const { buttonText, text, message, modalOpen, toggleModal } = props;
   const { messageState, messageDispatch } = useContext(MessageContext);
+  // const [open, setOpen] = useState(messageState.message !== "");
 
-  const handleOpen = () => {
-    messageDispatch({
-      type: UPDATE_MODAL_OPEN,
-      modalOpen: true,
-    });
-  };
+  const open = useMemo(() => messageState.message !== "", [messageState.message]);
 
   const handleClose = () => {
     messageDispatch({
-      type: UPDATE_MODAL_OPEN,
-      modalOpen: false,
+      type: UPDATE_MESSAGE,
+      message: "",
     });
   };
 
   const handleInteractiveClose = () => {
-    const payloads = { modeOpen: true, interactive: false };
+    const payloads = { modeOpen: false, interactive: false, message: "" };
     messageDispatch({
       type: BULK_UPDATE,
       payloads: { ...payloads },
@@ -90,9 +84,9 @@ const SpringModal = (props) => {
 
   return (
     <Modal
-      open={messageState.modalOpen}
-      onClick={() => handleClose()}
-      onClose={() => {
+      open={open}
+      onClick={() => {
+        handleClose();
         messageState.onModalClick();
       }}
       aria-labelledby="transition-modal-title"

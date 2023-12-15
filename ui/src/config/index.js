@@ -24,6 +24,10 @@ const colors = {
       },
     },
   },
+  yellow: {
+    background: "#eeab0c",
+  },
+
   components: {
     options: {
       color: "black",

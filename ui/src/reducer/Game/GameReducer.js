@@ -9,14 +9,6 @@ const initialGameState = {
 const gameReducer = (state = initialGameState, action) => {
   switch (action.type) {
     case UPDATE_RESTAURANTS_FOR_GAMES:
-      // return {
-      //   ...state,
-      //   restaurants: [...action.restaurants],
-      //   onGameEndCallback:
-      //     action.onGameEndCallback == null
-      //       ? initialGameState.onGameEndCallback
-      //       : action.onGameEndCallback,
-      // };
       return {
         ...state,
         restaurants: action.payload.restaurants,

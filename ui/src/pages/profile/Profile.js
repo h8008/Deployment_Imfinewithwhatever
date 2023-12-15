@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, cloneElement, useMemo } from "react";
-import { Backdrop, Grid, styled, useTheme } from "@mui/material";
+import { Grid, styled, useTheme } from "@mui/material";
 
 import Preferences from "../../components/Preferences";
 import SideMenu from "../../components/SideMenu";
@@ -13,40 +13,17 @@ import { MessageContext } from "../../providers/MessageProvider";
 
 import quicksort from "../../utils/Quicksort";
 import Reviews from "../../components/Reviews";
-import attributes from "../../config";
-import icons from "../../icons/foods";
-
-import RandomPositions from "../../components/RandomPositions";
+import Summary from "../../components/Summary";
 import EggYolks from "../../components/Three/EggYolks";
+
+import useGetSummary from "./Hooks/useGetSummary";
 
 const ProfileComponent = styled("div")({
   height: "100vh",
   width: "100%",
-  // zIndex: -10,
-  // position: "relative",
-  // display: "flex",
-  // flexDirection: "column",
-  // justifyContent: "flex-start",
-  // backgroundColor: attributes.colors.pages.profile.background.color,
 });
 
-// const BackdropComponent = styled(Backdrop)(({ theme }) => ({
-//   height: "90vh",
-//   width: "100vw",
-//   zIndex: -1,
-//   position: "relative",
-//   backgroundColor: theme.palette.background.default,
-// }));
-
-// const DefaultStyledComponent = styled(Grid)((props) => ({
-//   height: "100%",
-//   width: "80%",
-//   backgroundPosition: "center",
-//   backgroundSize: "contain",
-//   backgroundRepeat: "no-repeat",
-// }));
-
-const DefaultComponent = (props) => {
+const DefaultComponent = ({ summary }) => {
   const style = {
     position: "relative",
     zIndex: -3,
@@ -56,6 +33,7 @@ const DefaultComponent = (props) => {
   return (
     <Grid sx={style}>
       <EggYolks />
+      <Summary width="50%" height="50%" summary={summary} />
     </Grid>
   );
 };
@@ -133,7 +111,7 @@ const useGetReviews = (email) => {
     const getReviews = async () => {
       const res = await API.UserReviews.getReviews({ email: email });
       if (res.status === "OK") {
-        setReviews({ reviews: [...res.data] });
+        setReviews([...res.data]);
       }
     };
     if (email) {
@@ -184,7 +162,7 @@ const useSortPreferences = (preferences) => {
       let dislikes = await getDislikes(preferences);
       likes = await sortObject(likes);
       dislikes = await sortObject(dislikes);
-      setSorted({ preferences: { likes, dislikes, totalDataLength: likes.length + dislikes.length } });
+      setSorted({ likes, dislikes, totalDataLength: likes.length + dislikes.length });
     };
     if (preferences.length > 0) {
       sort();
@@ -202,10 +180,18 @@ const getComponents = () => [<DefaultComponent />, <PreferencesComponent />, <Re
 const useGetComponents = (ready, componentProps) => {
   const components = useMemo(() => {
     if (ready) {
+      const curriedProps = componentProps.reduce((acc, cur, i) => {
+        const { name: key, props: val } = componentProps[i];
+        const props = {};
+        props[key] = val;
+        return [...acc, props];
+      }, []);
+
       const components = getComponents();
-      const curriedComponents = components.map((component, idx) => cloneElement(component, { ...componentProps[idx] }));
+      const curriedComponents = components.map((component, i) => cloneElement(component, { ...curriedProps[i] }));
       return curriedComponents;
     }
+    return [];
   }, [componentProps, ready]);
 
   return [components];
@@ -222,6 +208,7 @@ const useGetComponentProps = (props) => {
     props.forEach((p, i) => {
       if (p != null && cp[i] == null) {
         cp[i] = p;
+        // cp[i] = { ...p };
       }
     });
     const update = cp.filter((p, i) => p !== componentProps[i]).length > 0;
@@ -264,10 +251,16 @@ const Profile = (props) => {
   const [reviews] = useGetReviews(userState.email);
   const [preferences] = useGetPreferences(userState.email);
   const [sortedPreferences] = useSortPreferences(preferences);
-  const [componentProps] = useGetComponentProps([backdrop, sortedPreferences, reviews]);
+  const [summary] = useGetSummary({ reviews, preferences: sortedPreferences });
+  const [componentProps] = useGetComponentProps([summary, sortedPreferences, reviews]);
   const [ready] = useGetReadyState(componentProps);
-  const [components] = useGetComponents(ready, componentProps);
-  const [componentNames, setComponentNames] = useState(["Default", "Preferences", "Reviews"]);
+  // const [summary] = useGetSummary(ready, reviews, preferences);
+
+  const [componentNames, setComponentNames] = useState(["summary", "preferences", "reviews"]);
+  const [components] = useGetComponents(
+    ready,
+    componentProps.map((cp, i) => ({ name: componentNames[i], props: cp }))
+  );
   const [activeComponentIdx, setActiveComponentIdx] = useState(0);
 
   const onSelectMenuItemCallback = (idx) => {
@@ -276,7 +269,8 @@ const Profile = (props) => {
 
   return (
     <ProfileComponent data_id={"Profile-Page"}>
-      <BodyComponent>{components != null ? components[activeComponentIdx] : <DefaultComponent />}</BodyComponent>
+      {/* {summary != null && <DefaultComponent summary={summary} />} */}
+      <BodyComponent>{components.length > 0 && components[activeComponentIdx]}</BodyComponent>
       <SideMenu
         position={"absolute"}
         sx={{ zIndex: 1 }}

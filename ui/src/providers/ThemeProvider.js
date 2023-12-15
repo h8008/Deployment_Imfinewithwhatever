@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material";
-import { green, grey, red } from "@mui/material/colors";
+import { green, grey, red, yellow } from "@mui/material/colors";
 import attributes from "../config";
 
 const palette = createTheme();
@@ -28,6 +28,12 @@ const GlobalTheme = createTheme({
       }),
       light: palette.palette.augmentColor({
         color: { main: "#E48A85" },
+      }),
+    },
+    warning: {
+      main: yellow[800],
+      dark: palette.palette.augmentColor({
+        color: { main: attributes.colors.yellow.background },
       }),
     },
     success: {

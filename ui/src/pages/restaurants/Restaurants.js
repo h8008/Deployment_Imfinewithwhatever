@@ -56,22 +56,6 @@ const filterRestaurantsByBlackList = (blacklist, restaurants) => {
   return restaurants.filter((restaurant) => blacklistObject[restaurant.id] == null);
 };
 
-// const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
-//   const initializeRestaurants = useMemo(() => {
-//     if (initialRestaurants == null) return [];
-//     if (intialBlacklist.length > 0 && initialRestaurants.length > 0) {
-//       return filterRestaurantsByBlackList([...intialBlacklist], [...initialRestaurants]);
-//     }
-//     if (initialRestaurants.length > 0) {
-//       return [...initialRestaurants];
-//     }
-//     return [];
-//   }, [intialBlacklist, initialRestaurants]);
-
-//   const restaurantsData = initializeRestaurants;
-//   return [restaurantsData];
-// };
-
 const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
   const initializeRestaurants = () => {
     if (initialRestaurants == null) return [];
@@ -84,7 +68,7 @@ const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
     return [];
   };
 
-  const [restaurants, setRestaurants] = useState({});
+  const [restaurants, setRestaurants] = useState(initializeRestaurants);
   return [restaurants, setRestaurants];
 };
 
@@ -168,7 +152,7 @@ const Restaurants = (props) => {
 
   const [newRestaurants, setNewRestaurants] = useInitializeRestaurants(
     userState.preferences || [],
-    locationState.state ? locationState.state.restaurants : []
+    restaurantState.restaurantsData
   );
 
   const [restaurants] = useFetchYelpRestaurants(newRestaurants, setNewRestaurants, region);
@@ -178,7 +162,8 @@ const Restaurants = (props) => {
   const [modelOpen, setModalOpen] = useState(preference);
   const [activeRestaurantIdx, setActiveRestaurantIdx] = useState(0);
 
-  const [activeRestaurant] = useInitializeActiveRestaurant(restaurants.businesses, activeRestaurantIdx);
+  // const [activeRestaurant] = useInitializeActiveRestaurant(restaurants.businesses, activeRestaurantIdx);
+  const [activeRestaurant] = useInitializeActiveRestaurant(restaurants, activeRestaurantIdx);
   const [verdicts, setVerdicts] = useState(initializeVerdicts(restaurants.businesses, activeRestaurantIdx, preference));
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
   const [dispatchVerdicts, setDispatchVerdicts] = useState(false);
