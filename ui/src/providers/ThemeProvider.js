@@ -15,7 +15,7 @@ const GlobalTheme = createTheme({
       main: grey[600],
       contrastText: grey[400],
       light: palette.palette.augmentColor({
-        color: { main: attributes.colors.pages.profile.buttons.color },
+        color: { main: attributes.colors.grey.light },
       }),
       dark: palette.palette.augmentColor({
         color: { main: "#3B464A" },

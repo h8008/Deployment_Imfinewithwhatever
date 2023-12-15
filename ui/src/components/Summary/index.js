@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import styled from "@emotion/styled";
-import { Box, CardMedia, Grid } from "@mui/material";
+import { Box, Button, CardMedia, Grid } from "@mui/material";
 import BorderedBox from "../../ui_components/BorderedBox";
 import Text from "../../ui_components/Text";
 
 const SummaryComponent = styled(Grid)(({ children, ...otherProps }) => ({
   container: true,
+  width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
@@ -17,25 +18,9 @@ const SummaryComponent = styled(Grid)(({ children, ...otherProps }) => ({
   border: "8px black solid",
   borderRadius: "20px",
   padding: "20px",
+  ...otherProps,
+  zIndex: 3,
 }));
-
-// const SummaryComponent = ({ children, ...otherProps }) => {
-//   const style = {
-//     display: "flex",
-//     flexDirection: "column",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     position: "absolute",
-//     top: "50%",
-//     left: "50%",
-//     transform: `translate(-50%, -50%)`,
-//     borderRadius: "20px",
-//     padding: "20px",
-//     ...otherProps,
-//   };
-
-//   return <BorderedBox style={style}>{children}</BorderedBox>;
-// };
 
 const TitlesComponent = styled(Grid)(() => ({
   gridRow: true,
@@ -56,14 +41,27 @@ const ContentComponent = styled(Grid)(() => ({
 }));
 
 const ReviewComponent = ({ reviews }) => {
-  const mainText = `Based on your reviews, you like`;
+  const mainText = `Based on your reviews`;
   return <Text text={mainText} />;
 };
 
-const BubbleComponent = styled(Box)(({ children, ...otherProps }) => ({
-  radius: "50%",
+const BubbleComponent = styled(Box)(({ children, theme, ...otherProps }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "50%",
+  border: `8px red dashed`,
+  backgroundColor: theme.palette.primary.light.main,
   ...otherProps,
-  border: `8px black dashed`,
+}));
+
+const BubblesComponent = styled(Grid)((props) => ({
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+  alignItems: "center",
 }));
 
 const LikeComponent = ({ likes }) => {
@@ -71,18 +69,36 @@ const LikeComponent = ({ likes }) => {
   const bubbleDims = likes.map((like, i) => ({ width: like[1] * 15, height: like[1] * 15 }));
 
   return (
-    <Grid>
+    <Fragment>
       <Text text={mainText} />
-      {bubbleDims.map((dim, i) => (
-        <BubbleComponent width={dim.width} height={dim.height} />
-      ))}
-    </Grid>
+      <BubblesComponent>
+        {bubbleDims.map((dim, i) => (
+          <BubbleComponent width={dim.width} height={dim.height} />
+        ))}
+      </BubblesComponent>
+    </Fragment>
   );
 };
 
 const DislikeComponent = ({ dislikes }) => {
   const mainText = `You swiped right on these tastes`;
-  return <Text text={mainText} />;
+  const bubbleSx = dislikes.map((dislike, i) => ({
+    width: dislike[1] * 1.5 * 20,
+    height: dislike[1] * 1.5 * 20,
+    transform: `translateY(${i % 2 === 0 ? 2 * dislike[1] : -2 * dislike[1]}%)`,
+  }));
+  return (
+    <Grid>
+      <Text text={mainText} />
+      <BubblesComponent>
+        {bubbleSx.map((sx, i) => (
+          <BubbleComponent key={`bubble ${i}`} sx={sx}>
+            <Text text={dislikes[i]} color="red" />
+          </BubbleComponent>
+        ))}
+      </BubblesComponent>
+    </Grid>
+  );
 };
 
 const getComponents = (likes, dislikes, reviews) => {
@@ -93,29 +109,36 @@ const getComponents = (likes, dislikes, reviews) => {
   ];
 };
 
+const getComponent = (components, i) => {
+  return components[i];
+};
+
 const Summary = ({ summary, ...otherProps }) => {
   console.log("summary", summary);
   const { reviewSummary, preferenceSummary } = summary;
-  const items = ["Your Most Liked", "Your Least Favorite", "Based On The Reviews You Left"];
+  const items = ["Your Most Liked", "Your Least Favorite", "Based On Your Reviews"];
   const components = useMemo(
     () => getComponents(preferenceSummary.whitelist, preferenceSummary.blacklist, reviewSummary),
     [preferenceSummary.blacklist, preferenceSummary.whitelist, reviewSummary]
   );
+
   const [activeComponentIdx, setActiveComponentIdx] = useState(0);
+  const handleRenderActiveComponent = (i) => {
+    setActiveComponentIdx(i);
+  };
 
   return (
     <SummaryComponent {...otherProps}>
       <TitlesComponent>
         {items.map((item, i) => (
-          <BorderedBox style={{ width: "30%", borderRadius: "8px", border: "8px solid white" }}>
-            <Text text={item} color="white" key={`Summary Item ${i}`} />
-          </BorderedBox>
+          <Button sx={{ width: "30%" }} onClick={() => handleRenderActiveComponent(i)}>
+            <BorderedBox style={{ borderRadius: "8px", border: "8px solid white" }}>
+              <Text text={item} color="white" key={`Summary Item ${i}`} />
+            </BorderedBox>
+          </Button>
         ))}
       </TitlesComponent>
-      <ContentComponent>
-        {/* <BorderedBox style={{ borderRadius: "8px", border: "8px solid white" }}></BorderedBox> */}
-        {components[activeComponentIdx]}
-      </ContentComponent>
+      <ContentComponent>{getComponent(components, activeComponentIdx)}</ContentComponent>
     </SummaryComponent>
   );
 };

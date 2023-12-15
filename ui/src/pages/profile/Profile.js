@@ -25,17 +25,19 @@ const ProfileComponent = styled("div")({
 
 const DefaultComponent = ({ summary }) => {
   const style = {
-    position: "relative",
-    zIndex: -3,
     height: "90vh",
   };
 
   return (
     <Grid sx={style}>
-      <EggYolks />
-      <Summary width="50%" height="50%" summary={summary} />
+      <EggYolks zIndex={1} />
+      <Summary width="50%" height="50%" summary={summary} zIndex={1} />
     </Grid>
   );
+};
+
+const SummaryComponent = ({ summary }) => {
+  return <Summary width="50%" height="50%" summary={summary} zIndex={1} />;
 };
 
 const BodyComponent = styled(Grid)(({ theme }) => ({
@@ -48,7 +50,6 @@ const BodyComponent = styled(Grid)(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "center",
   position: "relative",
-  zIndex: -1,
   backgroundColor: theme.palette.error.dark.main,
 }));
 
