@@ -25,6 +25,7 @@ import { GameContext } from "../../providers/GameProvider";
 
 import { useStealRestaurantsFromYelp } from "../../hooks/API/Restaurants";
 import { getRestaurantsByCuisines, getRestaurantsByLocations } from "../../utils/axios/restaurants";
+import Backdrop from "@mui/material/Backdrop";
 
 const useHandleTransitionToRestaurants = (restaurants, next) => {
   const navigate = useNavigate();
@@ -80,13 +81,14 @@ const CuisineSliders = (props) => {
 };
 
 const MultipleIdeas = (props) => {
+  const theme = useTheme();
   const rowStyle = {
     width: "100%",
   };
 
   return (
     <GridRow style={rowStyle}>
-      <GameInputComponent>
+      <GameInputComponent color={theme.palette.primary.light.main}>
         <Text text={"Decide for me"} />
         <ArrowForwardIcon onClick={() => props.onMultipleIdeasCallback()} />
       </GameInputComponent>
@@ -110,8 +112,8 @@ const Components = (props) => {
       focused
       onChange={(e) => props.handleLocationChange(e)}
       sx={{
-        "& .MuiInputLabel-root": { color: theme.palette.primary.light.main },
-        border: `1px solid ${borderColor}`,
+        "& .MuiInputLabel-root": { color: theme.palette.error.light.main },
+        border: `8px solid ${borderColor}`,
         borderRadius: 2,
         height: "50px",
         display: "flex",
@@ -138,7 +140,7 @@ const Components = (props) => {
       {props.components.map((comp, index) => (
         <GridRow columns={12} columnGap={20} style={rowStyle} color="primary">
           <GridItem style={{ width: "20%" }}>
-            <Text text={comp} color={theme.palette.primary.light.main} />
+            <Text text={comp} color={"white"} />
           </GridItem>
           <GridItem style={{ width: "80%", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
             {components[index]}
@@ -149,11 +151,20 @@ const Components = (props) => {
   );
 };
 
+const BackdropComponent = styled(Grid)(({ theme }) => ({
+  container: true,
+  backgroundColor: "grey",
+  height: "100vh",
+  width: "100vw",
+  zIndex: -2,
+  position: "relative",
+}));
+
 const MainComponent = styled(Grid)(({ theme }) => ({
   container: true,
-  backgroundColor: theme.palette.background.default,
-  position: "relative",
-  height: "90vh",
+  backgroundColor: theme.palette.warning.main,
+  // position: "relative",
+  height: "85%",
   width: "75vw",
   margin: "auto",
   display: "flex",
@@ -162,22 +173,27 @@ const MainComponent = styled(Grid)(({ theme }) => ({
   alignItems: "center",
   rowGap: 50,
   invisible: false,
+  position: "absolute",
+  zIndex: "1",
+  top: "50%",
+  left: "50%",
+  transform: `translate(-50%, -50%)`,
 }));
 
-const GameInputComponent = styled(Box)(({ theme, chidlren, ...otherProps }) => ({
-  color: theme.palette.primary.light.main,
+const GameInputComponent = styled(Box)(({ theme, color, children, ...otherProps }) => ({
+  color: "white",
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
-  border: "2px solid black",
+  border: `8px solid ${color}`,
   borderRadius: "5px",
   height: "50px",
+  ...otherProps,
 }));
 
 function Main(props) {
   console.log("Main Page");
-  const navigate = useNavigate();
 
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
   const cuisines = [
@@ -233,61 +249,16 @@ function Main(props) {
         return;
       }
 
-      // await restaurantDispatch({
-      //   type: UPDATE_CUISINE,
-      //   cuisines: selectedCuisines,
-      // });
-
-      // await restaurantDispatch({
-      //   type: UPDATE_LOCATION,
-      //   location: location,
-      // });
-
-      // const location_params = { term: "restaurant", location: location };
-      // const restaurant_by_location_response = await API.YelpAPI.getRestaurantsByLocation(location_params);
-      // let restaurantsByLocationData = {};
-      // if (restaurant_by_location_response.status === "OK") {
-      //   restaurantsByLocationData = await {
-      //     ...restaurantsByLocationData,
-      //     ...restaurant_by_location_response.restaurantsData,
-      //   };
-      // }
-
-      // const cuisin_params = {
-      //   term: "food",
-      //   location: location,
-      //   categories: await getFoodPreferences(selectedCuisines),
-      // };
-      // let restaurant_by_cuisine_response = await API.YelpAPI.getRestaurantsByCuisine(cuisin_params);
-      // if (restaurant_by_cuisine_response.status === "OK") {
-      //   const aggregatedRestaurantData = await {
-      //     ...restaurantsByLocationData,
-      //     ...restaurant_by_cuisine_response.restaurantsData,
-      //   };
-
-      //   const restaurants = aggregatedRestaurantData.businesses;
-      //   setRestaurants(restaurants);
-
-      //   await restaurantDispatch({
-      //     type: UPDATE_RESTAURANTS,
-      //     payload: {
-      //       restaurantsData: restaurants,
-      //       location: location,
-      //     },
-      //   });
-      // }
-
       const locationRes = await getRestaurantsByLocations(location);
       const cuisinesRes = await getRestaurantsByCuisines(selectedCuisines, location);
       const aggregatedRestaurantData = await {
         ...locationRes,
         ...cuisinesRes,
       };
-      // const restaurants = aggregatedRestaurantData.businesses;
+
       const restaurants = aggregatedRestaurantData;
       setRestaurants(restaurants);
       setNext(next);
-      // console.log("restaurants", aggregatedRestaurantData);
 
       await restaurantDispatch({
         type: UPDATE_CUISINE,
@@ -312,23 +283,26 @@ function Main(props) {
   };
 
   return (
-    <MainComponent data_id="main-page">
-      {
-        <Components
-          components={components}
-          cuisines={cuisines}
-          cuisine={cuisines[cuisineIdx]}
-          handleLocationChange={handleLocationChange}
-          handleCuisinesChange={handleCuisinesChange}
-          games={games}
-          onMultipleIdeasCallback={handleDecideForMeButtonClick}
-          restaurantDispatch={restaurantDispatch}
-        />
-      }
-      <RoundButton onClick={handleGoButtonClick}>
-        <Text text="GO" />
-      </RoundButton>
-    </MainComponent>
+    <Fragment>
+      <BackdropComponent />
+      <MainComponent data_id="main-page">
+        {
+          <Components
+            components={components}
+            cuisines={cuisines}
+            cuisine={cuisines[cuisineIdx]}
+            handleLocationChange={handleLocationChange}
+            handleCuisinesChange={handleCuisinesChange}
+            games={games}
+            onMultipleIdeasCallback={handleDecideForMeButtonClick}
+            restaurantDispatch={restaurantDispatch}
+          />
+        }
+        <RoundButton onClick={handleGoButtonClick} border={`6px white solid`}>
+          <Text text="GO" />
+        </RoundButton>
+      </MainComponent>
+    </Fragment>
   );
 }
 

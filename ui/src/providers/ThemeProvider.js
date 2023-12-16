@@ -24,7 +24,7 @@ const GlobalTheme = createTheme({
     error: {
       main: red.A100,
       dark: palette.palette.augmentColor({
-        color: { main: attributes.colors.pages.profile.background.red },
+        color: { main: attributes.colors.red.dark },
       }),
       light: palette.palette.augmentColor({
         color: { main: "#E48A85" },

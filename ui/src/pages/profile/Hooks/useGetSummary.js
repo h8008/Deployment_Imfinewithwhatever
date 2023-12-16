@@ -68,10 +68,10 @@ const sumUpPreferences = async (preferences) => {
 
 const sumUpReviews = (reviews) => {
   const numReviews = reviews.length;
-  const numGoodReviews = filterReviews(reviews, { qualifier: ">=", key: "rating", val: "6" });
-  const numBadReviews = filterReviews(reviews, { qualifier: "<=", key: "rating", val: "4" });
+  const goodReviews = filterReviews(reviews, { qualifier: ">=", key: "rating", val: "6" });
+  const badReviews = filterReviews(reviews, { qualifier: "<=", key: "rating", val: "4" });
   const neutralReviews = filterReviews(reviews, { qualifier: "=", key: "rating", val: "5" });
-  return { numReviews, numGoodReviews, numBadReviews, neutralReviews };
+  return { numReviews, goodReviews, badReviews, neutralReviews };
 };
 
 const useGetSummary = (props) => {

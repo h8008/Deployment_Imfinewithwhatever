@@ -56,20 +56,26 @@ const filterRestaurantsByBlackList = (blacklist, restaurants) => {
   return restaurants.filter((restaurant) => blacklistObject[restaurant.id] == null);
 };
 
-const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
-  const initializeRestaurants = () => {
-    if (initialRestaurants == null) return [];
-    if (intialBlacklist.length > 0 && initialRestaurants.length > 0) {
-      return filterRestaurantsByBlackList([...intialBlacklist], [...initialRestaurants]);
-    }
-    if (initialRestaurants.length > 0) {
-      return [...initialRestaurants];
-    }
-    return [];
-  };
+// const useInitializeRestaurants = (intialBlacklist, initialRestaurants) => {
+//   const initializeRestaurants = () => {
+//     if (initialRestaurants == null) return [];
+//     if (intialBlacklist.length > 0 && initialRestaurants.length > 0) {
+//       return filterRestaurantsByBlackList([...intialBlacklist], [...initialRestaurants]);
+//     }
+//     if (initialRestaurants.length > 0) {
+//       return [...initialRestaurants];
+//     }
+//     return [];
+//   };
 
-  const [restaurants, setRestaurants] = useState(initializeRestaurants);
-  return [restaurants, setRestaurants];
+//   const [restaurants, setRestaurants] = useState(initializeRestaurants);
+//   return [restaurants, setRestaurants];
+// };
+
+const useInitializeRestaurants = (sources) => {
+  const restaurants = useMemo(() => sources.filter((src, i) => src.length > 0), [sources]);
+
+  return restaurants;
 };
 
 const useInitializeActiveRestaurant = (restaurants, activeRestaurantIdx) => {
@@ -149,13 +155,13 @@ const Restaurants = (props) => {
   // const blacklistData = userState.preferences || [];
   const location = restaurantState.location;
   const region = restaurantState.region;
+  const [restaurantsFromServer] = useFetchYelpRestaurants(restaurantState.restaurantData, region);
 
-  const [newRestaurants, setNewRestaurants] = useInitializeRestaurants(
-    userState.preferences || [],
-    restaurantState.restaurantsData
-  );
-
-  const [restaurants] = useFetchYelpRestaurants(newRestaurants, setNewRestaurants, region);
+  const [restaurants] = useInitializeRestaurants([
+    locationState.state != null ? locationState.state.restaurants : [],
+    restaurantState.restaurantsData != null ? restaurantState.restaurantsData : [],
+    restaurantsFromServer != null ? restaurantsFromServer : [],
+  ]);
 
   const [message, setMessage] = useState(initializeMessage());
   const [preference, setPreference] = useState(null);
@@ -164,7 +170,7 @@ const Restaurants = (props) => {
 
   // const [activeRestaurant] = useInitializeActiveRestaurant(restaurants.businesses, activeRestaurantIdx);
   const [activeRestaurant] = useInitializeActiveRestaurant(restaurants, activeRestaurantIdx);
-  const [verdicts, setVerdicts] = useState(initializeVerdicts(restaurants.businesses, activeRestaurantIdx, preference));
+  const [verdicts, setVerdicts] = useState(initializeVerdicts(restaurants, activeRestaurantIdx, preference));
   const [showActiveRestaurantLocation, setShowActiveRestaurantLocation] = useState(false);
   const [dispatchVerdicts, setDispatchVerdicts] = useState(false);
 

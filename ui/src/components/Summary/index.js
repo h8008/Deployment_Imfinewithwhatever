@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { Box, Button, CardMedia, Grid } from "@mui/material";
 import BorderedBox from "../../ui_components/BorderedBox";
 import Text from "../../ui_components/Text";
+import BarChart from "../BarChart/A_Better_Barchart";
 
 const SummaryComponent = styled(Grid)(({ children, ...otherProps }) => ({
   container: true,
@@ -42,7 +43,28 @@ const ContentComponent = styled(Grid)(() => ({
 
 const ReviewComponent = ({ reviews }) => {
   const mainText = `Based on your reviews`;
-  return <Text text={mainText} />;
+  const { badReviews, goodReviews, neutralReviews } = reviews;
+  const data = useMemo(
+    () =>
+      Object.values(reviews)
+        .map((data, i) => {
+          return i > 0 ? { name: Object.keys(reviews)[i], data: data.length } : null;
+        })
+        .filter((d) => d != null),
+    [reviews]
+  );
+  const chartProps = {
+    chartData: data,
+    totalDataLength: data.length,
+    color: "white",
+  };
+
+  return (
+    <Fragment>
+      <Text text={mainText} />
+      <BarChart {...chartProps} />
+    </Fragment>
+  );
 };
 
 const BubbleComponent = styled(Box)(({ children, theme, ...otherProps }) => ({
@@ -51,13 +73,14 @@ const BubbleComponent = styled(Box)(({ children, theme, ...otherProps }) => ({
   justifyContent: "center",
   alignItems: "center",
   borderRadius: "50%",
-  border: `8px red dashed`,
+  border: `2px red dashed`,
   backgroundColor: theme.palette.primary.light.main,
   ...otherProps,
 }));
 
 const BubblesComponent = styled(Grid)((props) => ({
   width: "100%",
+  height: "90%",
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-evenly",
@@ -66,14 +89,21 @@ const BubblesComponent = styled(Grid)((props) => ({
 
 const LikeComponent = ({ likes }) => {
   const mainText = `You swiped left on these tastes`;
-  const bubbleDims = likes.map((like, i) => ({ width: like[1] * 15, height: like[1] * 15 }));
+
+  const bubbleSx = likes.map((dislike, i) => ({
+    width: dislike[1] * 1.5 * 25,
+    height: dislike[1] * 1.5 * 25,
+    transform: `translateY(${i % 2 === 0 ? 2 * dislike[1] : -2 * dislike[1]}%)`,
+  }));
 
   return (
     <Fragment>
       <Text text={mainText} />
       <BubblesComponent>
-        {bubbleDims.map((dim, i) => (
-          <BubbleComponent width={dim.width} height={dim.height} />
+        {bubbleSx.map((sx, i) => (
+          <BubbleComponent key={`bubble ${i}`} sx={sx}>
+            <Text text={likes[i]} color="red" />
+          </BubbleComponent>
         ))}
       </BubblesComponent>
     </Fragment>
@@ -116,6 +146,9 @@ const getComponent = (components, i) => {
 const Summary = ({ summary, ...otherProps }) => {
   console.log("summary", summary);
   const { reviewSummary, preferenceSummary } = summary;
+
+  console.log("review summaries", reviewSummary);
+
   const items = ["Your Most Liked", "Your Least Favorite", "Based On Your Reviews"];
   const components = useMemo(
     () => getComponents(preferenceSummary.whitelist, preferenceSummary.blacklist, reviewSummary),

@@ -24,6 +24,10 @@ const colors = {
       },
     },
   },
+  red: {
+    ligth: "#dddddd",
+    dark: "#ff0000",
+  },
   yellow: {
     background: "#eeab0c",
   },

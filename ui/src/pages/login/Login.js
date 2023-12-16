@@ -224,7 +224,7 @@ const Login = (props) => {
   };
 
   // useNavigation("/", authenticated === true);
-  useNavigator({ dest: "/", cond: authenticated === true });
+  useNavigator({ dest: "/Profile", cond: authenticated === true });
 
   return (
     <LoginComponent data_id="login-component">

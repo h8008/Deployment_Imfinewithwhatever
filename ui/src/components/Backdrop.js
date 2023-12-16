@@ -5,23 +5,28 @@ import { styled } from "@mui/material";
 import { useTheme } from "@mui/material";
 import { Backdrop as MUIBackdrop } from "@mui/material";
 
-const BackDropComponent = styled(MUIBackdrop)({
-  backgroundColor: attributes.backgroundColor,
-  height: "100vh",
-  width: "100%",
+const BackDropComponent = styled(MUIBackdrop)((props) => ({
+  backgroundColor: props.backgroundColor,
+  height: props.height ? props.height : "90vh",
+  width: props.width ? props.width : "100vw",
   margin: "auto",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
   alignItems: "center",
-  zIndex: -1,
-  // position: "relative",
-});
+  zIndex: -2,
+  position: "relative",
+}));
 
 const Backdrop = (props) => {
   const theme = useTheme();
+  const { backgroundColor } = props;
 
-  return <BackDropComponent open={true}>{props.children}</BackDropComponent>;
+  return (
+    <BackDropComponent backgroundColor={backgroundColor} open={true}>
+      {props.children}
+    </BackDropComponent>
+  );
 };
 
 export default Backdrop;

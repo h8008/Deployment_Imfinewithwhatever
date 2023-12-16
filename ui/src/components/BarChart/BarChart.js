@@ -1,87 +1,44 @@
-import React, { Fragment, useEffect } from "react";
-import { useState } from "react";
-import { styled, Grid } from "@mui/material";
-import CurvedArrowLine from "../../ui_components/CurveArrowedLine";
+import { useRef, useEffect } from "react";
 import * as d3 from "d3";
-
-// import rd3 from "react-d3-library";
-import "./BarChart.css";
-
-const initializeTextVisible = (len) => new Array(len).fill(false).map((el) => el);
-const labelStyle = {
-  height: "50px",
-  width: "25px",
-  border: `1px solid black`,
-  backgroundColor: "blue",
-};
-const dataStyle = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-};
+import rd3 from "react-d3-library";
+import node from "d3file";
+import { height } from "@mui/system";
+const RD3Component = rd3.Component;
 
 const BarChart = (props) => {
-  const { chartData, totalDataLength, color, height, width } = props;
-  const [data, setData] = useState(chartData);
-  const [textVisible, setTextVisible] = useState(initializeTextVisible(chartData.length));
+  const ref = useRef();
+  const { data, width, height } = props;
 
-  const barWidth = 25;
-  const chartWidth = data.length * (barWidth + 5);
-  const xScale = d3.scaleLinear().domain([0, data.length]).range([0, chartWidth]);
-  const yScale = (d) => 10 * d;
-  // const xOffset = window.innerWidth / 2 - chartWidth / 2;
-  const xOffset = 0;
+  useEffect(() => {
+    const svg = d3
+      .select(ref.current)
+      .append("svg")
+      //   .attr("width", width + margin.left + margin.right)
+      //   .attr("height", height + margin.top + margin.bottom)
+      .attr("width")
+      .attr("height")
+      .append("g");
+    //   .attr("transform", `translate(${margin.left},${margin.top})`);
+    const x = d3
+      .scaleBand()
+      .range([0, width])
+      .domain(data.map((d) => d.reviews))
+      .padding(0.2);
 
-  const maxHeight = yScale(totalDataLength);
+    svg
+      .append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("transform", "translate(-10,0)rotate(-45)")
+      .style("text-anchor", "end");
 
-  console.log(data);
+    // Add Y axis
+    const y = d3.scaleLinear().domain([0, 13000]).range([height, 0]);
+    svg.append("g").call(d3.axisLeft(y));
+  }, []);
 
-  const handleSetVisible = (idx) => {
-    const v = initializeTextVisible(data.length);
-    v[idx] = true;
-    setTextVisible(v);
-  };
-
-  return (
-    <Fragment>
-      <svg
-        height={height}
-        width={width}
-        style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center" }}
-      >
-        {data.map((d, idx) => {
-          const barHeight = yScale(d[1]);
-          const x = xScale(idx) + xOffset;
-          const y = maxHeight - barHeight;
-          const arrowSrc = y + barHeight;
-          const arrowDest = y + barHeight + 50;
-          return (
-            <Fragment>
-              <g
-                key={idx}
-                style={dataStyle}
-                width={barWidth}
-                height={maxHeight}
-                transform={`translate(${x}, ${0})`}
-                onMouseEnter={() => handleSetVisible(idx)}
-              >
-                <rect width={barWidth} height={y} fill={"black"} />
-                <rect width={barWidth} transform={`translate(${0}, ${y})`} height={barHeight} fill={color} />
-              </g>
-              <CurvedArrowLine
-                color={color}
-                visible={textVisible[idx]}
-                data={d[0]}
-                start={{ x, y: arrowSrc }}
-                stop={{ x: x - 100, y: arrowDest }}
-              />
-            </Fragment>
-          );
-        })}
-      </svg>
-    </Fragment>
-  );
+  return <svg width={width} height={height} id="barchart" ref={ref} />;
 };
 
 export default BarChart;

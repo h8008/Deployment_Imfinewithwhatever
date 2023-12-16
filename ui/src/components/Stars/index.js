@@ -6,8 +6,8 @@ const Stars = (props) => {
   const [stars, setStars] = useState([Math.round(rating / 2)]);
 
   const readonly = props.onBarCellHoverCallback && props.onBarCellClickCallback ? false : true;
-  const onBarCellHoverCallback = readonly ? props.onBarCellHoverCallback : () => {};
-  const onBarCellClickCallback = readonly ? props.onBarCellClickCallback : () => {};
+  const onBarCellHoverCallback = readonly ? () => {} : props.onBarCellHoverCallback;
+  const onBarCellClickCallback = readonly ? () => {} : props.onBarCellClickCallback;
 
   return (
     <Rating
