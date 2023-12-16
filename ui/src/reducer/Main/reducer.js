@@ -49,7 +49,7 @@ const reducer = (state = initialState, action) => {
     case UPDATE_RESTAURANTS: {
       newState = {
         ...newState,
-        restaurantsData: [...action.payload.restaurantsData],
+        restaurantsData: [...action.payload.restaurants],
         region: action.payload.region ? action.payload.region : newState.region,
       };
 

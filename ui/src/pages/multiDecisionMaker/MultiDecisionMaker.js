@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FormControl, Grid, Tabs, Tab } from "@mui/material";
 import { Scrollbar } from "react-scrollbars-custom";
@@ -19,6 +19,7 @@ import { GameContext } from "../../providers/GameProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 import { UPDATE_RESTAURANTS_FOR_GAMES } from "../../reducer/Game/GameActions";
 import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
+import { useFetchYelpRestaurants } from "../../hooks/API/Restaurants";
 
 const GridRowStyle = (display) => {
   const newdisplay =
@@ -84,7 +85,7 @@ const RestaurantsInput = (props) => {
       <RowComponent>
         <Text text={"Enter Restaurants"} />
       </RowComponent>
-      <Scrollbar style={{ width: 900, height: 500 }}>
+      <Scrollbar style={{ width: 700, height: 300 }}>
         <RestaurantsInputComponent autoFocus={true} rowGap={20} data_id={"restaurant-input-component"}>
           <Dropdown inputs={restaurantInputs} options={restaurants} handleChange={handleChange} />
         </RestaurantsInputComponent>
@@ -123,17 +124,45 @@ const GamesInputComponent = (props) => {
   );
 };
 
+const BackdropComponent = styled(Grid)(({ theme }) => ({
+  container: true,
+  backgroundColor: "grey",
+  height: "100vh",
+  width: "100vw",
+  zIndex: -2,
+  position: "relative",
+}));
+
+const ContentComponent = styled(Grid)(({ theme }) => ({
+  container: true,
+  backgroundColor: theme.palette.warning.main,
+  height: "90%",
+  width: "75vw",
+  margin: "auto",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  invisible: false,
+  position: "absolute",
+  zIndex: "1",
+  top: "50%",
+  left: "50%",
+  transform: `translate(-50%, -50%)`,
+}));
+
 // For the benefit of easily adding additional styles to the default mui components
 // by using the styled function
-const MultiDecisionMakerComponent = styled(Grid)(() => ({
+const MultiDecisionMakerComponent = styled(Grid)(({ children, theme, ...otherProps }) => ({
   container: true,
   rowGap: 20,
-  height: "90vh",
+  height: "100vh",
   width: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-evenly",
   alignItems: "flex-start",
+  ...otherProps,
 }));
 
 const createInitialRestaurants = (num) => {
@@ -142,19 +171,49 @@ const createInitialRestaurants = (num) => {
     .map(() => [{}]);
 };
 
+const useIntializeOptions = (initialOptions) =>
+  useMemo(() => (initialOptions ? [initialOptions] : []), [initialOptions]);
+
+const useLocationState = () => {
+  const location = useLocation();
+  const restaurants = useMemo(
+    () => (location.state && location.state.restaurants ? location.state.restaurants : {}),
+    [location.state]
+  );
+  return restaurants;
+};
+
+const useInitializeRestaurants = (sources) => {
+  // const restaurants = useMemo(() => sources.filter((src, i) => src.length > 0), [sources]);
+
+  const filtered = sources.filter((src) => src.length > 0);
+  const restaurants = useMemo(() => (filtered.length > 0 ? filtered : [{ businesses: [] }]), [filtered]);
+
+  return restaurants[0];
+};
+
 const MultiDecisionMaker = (props) => {
   const games = attributes.games.names;
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const { messageState, messageDispatch } = useContext(MessageContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
   const { gameState, gameDispatch } = useContext(GameContext);
 
-  const { restaurants } = location.state;
+  const sourceOne = useLocationState();
+  const sourceTwo = restaurantState.restaurantsData;
+  const sourceThree = useFetchYelpRestaurants(sourceOne);
+
+  const restaurants = useInitializeRestaurants([
+    sourceOne,
+    sourceTwo != null ? sourceTwo : [],
+    sourceThree != null ? sourceThree : [],
+  ]);
 
   const [numRestaurants, setNumRestaurants] = useState(3);
   const [restaurantInputs, setRestaurantInputs] = useState(createInitialRestaurants(numRestaurants));
+  const [restaurantOptions] = useIntializeOptions(restaurants);
   const [selectedGame, setSelectedGame] = useState("");
   const [checked, setChecked] = useState(games.map(() => false));
 
@@ -242,22 +301,25 @@ const MultiDecisionMaker = (props) => {
 
   return (
     <MultiDecisionMakerComponent>
-      <RestaurantsInput
-        flex={"70%"}
-        restaurantInputs={restaurantInputs}
-        handleChange={handleRestaurantChange}
-        handleAddRestaurantInput={handleAddRestaurantInput}
-        handleRemoveRestaurantInput={handleRemoveRestaurantInput}
-        restaurants={restaurants}
-      />
-      <GamesInputComponent flex={"20%"} games={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
-      <RowComponent>
-        <RowComponent display={{ justifyContent: "center" }}>
-          <RoundButton onClick={handleGoButtonClick}>
-            <Text text="Go!" />
-          </RoundButton>
+      <BackdropComponent />
+      <ContentComponent>
+        <RestaurantsInput
+          flex={"70%"}
+          restaurantInputs={restaurantInputs}
+          handleChange={handleRestaurantChange}
+          handleAddRestaurantInput={handleAddRestaurantInput}
+          handleRemoveRestaurantInput={handleRemoveRestaurantInput}
+          restaurants={restaurantOptions}
+        />
+        <GamesInputComponent flex={"20%"} games={games} checked={checked} onSelectGameCallback={onSelectGameCallback} />
+        <RowComponent>
+          <RowComponent display={{ justifyContent: "center" }}>
+            <RoundButton onClick={handleGoButtonClick}>
+              <Text text="Go!" />
+            </RoundButton>
+          </RowComponent>
         </RowComponent>
-      </RowComponent>
+      </ContentComponent>
     </MultiDecisionMakerComponent>
   );
 };

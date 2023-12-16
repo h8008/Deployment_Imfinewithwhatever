@@ -151,6 +151,14 @@ const Components = (props) => {
   );
 };
 
+const MainComponent = styled(Grid)(() => ({
+  height: "90vh",
+  width: "100vw",
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "center",
+}));
+
 const BackdropComponent = styled(Grid)(({ theme }) => ({
   container: true,
   backgroundColor: "grey",
@@ -160,11 +168,10 @@ const BackdropComponent = styled(Grid)(({ theme }) => ({
   position: "relative",
 }));
 
-const MainComponent = styled(Grid)(({ theme }) => ({
+const ContentComponent = styled(Grid)(({ theme }) => ({
   container: true,
   backgroundColor: theme.palette.warning.main,
-  // position: "relative",
-  height: "85%",
+  height: "90%",
   width: "75vw",
   margin: "auto",
   display: "flex",
@@ -283,9 +290,9 @@ function Main(props) {
   };
 
   return (
-    <Fragment>
+    <MainComponent>
       <BackdropComponent />
-      <MainComponent data_id="main-page">
+      <ContentComponent data_id="main-page">
         {
           <Components
             components={components}
@@ -301,8 +308,8 @@ function Main(props) {
         <RoundButton onClick={handleGoButtonClick} border={`6px white solid`}>
           <Text text="GO" />
         </RoundButton>
-      </MainComponent>
-    </Fragment>
+      </ContentComponent>
+    </MainComponent>
   );
 }
 

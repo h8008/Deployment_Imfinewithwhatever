@@ -36,9 +36,9 @@ const DefaultComponent = ({ summary }) => {
   );
 };
 
-const SummaryComponent = ({ summary }) => {
-  return <Summary width="50%" height="50%" summary={summary} zIndex={1} />;
-};
+// const SummaryComponent = ({ summary }) => {
+//   return <Summary width="50%" height="50%" summary={summary} zIndex={1} />;
+// };
 
 const BodyComponent = styled(Grid)(({ theme }) => ({
   container: true,
@@ -63,14 +63,14 @@ const ReviewsStyledComponent = styled(Box)({
   height: "100%",
 });
 
-const PreferencesStyledComponent = styled(Grid)({
-  container: true,
-  gridRow: true,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-});
+// const PreferencesStyledComponent = styled(Grid)({
+//   container: true,
+//   gridRow: true,
+//   display: "flex",
+//   flexDirection: "column",
+//   justifyContent: "center",
+//   alignItems: "center",
+// });
 
 const ReviewsComponent = (props) => {
   const { reviews } = props;
@@ -172,9 +172,9 @@ const useSortPreferences = (preferences) => {
   return [sorted];
 };
 
-const getActiveComponent = (activeComponentIdx, components) => {
-  return components[activeComponentIdx];
-};
+// const getActiveComponent = (activeComponentIdx, components) => {
+//   return components[activeComponentIdx];
+// };
 
 const getComponents = () => [<DefaultComponent />, <PreferencesComponent />, <ReviewsComponent />];
 
@@ -270,7 +270,6 @@ const Profile = (props) => {
 
   return (
     <ProfileComponent data_id={"Profile-Page"}>
-      {/* {summary != null && <DefaultComponent summary={summary} />} */}
       <BodyComponent>{components.length > 0 && components[activeComponentIdx]}</BodyComponent>
       <SideMenu
         position={"absolute"}

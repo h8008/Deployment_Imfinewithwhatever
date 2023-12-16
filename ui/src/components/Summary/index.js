@@ -43,15 +43,15 @@ const ContentComponent = styled(Grid)(() => ({
 
 const ReviewComponent = ({ reviews }) => {
   const mainText = `Based on your reviews`;
-  const { badReviews, goodReviews, neutralReviews } = reviews;
+  const names = useMemo(() => ["", "Bad Reviews", "Good Reviews", "Neutral Reviews"], []);
   const data = useMemo(
     () =>
       Object.values(reviews)
         .map((data, i) => {
-          return i > 0 ? { name: Object.keys(reviews)[i], data: data.length } : null;
+          return i > 0 ? { name: names[i], data: data.length } : null;
         })
         .filter((d) => d != null),
-    [reviews]
+    [names, reviews]
   );
   const chartProps = {
     chartData: data,

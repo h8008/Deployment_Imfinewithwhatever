@@ -15,32 +15,32 @@ const DropdownItemComponent = styled(Grid)((props) => ({
   gridRow: true,
 }));
 
-const MenuItemComponent = styled(Grid)((props) => ({
-  gridRow: true,
-}));
+// const MenuItemComponent = styled(Grid)((props) => ({
+//   gridRow: true,
+// }));
 
-const initializeStyle = (num) =>
-  Array(num)
-    .fill(true)
-    .map(() => ({ backgroundColor: "white" }));
+const initializeStyle = (ref) =>
+  ref
+    ? Array(ref.length)
+        .fill(true)
+        .map(() => ({ backgroundColor: "white" }))
+    : [];
 
 const Options = (props) => {
   const { options, handleChange, slot } = props;
   const [value, setValue] = useState("");
-  const [style, setStyle] = useState(() => initializeStyle(options.length));
+  const [style, setStyle] = useState(() => initializeStyle(options));
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleSelect = (e) => {
-    const index = slot;
+    const index = e.target.value;
     const value = selectedOption;
     setValue(index);
-    handleChange(index, value);
+    handleChange(slot, value);
   };
 
   const handleHover = (idx, option) => {
     setSelectedOption(option);
-    // const newStyle = style.map((s, i) => (i === idx ? { ...s, backgroundColor: "red" } : { ...s }));
-    // setStyle(newStyle);
   };
 
   return (
@@ -71,10 +71,7 @@ const Options = (props) => {
                   }}
                   value={index}
                   onMouseEnter={() => handleHover(index, option)}
-                  // disableGutters={true}
-                  // style={{ backgroundColor: "transparent"}}
                 >
-                  {/* <Text style={{ width: "100%", backgroundColor: "black", margin: "0px" }} text={option.name} /> */}
                   {option.name}
                 </MenuItem>
               );

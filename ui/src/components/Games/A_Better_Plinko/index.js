@@ -27,7 +27,7 @@ const useHandleDispatchMessage = (message, onModalClick) => {
   }
 };
 
-const useHandleDispatchChoice = (choice) => {
+const useHandleDispatchChoice = (choice, setRun) => {
   const { restaurantDispatch } = useContext(RestaurantsContext);
   if (choice) {
     restaurantDispatch({
@@ -36,6 +36,7 @@ const useHandleDispatchChoice = (choice) => {
         restaurants: [choice],
       },
     });
+    setRun(false);
   }
 };
 
@@ -51,6 +52,7 @@ const Plinko = ({ children, ...otherProps }) => {
   const [choice, setChoice] = useState(null);
   const [next, setNext] = useState(null);
   const [shouldNavigate, setShouldNavigate] = useState(false);
+  const [run, setRun] = useState(true);
 
   const handleGameEnd = async (selected) => {
     const choice = restaurants[selected];
@@ -60,7 +62,7 @@ const Plinko = ({ children, ...otherProps }) => {
     setNext("/Restaurants");
   };
 
-  useHandleDispatchChoice(choice);
+  useHandleDispatchChoice(choice, setRun);
   useHandleDispatchMessage(message, () => setShouldNavigate(true));
   useHandleNavigate(shouldNavigate, next);
 
@@ -76,6 +78,7 @@ const Plinko = ({ children, ...otherProps }) => {
       slots={restaurants}
       theme={theme}
       box={boxRef}
+      run={run}
       canvas={canvasRef}
       {...otherProps}
     />
@@ -86,6 +89,7 @@ class PlinkoComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      run: props.run,
       slots: props.slots,
       bucket: {},
       dests: [],
@@ -134,7 +138,7 @@ class PlinkoComponent extends Component {
 
   async bound(color, num = 7) {
     const totalSize = config.worldWidth;
-    const numBuckets = num - 1;
+    const numBuckets = num;
     const bucketSize = (totalSize - num * config.barWidth) / numBuckets;
     const promises = Array(num)
       .fill()
@@ -275,7 +279,8 @@ class PlinkoComponent extends Component {
           const prevSlotPos = curDestIdx === 0 ? 0 : buckets[curDestIdx - 1].width;
           const curSlotPos = buckets[curDestIdx].width;
           if (prevSlotPos <= slotPos && curSlotPos >= slotPos) {
-            slotIdx = curDestIdx - 1;
+            // slotIdx = curDestIdx - 1;
+            slotIdx = curDestIdx;
           }
           return slotIdx;
         }, 0);
@@ -304,7 +309,6 @@ class PlinkoComponent extends Component {
         style={{
           width: "100vw",
           height: "100vh",
-          backgroundColor: "red",
         }}
       >
         <canvas ref={this.canvas} />

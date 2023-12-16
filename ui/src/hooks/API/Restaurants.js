@@ -27,7 +27,7 @@ const useFetchYelpRestaurants = (newRestaurants, region) => {
     if (newRestaurants == null || Object.keys(newRestaurants).length === 0) fetch();
   }, [region, newRestaurants]);
 
-  return [restaurants];
+  return restaurants;
 };
 
 const useSelectRestaurantsByLocation = (allRestaurants, region) => {

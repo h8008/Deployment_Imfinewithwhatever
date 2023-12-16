@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useMemo } from "react";
 
 import backdropOne from "../Assets/Profiles/erik-mclean-kPYQyUvjS4w-unsplash.jpg";
 import backdropTwo from "../Assets/Profiles/tungsten-rising-DaOE1R832Uc-unsplash.jpg";
@@ -29,13 +29,24 @@ import { TbMeat } from "react-icons/tb";
 import { LuBeef } from "react-icons/lu";
 
 const AssetsContext = createContext();
+const icons = require.context("../Assets/icons", true);
+const getIcons = () => {
+  const iconList = icons.keys().map((icon) => icons(icon));
+  return iconList;
+};
+
+console.log("icons", icons);
 
 const AssetsProvider = (props) => {
-  const [assets, setAssets] = useState({
-    backdrops: [backdropFour, backdropTwo, backdropOne, backdropThree, backdropFive, backdropSix],
-  });
+  const assets = useMemo(
+    () => ({
+      backdrops: [backdropFour, backdropTwo, backdropOne, backdropThree, backdropFive, backdropSix],
+      icons: getIcons(),
+    }),
+    []
+  );
 
-  return <AssetsContext.Provider value={{ assets, setAssets }}>{props.children}</AssetsContext.Provider>;
+  return <AssetsContext.Provider value={{ assets }}>{props.children}</AssetsContext.Provider>;
 };
 
 export { AssetsContext, AssetsProvider };

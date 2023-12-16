@@ -32,6 +32,7 @@ import Menu from "./components/Menu";
 
 import GlobalTheme from "./providers/ThemeProvider";
 import BackgroundDispatcher from "./wrappers/BackgroundDispatcher";
+import Backdrop from "./components/Backdrop";
 
 function App() {
   return (
@@ -45,9 +46,7 @@ function App() {
                 <UseHydrateWrapper>
                   <GameProvider>
                     <div className="App">
-                      {/* <Backdrop> */}
                       <Router>
-                        {/* <Navigation /> */}
                         <Menu />
                         <SpringModal />
                         <BackgroundDispatcher />
@@ -64,7 +63,6 @@ function App() {
                           <Route exact path="/Games/Wheel" element={<Wheel />} />
                         </Routes>
                       </Router>
-                      {/* </Backdrop> */}
                     </div>
                   </GameProvider>
                 </UseHydrateWrapper>
