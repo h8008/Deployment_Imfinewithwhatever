@@ -27,18 +27,18 @@ const useHandleDispatchMessage = (message, onModalClick) => {
   }
 };
 
-const useHandleDispatchChoice = (choice, setRun) => {
-  const { restaurantDispatch } = useContext(RestaurantsContext);
-  if (choice) {
-    restaurantDispatch({
-      type: UPDATE_RESTAURANTS,
-      payload: {
-        restaurants: [choice],
-      },
-    });
-    setRun(false);
-  }
-};
+// const useHandleDispatchChoice = (choice, setChoice) => {
+//   const { restaurantDispatch } = useContext(RestaurantsContext);
+//   if (choice) {
+//     restaurantDispatch({
+//       type: UPDATE_RESTAURANTS,
+//       payload: {
+//         restaurants: [choice],
+//       },
+//     });
+//     // setChoice(null);
+//   }
+// };
 
 const useHandleNavigate = (shouldNavigate, next) => {
   const navigate = useNavigate();
@@ -52,17 +52,23 @@ const Plinko = ({ children, ...otherProps }) => {
   const [choice, setChoice] = useState(null);
   const [next, setNext] = useState(null);
   const [shouldNavigate, setShouldNavigate] = useState(false);
+  const { restaurantDispatch } = useContext(RestaurantsContext);
   const [run, setRun] = useState(true);
 
   const handleGameEnd = async (selected) => {
     const choice = restaurants[selected];
     const message = `You selected: ${choice.name}`;
     setMessage(message);
-    setChoice(choice);
+    restaurantDispatch({
+      type: UPDATE_RESTAURANTS,
+      payload: {
+        restaurants: [choice],
+      },
+    });
     setNext("/Restaurants");
   };
 
-  useHandleDispatchChoice(choice, setRun);
+  // useHandleDispatchChoice(choice, setChoice);
   useHandleDispatchMessage(message, () => setShouldNavigate(true));
   useHandleNavigate(shouldNavigate, next);
 
@@ -138,12 +144,12 @@ class PlinkoComponent extends Component {
 
   async bound(color, num = 7) {
     const totalSize = config.worldWidth;
-    const numBuckets = num;
+    const numBuckets = num - 1;
     const bucketSize = (totalSize - num * config.barWidth) / numBuckets;
     const promises = Array(num)
       .fill()
       .map((_, i) => {
-        const x = i * (bucketSize + config.barWidth) + 5;
+        const x = i * bucketSize + config.barWidth;
         const y = 800;
         const w = config.barWidth;
         const h = 100;
@@ -218,7 +224,6 @@ class PlinkoComponent extends Component {
     const promises = rows.map((row, i) => row.map((col, j) => addPeg(i, j)));
     const pegs = await Promise.all(promises);
     this.pins = pegs;
-    console.log("pegs", pegs);
   }
 
   draw() {
@@ -253,18 +258,20 @@ class PlinkoComponent extends Component {
     const ground = this.floor.position.y;
     Events.on(this.engine, "collisionEnd", function (event) {
       var pairs = event.pairs;
-      for (let i = 0; i < pairs.length; i++) {
-        var pair = pairs[i];
-        // pair.bodyA.render.fillStyle = "black";
-        pair.bodyB.render.fillStyle = "white";
-        if (pair.bodyA.position.y >= ground - ballConfig.r * 2) {
-          console.log("hit the floor");
-          updateState({ key: "bucket", val: pair.bodyA.position });
-          updateState({ key: "run", val: false });
-          findBucket(pair.bodyA.position);
+      if (pairs.length > 0) {
+        for (let i = 0; i < pairs.length; i++) {
+          var pair = pairs[i];
+          pair.bodyB.render.fillStyle = "white";
+          if (pair.bodyA.position.y >= ground - ballConfig.r * 2) {
+            console.log("hit the floor");
+            updateState({ key: "bucket", val: pair.bodyA.position });
+            updateState({ key: "run", val: false });
+            findBucket(pair.bodyA.position);
+          }
+          // updateState({ key: "dests", val: [...state.dests, pair.bodyA.position] });
         }
-        // updateState({ key: "dests", val: [...state.dests, pair.bodyA.position] });
       }
+      updateState({ key: "run", val: false });
     });
   }
 
@@ -279,15 +286,15 @@ class PlinkoComponent extends Component {
           const prevSlotPos = curDestIdx === 0 ? 0 : buckets[curDestIdx - 1].width;
           const curSlotPos = buckets[curDestIdx].width;
           if (prevSlotPos <= slotPos && curSlotPos >= slotPos) {
-            // slotIdx = curDestIdx - 1;
-            slotIdx = curDestIdx;
+            slotIdx = curDestIdx - 1;
           }
           return slotIdx;
         }, 0);
 
         slotIdx = slotIdx === -1 ? 0 : slotIdx;
-        this.handleGameEnd(slotIdx);
         console.log("The ball landed in slot: ", slotIdx);
+        this.updateState({ key: "run", value: "false" });
+        this.handleGameEnd(slotIdx);
       }
     }
   }

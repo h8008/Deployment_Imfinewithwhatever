@@ -143,7 +143,7 @@ function Main(props) {
       dispatch({
         type: UPDATE_RESTAURANTS,
         payload: {
-          restaurantsData: response.restaurantsData,
+          restaurants: response.restaurantsData,
         },
       });
       navigate('/Restaurants');

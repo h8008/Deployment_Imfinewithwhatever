@@ -28,7 +28,7 @@ const useHydrate = (props) => {
           await dispatch({
             type: UPDATE_RESTAURANTS,
             payload: {
-              restaurantsData: data.businesses,
+              restaurants: data.businesses,
             },
           });
         }

@@ -13,20 +13,6 @@ import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
 
 import API from "../API_Interface";
 
-// const ReviewsComponent = styled("div")(({ theme, children, ...otherProps }) => ({
-//   container: true,
-//   height: "100%",
-//   width: "100%",
-//   backgroundColor: theme.palette.primary.dark.main,
-//   zIndex: -2,
-//   position: "relative",
-//   display: "flex",
-//   flexDirection: "row",
-//   justifyContent: "center",
-//   alignItems: "center",
-//   ...otherProps,
-// }));
-
 const ReviewComponent = ({ children, theme, ...otherProps }) => {
   const style = {
     height: "100%",
@@ -70,23 +56,6 @@ const SwipeComponent = styled(Grid)((props) => ({
   justifyContent: "center",
   alignItems: "center",
   zIndex: 1,
-}));
-
-const ColumnComponent = styled(Grid)((props) => ({
-  data_id: "column-component",
-  gridRow: true,
-  heights: `${props.numItems * 50}px`,
-  width: `50px`,
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-}));
-
-const ButtonComponent = styled(Grid)((children, ...otherProps) => ({
-  data_id: "review-interactive-button-component",
-  gridRow: true,
-  ...otherProps,
 }));
 
 const Reviews = (props) => {

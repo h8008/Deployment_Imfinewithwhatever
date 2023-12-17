@@ -155,7 +155,7 @@ const Restaurants = (props) => {
   // const blacklistData = userState.preferences || [];
   const location = restaurantState.location;
   const region = restaurantState.region;
-  const [restaurantsFromServer] = useFetchYelpRestaurants(restaurantState.restaurantData, region);
+  const restaurantsFromServer = useFetchYelpRestaurants(restaurantState.restaurantData, region);
 
   const [restaurants] = useInitializeRestaurants([
     locationState.state != null ? locationState.state.restaurants : [],
@@ -223,7 +223,7 @@ const Restaurants = (props) => {
     restaurantDispatch({
       type: UPDATE_RESTAURANTS,
       payload: {
-        restaurantsData: [...newRestaurants],
+        restaurants: [...newRestaurants],
       },
     });
   };
