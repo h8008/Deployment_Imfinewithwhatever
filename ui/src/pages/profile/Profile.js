@@ -14,7 +14,7 @@ import { MessageContext } from "../../providers/MessageProvider";
 import quicksort from "../../utils/Quicksort";
 import Reviews from "../../components/Reviews";
 import Summary from "../../components/Summary";
-import EggYolks from "../../components/Three/EggYolks";
+import EggYolks from "../../components/Three/TomatoEggs";
 
 import useGetSummary from "./Hooks/useGetSummary";
 
@@ -35,10 +35,6 @@ const DefaultComponent = ({ summary }) => {
     </Grid>
   );
 };
-
-// const SummaryComponent = ({ summary }) => {
-//   return <Summary width="50%" height="50%" summary={summary} zIndex={1} />;
-// };
 
 const BodyComponent = styled(Grid)(({ theme }) => ({
   container: true,

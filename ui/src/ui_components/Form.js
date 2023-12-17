@@ -2,10 +2,7 @@ import { useState } from "react";
 import { FormControl, FormControlLabel, FormGroup, InputLabel, Select, Switch, styled, useTheme } from "@mui/material";
 
 import Box from "./Box";
-
-// import { main_config } from '../styles/shared';
 import GridRow from "./GridRow";
-import CustomBox from "./Box";
 
 const SwitchComponent = styled(Switch)(({ theme }) => ({
   width: 42,
@@ -49,7 +46,6 @@ const SwitchComponent = styled(Switch)(({ theme }) => ({
 const Form = (props) => {
   const { fullWidth, color, focused, options, onClick } = props;
   const [checked, setChecked] = useState(options.map(() => false));
-  // const theme = useTheme();
 
   const onSlideCallback = (optionIdx) => {
     console.log(optionIdx);
@@ -67,8 +63,14 @@ const Form = (props) => {
       variant="outlined"
       data_id="form-control-component"
     >
-      <FormGroup>
-        {/* <SelectComponent data_id='select-component'> */}
+      <FormGroup
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
         {options.map((option, index) => (
           <GridRow>
             <Box>
@@ -80,7 +82,6 @@ const Form = (props) => {
             </Box>
           </GridRow>
         ))}
-        {/* </SelectComponent> */}
       </FormGroup>
     </FormControl>
   );

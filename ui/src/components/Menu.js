@@ -25,7 +25,8 @@ const MenuComponent = styled(Grid)((props) => ({
   justifyContent: "flex-start",
   alignItems: "center",
   backgroundColor: props.color,
-  zIndex: 1,
+  position: "absolute",
+  zIndex: 6,
 }));
 
 const LinkComponent = styled(NavLink)((props) => ({

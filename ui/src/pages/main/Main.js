@@ -14,10 +14,9 @@ import MultiDecisionMaker from "../multiDecisionMaker/MultiDecisionMaker";
 import { main_config } from "../../styles/shared";
 import styled from "@emotion/styled";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { UPDATE_CUISINE, UPDATE_LOCATION, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
+import { UPDATE_CUISINE, UPDATE_LOCATION } from "../../reducer/Main/actions";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
-import API from "../../API_Interface";
 import { Box, useTheme } from "@mui/material";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
@@ -25,7 +24,8 @@ import { GameContext } from "../../providers/GameProvider";
 
 import { useStealRestaurantsFromYelp } from "../../hooks/API/Restaurants";
 import { getRestaurantsByCuisines, getRestaurantsByLocations } from "../../utils/axios/restaurants";
-import Backdrop from "@mui/material/Backdrop";
+
+import EggYolk from "../../components/Three/EggYolk";
 
 const useHandleTransitionToRestaurants = (restaurants, next) => {
   const navigate = useNavigate();
@@ -152,7 +152,7 @@ const Components = (props) => {
 };
 
 const MainComponent = styled(Grid)(() => ({
-  height: "90vh",
+  height: "100vh",
   width: "100vw",
   display: "flex",
   justifyContent: "flex-start",
@@ -170,7 +170,8 @@ const BackdropComponent = styled(Grid)(({ theme }) => ({
 
 const ContentComponent = styled(Grid)(({ theme }) => ({
   container: true,
-  backgroundColor: theme.palette.warning.main,
+  // backgroundColor: theme.palette.warning.main,
+  backgroundColor: "transparent",
   height: "90%",
   width: "75vw",
   margin: "auto",
@@ -291,7 +292,7 @@ function Main(props) {
 
   return (
     <MainComponent>
-      <BackdropComponent />
+      <EggYolk zIndex={1} />
       <ContentComponent data_id="main-page">
         {
           <Components

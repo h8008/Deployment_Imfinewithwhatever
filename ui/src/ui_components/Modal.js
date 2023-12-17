@@ -43,7 +43,7 @@ const Fade = forwardRef(function Fade(props, ref) {
 
 const ModalContentComponent = (props) => {
   const theme = useTheme();
-  const backgroundColor = theme.palette.error.dark;
+  const backgroundColor = theme.palette.error.dark.main;
   const style = {
     position: "absolute",
     top: "50%",
@@ -63,9 +63,11 @@ const ModalContentComponent = (props) => {
 
 const SpringModal = (props) => {
   const { messageState, messageDispatch } = useContext(MessageContext);
-  // const [open, setOpen] = useState(messageState.message !== "");
+  // const open = useMemo(() => messageState.message !== "", [messageState.message]);
 
-  const open = useMemo(() => messageState.message !== "", [messageState.message]);
+  const [open, setOpen] = useState(messageState.message !== "");
+
+  console.log("modal open", open);
 
   const handleClose = () => {
     messageDispatch({
