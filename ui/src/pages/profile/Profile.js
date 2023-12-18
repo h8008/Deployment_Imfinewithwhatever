@@ -21,6 +21,9 @@ import useGetSummary from "./Hooks/useGetSummary";
 const ProfileComponent = styled("div")({
   height: "100vh",
   width: "100%",
+  display: "flex",
+  flexDirection: "center",
+  alignItems: "center",
 });
 
 const DefaultComponent = ({ summary }) => {
@@ -58,15 +61,6 @@ const ReviewsStyledComponent = styled(Box)({
   width: "80%",
   height: "100%",
 });
-
-// const PreferencesStyledComponent = styled(Grid)({
-//   container: true,
-//   gridRow: true,
-//   display: "flex",
-//   flexDirection: "column",
-//   justifyContent: "center",
-//   alignItems: "center",
-// });
 
 const ReviewsComponent = (props) => {
   const { reviews } = props;

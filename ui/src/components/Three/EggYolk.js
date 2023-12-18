@@ -180,17 +180,27 @@ function SolidBoxes({ count = 50, layout, location, position }) {
     () => Float32Array.from(new Array(count).fill().flatMap((_, i) => tempColor.set(data[i].color).toArray())),
     [count]
   );
-  const getRandomPosition = (upperBound, lowerBound, count) => {
-    const positions = Array(count)
-      .fill()
-      .map((_, i) => (lowerBound < 0 ? Math.random() + upperBound : Math.random() + lowerBound));
-    return positions[Math.floor(positions.length / 2)];
+  const getRandomPosition = (upperBound, lowerBound) => {
+    // const positions = Array(count)
+    //   .fill()
+    //   .map((_, i) =>
+    //     lowerBound < 0
+    //       ? Math.floor(-1 * Math.random() * Math.abs(upperBound - lowerBound) + lowerBound)
+    //       : Math.floor(Math.random() * Math.abs(upperBound - lowerBound) + lowerBound)
+    //   );
+    const position =
+      lowerBound < 0
+        ? Math.floor(-1 * Math.random() * Math.abs(upperBound - lowerBound) + lowerBound)
+        : Math.floor(Math.random() * Math.abs(upperBound - lowerBound) + lowerBound);
+
+    return position;
   };
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     let i = 0;
     const time = state.clock.getElapsedTime();
-    const sign = location === "top" ? 1 : -1;
+    const signs = { left: 0, top: 1, bottom: -1, right: 0 };
+    const sign = signs[location];
     // const matrixRotation = layout === "horizontal" ? [0, 0, sign * (Math.PI / 2)] : [0, 0, 0];
 
     const matrixRotations = {
@@ -199,24 +209,33 @@ function SolidBoxes({ count = 50, layout, location, position }) {
     };
     const matrixRotation = matrixRotations[layout];
 
-    for (let x = 0; x < 10; x++) {
-      for (let y = 0; y < 10; y++) {
+    for (let x = -10; x < 10; x++) {
+      const leftPositions = Array(10)
+        .fill()
+        .map(() => getRandomPosition(-2, -6));
+      const rightPositions = Array(10)
+        .fill()
+        .map(() => getRandomPosition(2, 6));
+      for (let y = -10; y < 10; y++) {
+        // const cur_rotation = tempObject.rotation;
+        // const new_rotation = [1 * delta + cur_rotation.x, 0.5 * delta + cur_rotation.y, cur_rotation.z];
         const id = i++;
-        const angle = Math.sin(x / 4 - time) + Math.sin(y / 4 + time) * 2;
         const positions = {
-          left: [getRandomPosition(-6, -8, count), y - 5, 0],
-          right: [getRandomPosition(6, 8, count), 5 - y, 0],
-          top: [3, y - 5, 0],
-          bottom: [3, 5 - y, 0],
+          left: [-x + 2, y, 0],
+          right: [x - 2, y, 0],
+          top: [Math.abs(x) - 6, y, 0],
+          bottom: [-1 * Math.abs(x) + 13, y, 0],
         };
 
-        // const position = location === "left" ? [-7, y - 5, 0] : [7, 5 - y, 0];
         const position = positions[location];
+        const speed = Math.sin(x / 4 + time) + Math.sin(y / 4 + time);
+        tempObject.rotation.x = location === "top" || location === "bottom" ? speed : 0;
+        tempObject.rotation.y = location === "left" || location === "right" ? speed : 0;
+        tempObject.rotation.z = speed * 2;
 
-        // console.log("position", position);
+        // tempObject.rotation.y = Math.sin(x / 4 + time) + Math.sin(y / 4 + time) + 0;
+        // tempObject.rotation.z = tempObject.rotation.y * 2;
 
-        const rotation = [angle, angle, angle];
-        tempObject.rotation.set(...rotation);
         tempObject.position.set(...position);
         const scale = data[id].scale;
         tempObject.scale.setScalar(scale);

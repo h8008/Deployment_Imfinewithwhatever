@@ -17,7 +17,7 @@ import { UPDATE_MODAL_OPEN, BULK_UPDATE, UPDATE_MESSAGE } from "../reducer/Messa
 import BorderedBox from "./BorderedBox";
 import { useTheme } from "@mui/material";
 
-const Fade = forwardRef(function Fade(props, ref) {
+const Fade = (props, ref) => {
   const { children, in: open, onClick, onEnter, onExited, ownerState, ...other } = props;
   const style = useSpring({
     from: { opacity: 0 },
@@ -39,7 +39,7 @@ const Fade = forwardRef(function Fade(props, ref) {
       {cloneElement(children, { onClick })}
     </animated.div>
   );
-});
+};
 
 const ModalContentComponent = (props) => {
   const theme = useTheme();
@@ -63,9 +63,7 @@ const ModalContentComponent = (props) => {
 
 const SpringModal = (props) => {
   const { messageState, messageDispatch } = useContext(MessageContext);
-  // const open = useMemo(() => messageState.message !== "", [messageState.message]);
-
-  const [open, setOpen] = useState(messageState.message !== "");
+  const [open, setOpen] = useState(messageState.modalOpen);
 
   console.log("modal open", open);
 

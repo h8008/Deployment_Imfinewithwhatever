@@ -43,7 +43,7 @@ const ContentComponent = styled(Grid)(() => ({
 
 const ReviewComponent = ({ reviews }) => {
   const mainText = `Based on your reviews`;
-  const names = useMemo(() => ["", "Bad Reviews", "Good Reviews", "Neutral Reviews"], []);
+  const names = useMemo(() => ["", "Good", "Bad", "Neutral Reviews"], []);
   const data = useMemo(
     () =>
       Object.values(reviews)

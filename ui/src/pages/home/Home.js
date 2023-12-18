@@ -20,7 +20,7 @@ const HomeComponent = styled(Grid)(({ theme }) => ({
   display: "flex",
   margin: "auto",
   flexDirection: "column",
-  justifyContent: "space-evenly",
+  justifyContent: "center",
   alignItems: "center",
   position: "relative",
   zIndex: 1,
@@ -31,8 +31,8 @@ const HomeComponent = styled(Grid)(({ theme }) => ({
 const LogoComponent = styled(CardMedia)({
   backgroundImage: `url(${Logo})`,
   alt: "logo",
-  height: "500px",
-  width: "500px",
+  height: "600px",
+  width: "600px",
 });
 
 const Home = (props) => {
@@ -41,13 +41,13 @@ const Home = (props) => {
   return (
     <HomeComponent data_id="home-container">
       <LogoComponent src={Logo} />
-      <Developers
-        style={{
+      {/* <Developers
+        style={{s
           height: "50px",
           width: "100%",
         }}
         color="white"
-      />
+      /> */}
     </HomeComponent>
   );
 };

@@ -26,8 +26,8 @@ import { useFetchYelpRestaurants, useSelectRestaurantsByLocation } from "../../h
 
 const RestaurantsComponent = styled(Grid)(({ theme }) => ({
   container: true,
-  width: "90%",
-  height: "80%",
+  width: "100vw",
+  height: "100vh",
   margin: "auto",
   display: "flex",
   flexDirection: "row",

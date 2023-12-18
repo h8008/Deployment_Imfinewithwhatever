@@ -24,11 +24,14 @@ const CardContainer = styled(Card)({
   justifyContent: "center",
   alignItems: "center",
   width: "60%",
-  height: "85%",
+  height: "90vh",
   backgroundColor: "white",
   id: "restaurant-container",
-  border: "8px solid black",
-  borderRadius: "20px",
+  borderLeft: "8px solid black",
+  borderRight: "8px solid black",
+  borderBottom: "8px solid black",
+  borderBottomLeftRadius: "20px",
+  borderBottomRightRadius: "20px",
   padding: "20px",
   margin: "20px",
 });
@@ -295,9 +298,15 @@ const Restaurant = (props) => {
         <CardContainer>
           {reviews.length > 0 && <SwipeableDrawer items={reviews.map((r) => r.text)} />}
           <TopComponent flexDirection={"row"} justifyContent={"center"}>
-            <CardMediaComponent flex={"55%"}>
-              <CardMedia image={data.image_url} component={"img"} src={"img"} height={"300px"} />
-            </CardMediaComponent>
+            {/* <CardMediaComponent flex={"55%"}> */}
+            <CardMedia
+              sx={{ flex: "55%", border: `8px black solid`, borderRadius: "20px" }}
+              image={data.image_url}
+              component={"img"}
+              src={"img"}
+              height={"250px"}
+            />
+            {/* </CardMediaComponent> */}
             <MainDetailsComponent flex={"45%"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
           <MapComponent>

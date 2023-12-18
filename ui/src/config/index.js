@@ -47,7 +47,8 @@ const colors = {
 const attributes = {
   app: "Fine With Whatever",
   games: {
-    names: ["Wheel", "Flip", "Plinko"],
+    // names: ["Wheel", "Flip", "Plinko"],
+    names: ["Wheel", "Plinko"],
   },
   backgroundColor: grey[100],
   homeBackgroundColor: "#343F44",

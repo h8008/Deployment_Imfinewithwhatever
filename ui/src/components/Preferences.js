@@ -9,7 +9,7 @@ import BorderedBox from "../ui_components/BorderedBox";
 
 const PreferenceComponent = styled(Grid)(({ children, theme, ...otherProps }) => ({
   container: true,
-  height: "95%",
+  height: "85vh",
   width: "85%",
   margin: "auto",
   display: "flex",

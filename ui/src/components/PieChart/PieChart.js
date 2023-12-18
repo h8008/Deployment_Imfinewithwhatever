@@ -109,42 +109,10 @@ const getOptions = (props) => ({
   },
 });
 
-// const useDrawPieChart = (width, height, radius, data, options) => {
-//   const pie = useMemo(() => {
-//     return new Chart("canvas", {
-//       type: "pie",
-//       plugins: [
-//         {
-//           beforeDraw: (chart) => {
-//             const ctx = chart.chart.ctx;
-//             ctx.save();
-//             ctx.beginPath();
-//             ctx.shadowColor = "black";
-//             // const x = chart.chart.width / 2;
-//             // const y = chart.chart.height / 2 + 15;
-//             const x = width;
-//             const y = height;
-//             ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-//             ctx.fill();
-//             ctx.restore();
-//           },
-//         },
-//       ],
-//       data: {
-//         labels: data.labels,
-//         datasets: data.dataSets,
-//       },
-//       options: data.options,
-//     });
-//   }, [data.labels, data.dataSets, data.options, width, height, radius]);
-
-//   return pie;
-// };
-
 const PieChart = ({ chartData, title, ...otherProps }) => {
   // console.log("chart data", chartData);
   const [data, setData] = useState(getData(chartData));
-  const { width, height, radius } = otherProps;
+  const { width, height } = otherProps;
   // useDrawPieChart(width, height, radius, data, options)
 
   return (
