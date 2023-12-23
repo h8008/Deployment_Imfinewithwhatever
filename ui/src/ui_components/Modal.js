@@ -1,6 +1,6 @@
 // Referenced from MUI documentation at https://codesandbox.io/s/74fq8m?file=/demo.tsx
 
-import { useContext, useState, useEffect, forwardRef, cloneElement, Fragment, useMemo } from "react";
+import { useContext, useState, useEffect, cloneElement, Fragment, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSpring, animated } from "@react-spring/web";
 import { Backdrop, Box, DialogTitle, List, Dialog, Modal, useThemeProps } from "@mui/material";
@@ -15,31 +15,31 @@ import Text from "./Text";
 
 import { UPDATE_MODAL_OPEN, BULK_UPDATE, UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
 import BorderedBox from "./BorderedBox";
-import { useTheme } from "@mui/material";
+import { useTheme, Grid } from "@mui/material";
 
-const Fade = (props, ref) => {
-  const { children, in: open, onClick, onEnter, onExited, ownerState, ...other } = props;
-  const style = useSpring({
-    from: { opacity: 0 },
-    to: { opacity: open ? 1 : 0 },
-    onStart: () => {
-      if (open && onEnter) {
-        onEnter(null, true);
-      }
-    },
-    onRest: () => {
-      if (!open && onExited) {
-        onExited(null, true);
-      }
-    },
-  });
+// const Fade = (props, ref) => {
+//   const { children, in: open, onClick, onEnter, onExited, ownerState, ...other } = props;
+//   const style = useSpring({
+//     from: { opacity: 0 },
+//     to: { opacity: open ? 1 : 0 },
+//     onStart: () => {
+//       if (open && onEnter) {
+//         onEnter(null, true);
+//       }
+//     },
+//     onRest: () => {
+//       if (!open && onExited) {
+//         onExited(null, true);
+//       }
+//     },
+//   });
 
-  return (
-    <animated.div ref={ref} style={style} {...other}>
-      {cloneElement(children, { onClick })}
-    </animated.div>
-  );
-};
+//   return (
+//     <animated.div ref={ref} style={style} {...other}>
+//       {cloneElement(children, { onClick })}
+//     </animated.div>
+//   );
+// };
 
 const ModalContentComponent = (props) => {
   const theme = useTheme();
@@ -61,68 +61,127 @@ const ModalContentComponent = (props) => {
   return <BorderedBox style={style}>{props.children}</BorderedBox>;
 };
 
-const SpringModal = (props) => {
+const useInitializeModalOpen = (value) => {
+  const globalValue = useMemo(() => value, [value]);
+  const [open, setOpen] = useState(globalValue);
+  const [closed, setClosed] = useState(false);
   const { messageState, messageDispatch } = useContext(MessageContext);
-  const [open, setOpen] = useState(messageState.modalOpen);
 
-  console.log("modal open", open);
+  const update = useCallback((value) => {
+    setOpen(value);
+  }, []);
+
+  const autoCloseAfterTimeOut = useCallback(() => {
+    if (open && !messageState.interactive) {
+      setTimeout(() => {
+        setOpen(false);
+        setClosed(true);
+      }, [1000]);
+    }
+  }, [messageState.interactive, open]);
+
+  const clearMessageOnModalClose = useCallback(() => {
+    if (closed && messageState.message !== "") {
+      messageDispatch({
+        type: UPDATE_MESSAGE,
+        message: "",
+      });
+    }
+  }, [closed, messageDispatch, messageState.message]);
+
+  useEffect(() => {
+    if (globalValue !== open) {
+      setOpen(globalValue);
+    }
+  }, [globalValue, open]);
+
+  autoCloseAfterTimeOut();
+  clearMessageOnModalClose();
+
+  console.log("local", open);
+  console.log("global", globalValue);
+
+  return [open, update];
+};
+
+const initializeState = (initialValue) => initialValue;
+
+const SpringModal = (props) => {
+  // const { messageState, messageDispatch } = useContext(MessageContext);
+  // const [open, setOpen] = useInitializeModalOpen(messageState.modalOpen);
+  // const open = useMemo(() => messageState.modalOpen, [messageState.modalOpen]);
+
+  // const [open, setOpen] = useState(initializeState(messageState.modalOpen));
+
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
-    messageDispatch({
-      type: UPDATE_MESSAGE,
-      message: "",
-    });
+    setOpen(false);
+    // messageDispatch({
+    //   type: UPDATE_MESSAGE,
+    //   message: "",
+    // });
+    // messageState.onModalClick();
   };
 
   const handleInteractiveClose = () => {
     const payloads = { modeOpen: false, interactive: false, message: "" };
-    messageDispatch({
-      type: BULK_UPDATE,
-      payloads: { ...payloads },
-    });
+    // messageDispatch({
+    //   type: BULK_UPDATE,
+    //   payloads: { ...payloads },
+    // });
   };
 
   return (
     <Modal
       open={open}
-      onClick={() => {
-        handleClose();
-        messageState.onModalClick();
-      }}
+      // onClick={() => {
+      //   handleClose();
+      //   // messageState.onModalClick();
+      // }}
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
+      // slots={{ backdrop: Backdrop }}
+      // slotProps={{
+      //   backdrop: {
+      //     timeout: 500,
+      //   },
+      // }}
     >
       <ModalContentComponent>
-        <Text text={messageState.message} />
-        {messageState.interactive && (
+        {/* <Text text={messageState.message} /> */}
+        {/* {messageState.interactive ? ( */}
+        <>
           <List>
             <RowComponent theme={{ justifyContent: "space-evenly", alignItems: "center" }}>
               <RoundButton
                 onClick={() => {
-                  handleInteractiveClose();
-                  messageState.onModalClick(true);
+                  // handleInteractiveClose();
+                  // messageState.onModalClick(true);
+                  handleClose();
                 }}
               >
                 <CheckIcon />
               </RoundButton>
               <RoundButton
                 onClick={() => {
-                  handleInteractiveClose();
-                  messageState.onModalClick(false);
+                  // handleInteractiveClose();
+                  // messageState.onModalClick(false);
+                  handleClose();
                 }}
               >
                 <CloseIcon />
               </RoundButton>
             </RowComponent>
           </List>
-        )}
+          {/* <Text text={messageState.message} /> */}
+        </>
+        {/* ) : (
+          <Grid onClick={handleClose}>
+            <Text text={messageState.message} />
+          </Grid>
+        )} */}
       </ModalContentComponent>
     </Modal>
   );

@@ -5,10 +5,12 @@ const Barchart = (props) => {
   const { chartData: data } = props;
   const ref = useRef();
 
+  console.log("bar chart data", data);
+
   useEffect(() => {
     // set the dimensions and margins of the graph
-    const margin = { top: 30, right: 30, bottom: 70, left: 60 },
-      width = 750 - margin.left - margin.right,
+    const margin = { top: 30, right: 150, bottom: 70, left: 150 },
+      width = 900 - margin.left - margin.right,
       height = 250 - margin.top - margin.bottom;
 
     console.log("width", width, "height", height);
@@ -21,7 +23,7 @@ const Barchart = (props) => {
       .attr("height", height + margin.top + margin.bottom)
       .attr("color", "white")
       .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+      .attr("transform", `translate(${margin.left * 2},${margin.top})`);
 
     // Parse the Data
     // d3.csv(
@@ -57,7 +59,15 @@ const Barchart = (props) => {
       .attr("fill", "white");
   }, [data]);
 
-  return <svg width={"90%"} height={"90%"} id="barchart" ref={ref} />;
+  return (
+    <svg
+      width={"90%"}
+      height={"90%"}
+      id="barchart"
+      ref={ref}
+      style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "auto" }}
+    />
+  );
 };
 
 export default Barchart;

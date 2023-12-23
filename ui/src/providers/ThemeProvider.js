@@ -17,12 +17,12 @@ const GlobalTheme = createTheme({
       dark: palette.palette.augmentColor({
         color: { main: "#3B464A" },
       }),
-      // light: palette.palette.augmentColor({
-      //   color: { main: attributes.colors.grey.light },
-      // }),
       light: palette.palette.augmentColor({
-        color: { main: "#ffffff" },
+        color: { main: attributes.colors.grey.light },
       }),
+      // light: palette.palette.augmentColor({
+      //   color: { main: "#ffffff" },
+      // }),
       // light: grey[100],
     },
     error: {

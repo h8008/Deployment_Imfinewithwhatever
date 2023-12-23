@@ -33,8 +33,8 @@ const colors = {
     light: "#fff2d9",
   },
   grey: {
-    // light: "#959394",
-    light: "#ffffff",
+    light: "#959394",
+    // light: "#ffffff",
   },
   components: {
     options: {

@@ -10,6 +10,7 @@ import { FaArrowRight, FaArrowLeft, FaRibbon } from "react-icons/fa6";
 
 import { MessageContext } from "../providers/MessageProvider";
 import Text from "../ui_components/Text";
+import BorderedBox from "../ui_components/BorderedBox";
 
 const ArrowsComponent = styled(Grid)(({ theme }) => ({
   width: "50%",
@@ -83,9 +84,32 @@ const Reviews = ({ reviews }) => {
           .map((review, i) => (
             <ReviewComponent item xs={4}>
               <div style={{ width: "100%" }}>
-                <Text text={review.email} />
-                <Text text={review.rating} />
-                <Text text={review.review} />
+                <Grid
+                  display={"flex"}
+                  flex={1}
+                  flexDirection={"row"}
+                  alignItems={"center"}
+                  justifyContent={"flex-start"}
+                >
+                  <Grid mr={5}>
+                    <Text text={review.email} />
+                  </Grid>
+                  <Grid mr={5}>
+                    <Text text={`Rating: ${review.rating}`} />
+                  </Grid>
+                </Grid>
+                <Grid
+                  height={"fit-content"}
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"flex-start"}
+                  alignItems={"center"}
+                  flexWrap={"wrap"}
+                  borderTop={`2px black solid`}
+                  borderRadius={`1px`}
+                >
+                  <Text text={review.review} />
+                </Grid>
               </div>
             </ReviewComponent>
           ))}

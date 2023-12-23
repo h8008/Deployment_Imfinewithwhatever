@@ -16,13 +16,13 @@ var Engine = Matter.Engine,
   Render = Matter.Render,
   Runner = Matter.Runner;
 
-const useHandleDispatchMessage = (message, onModalClick) => {
+const useHandleDispatchMessage = (message) => {
   const { messageDispatch } = useContext(MessageContext);
   if (message) {
     messageDispatch({
       type: UPDATE_MESSAGE,
       message: message,
-      onModalClick: onModalClick,
+      // onModalClick: onModalClick,
     });
   }
 };
@@ -40,7 +40,13 @@ const useHandleDispatchMessage = (message, onModalClick) => {
 //   }
 // };
 
-const useHandleNavigate = (shouldNavigate, next) => {
+const useHandleNavigate = (shouldNavigate, next, message, messageDispatch) => {
+  if (message) {
+    messageDispatch({
+      type: UPDATE_MESSAGE,
+      message: message,
+    });
+  }
   const navigate = useNavigate();
   if (shouldNavigate && next) {
     navigate(next);
@@ -53,23 +59,33 @@ const Plinko = ({ children, ...otherProps }) => {
   const [next, setNext] = useState(null);
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const { restaurantDispatch } = useContext(RestaurantsContext);
+  const { messageDispatch } = useContext(MessageContext);
   const [run, setRun] = useState(true);
+  const navigate = useNavigate();
 
   const handleGameEnd = async (selected) => {
     const choice = restaurants[selected];
     const message = `You selected: ${choice.name}`;
-    setMessage(message);
     restaurantDispatch({
       type: UPDATE_RESTAURANTS,
       payload: {
         restaurants: [choice],
       },
     });
+    // messageDispatch({
+    //   type: UPDATE_MESSAGE,
+    //   message: message,
+    //   onModalClick: () => navigate("/Restaurants"),
+    // });
+    // setRun(false);
+    setRun(false);
+    setShouldNavigate(true);
     setNext("/Restaurants");
+    setMessage(message);
   };
 
   // useHandleDispatchChoice(choice, setChoice);
-  useHandleDispatchMessage(message, () => setShouldNavigate(true));
+  useHandleDispatchMessage(message);
   useHandleNavigate(shouldNavigate, next);
 
   const theme = useTheme();
@@ -79,15 +95,19 @@ const Plinko = ({ children, ...otherProps }) => {
   const restaurants = gameState.restaurants;
 
   return (
-    <PlinkoComponent
-      handleGameEnd={handleGameEnd}
-      slots={restaurants}
-      theme={theme}
-      box={boxRef}
-      run={run}
-      canvas={canvasRef}
-      {...otherProps}
-    />
+    <>
+      {run && (
+        <PlinkoComponent
+          handleGameEnd={handleGameEnd}
+          slots={restaurants}
+          theme={theme}
+          box={boxRef}
+          run={run}
+          canvas={canvasRef}
+          {...otherProps}
+        />
+      )}
+    </>
   );
 };
 
@@ -95,7 +115,7 @@ class PlinkoComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      run: props.run,
+      // run: props.run,
       slots: props.slots,
       bucket: {},
       dests: [],
@@ -112,6 +132,7 @@ class PlinkoComponent extends Component {
     this.draw = this.draw.bind(this);
     this.bound = this.bound.bind(this);
     this.floor = this.floor.bind(this);
+    this.stop = this.stop.bind(this);
     this.updateState = this.updateState.bind(this);
     this.mapBucketsToOptions = this.mapBucketsToOptions.bind(this);
     this.handleGameEnd = this.handleGameEnd.bind(this);
@@ -119,6 +140,7 @@ class PlinkoComponent extends Component {
 
   setup() {
     this.engine = Engine.create();
+    this.runner = Runner.create();
     this.world = this.engine.world;
     this.particle();
     this.pegs();
@@ -126,7 +148,6 @@ class PlinkoComponent extends Component {
     this.floor();
     this.setState({
       ...this.state,
-      run: true,
       buckets: this.mapBucketsToOptions(this.state.slots),
     });
   }
@@ -248,12 +269,24 @@ class PlinkoComponent extends Component {
     this.setState({ ...newState });
   }
 
+  stop() {
+    console.log("cleaning up Plinko");
+    World.clear(this.world);
+    Engine.clear(this.engine);
+    Render.stop(this.render);
+    Runner.stop(this.runner);
+    // this.render.canvas.remove();
+    this.render.canvas = null;
+    this.render.context = null;
+    this.render.textures = {};
+  }
+
   run() {
-    if (!this.state.run) return;
-    Runner.run(this.engine);
+    Runner.run(this.runner, this.engine);
     const state = this.state;
     const updateState = this.updateState;
     const findBucket = this.findBucket;
+    const stop = this.stop;
     console.log("floor", this.floor);
     const ground = this.floor.position.y;
     Events.on(this.engine, "collisionEnd", function (event) {
@@ -264,14 +297,16 @@ class PlinkoComponent extends Component {
           pair.bodyB.render.fillStyle = "white";
           if (pair.bodyA.position.y >= ground - ballConfig.r * 2) {
             console.log("hit the floor");
-            updateState({ key: "bucket", val: pair.bodyA.position });
-            updateState({ key: "run", val: false });
+            // updateState({ key: "bucket", val: pair.bodyA.position });
+            // updateState({ key: "run", val: false });
+            // Runner.stop(this.runner);
+            stop();
             findBucket(pair.bodyA.position);
           }
           // updateState({ key: "dests", val: [...state.dests, pair.bodyA.position] });
         }
       }
-      updateState({ key: "run", val: false });
+      // updateState({ key: "run", val: false });
     });
   }
 
@@ -293,7 +328,7 @@ class PlinkoComponent extends Component {
 
         slotIdx = slotIdx === -1 ? 0 : slotIdx;
         console.log("The ball landed in slot: ", slotIdx);
-        this.updateState({ key: "run", value: "false" });
+        // this.updateState({ key: "run", value: "false" });
         this.handleGameEnd(slotIdx);
       }
     }
