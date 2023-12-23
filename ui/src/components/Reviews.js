@@ -5,8 +5,6 @@ import BorderedBox from "../ui_components/BorderedBox";
 
 import Review from "./Review";
 import Grid from "@mui/material/Grid";
-import UpArrow from "@mui/icons-material/KeyboardArrowUp";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import { MessageContext } from "../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";

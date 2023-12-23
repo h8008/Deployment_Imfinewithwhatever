@@ -12,44 +12,52 @@ import { UserContext } from "../../providers/UserProvider";
 import { MessageContext } from "../../providers/MessageProvider";
 
 import quicksort from "../../utils/Quicksort";
-import Reviews from "../../components/Reviews";
+// import Reviews from "../../components/Reviews";
+import Reviews from "../../components/Swiper_Reviews";
 import Summary from "../../components/Summary";
 import EggYolks from "../../components/Three/TomatoEggs";
 
 import useGetSummary from "./Hooks/useGetSummary";
 
-const ProfileComponent = styled("div")({
+const ProfileComponent = styled(Grid)({
   height: "100vh",
-  width: "100%",
+  width: "100vw",
   display: "flex",
-  flexDirection: "center",
+  flexDirection: "column",
+  justifyContent: "center",
   alignItems: "center",
+  backgroundColor: "#ffffff",
 });
 
-const DefaultComponent = ({ summary }) => {
+const DefaultComponent = ({ summary, active }) => {
   const style = {
     height: "90vh",
+    backgroundColor: "red",
   };
 
   return (
-    <Grid sx={style}>
-      <EggYolks zIndex={1} />
-      <Summary width="50%" height="50%" summary={summary} zIndex={1} />
-    </Grid>
+    <>
+      {active && (
+        <Grid sx={style}>
+          <EggYolks zIndex={1} />
+          <Summary width="50%" height="50%" summary={summary} zIndex={1} />
+        </Grid>
+      )}
+    </>
   );
 };
 
 const BodyComponent = styled(Grid)(({ theme }) => ({
   container: true,
   rowGap: 50,
-  width: "100%",
-  height: "100%",
+  width: "100vw",
+  height: "100vh",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
   alignItems: "center",
   position: "relative",
-  backgroundColor: theme.palette.error.dark.main,
+  // backgroundColor: theme.palette.error.dark.main,
 }));
 
 const ReviewsStyledComponent = styled(Box)({
@@ -62,20 +70,20 @@ const ReviewsStyledComponent = styled(Box)({
   height: "100%",
 });
 
-const ReviewsComponent = (props) => {
-  const { reviews } = props;
-
+const ReviewsComponent = ({ reviews, active }) => {
   return (
-    <ReviewsStyledComponent>
-      <Reviews reviews={reviews} />
-    </ReviewsStyledComponent>
+    <>
+      {active && (
+        <ReviewsStyledComponent>
+          <Reviews reviews={reviews} />
+        </ReviewsStyledComponent>
+      )}
+    </>
   );
 };
 
-const PreferencesComponent = (props) => {
-  const { preferences } = props;
-
-  return <Preferences preferences={preferences} />;
+const PreferencesComponent = ({ preferences, active }) => {
+  return <>{active && <Preferences preferences={preferences} />}</>;
 };
 
 const useGetPreferences = (email) => {
@@ -260,7 +268,17 @@ const Profile = (props) => {
 
   return (
     <ProfileComponent data_id={"Profile-Page"}>
-      <BodyComponent>{components.length > 0 && components[activeComponentIdx]}</BodyComponent>
+      {/* <BodyComponent data_id={"profile body component"}>
+        {components.length > 0 && components[activeComponentIdx]}
+      </BodyComponent> */}
+      {ready && (
+        <>
+          <DefaultComponent summary={summary} active={activeComponentIdx === 0} />
+          <PreferencesComponent preferences={sortedPreferences} active={activeComponentIdx === 1} />
+          <ReviewsComponent reviews={reviews} active={activeComponentIdx === 2} />
+        </>
+      )}
+
       <SideMenu
         position={"absolute"}
         sx={{ zIndex: 1 }}

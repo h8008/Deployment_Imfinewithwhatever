@@ -30,9 +30,11 @@ const colors = {
   },
   yellow: {
     background: "#eeab0c",
+    light: "#fff2d9",
   },
   grey: {
-    light: "#959394",
+    // light: "#959394",
+    light: "#ffffff",
   },
   components: {
     options: {

@@ -14,12 +14,16 @@ const GlobalTheme = createTheme({
     primary: {
       main: grey[600],
       contrastText: grey[400],
-      light: palette.palette.augmentColor({
-        color: { main: attributes.colors.grey.light },
-      }),
       dark: palette.palette.augmentColor({
         color: { main: "#3B464A" },
       }),
+      // light: palette.palette.augmentColor({
+      //   color: { main: attributes.colors.grey.light },
+      // }),
+      light: palette.palette.augmentColor({
+        color: { main: "#ffffff" },
+      }),
+      // light: grey[100],
     },
     error: {
       main: red.A100,
@@ -34,6 +38,9 @@ const GlobalTheme = createTheme({
       main: yellow[800],
       dark: palette.palette.augmentColor({
         color: { main: attributes.colors.yellow.background },
+      }),
+      ligth: palette.palette.augmentColor({
+        color: { main: attributes.colors.yellow.light },
       }),
     },
     success: {

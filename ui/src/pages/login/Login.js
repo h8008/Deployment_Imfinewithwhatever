@@ -1,14 +1,15 @@
 import { useState, useEffect, useContext } from "react";
-import { FormControl, IconButton, InputAdornment, TextField, OutlinedInput, InputLabel } from "@mui/material";
+import { FormControl, IconButton, InputAdornment, TextField, OutlinedInput, InputLabel, useTheme } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 import Text from "../../ui_components/Text";
-import Button from "../../ui_components/Button";
-import Grid from "@mui/material/Grid";
+// import Button from "../../ui_components/Button";
 import GridRow from "../../ui_components/GridRow";
 import GridItem from "../../ui_components/GridItem";
 
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
 
 import API from "../../API_Interface";
@@ -17,24 +18,53 @@ import { UserContext } from "../../providers/UserProvider";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_PREFERENCES } from "../../reducer/User/UserActions";
 import useNavigator from "../../hooks/useNavigator";
+import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 
 const FormComponent = styled("form")(() => ({
   width: "100%",
 }));
 
-const TextFieldComponet = styled(TextField)(() => ({
+const TextFieldComponent = styled(TextField)({
   display: "flex",
   margin: "10px",
-  color: "primary",
-}));
+  "& label.Mui-focused": {
+    color: "white",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "white",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "white",
+    },
+    "&:hover fieldset": {
+      borderColor: "white",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "white",
+    },
+  },
+});
 
-const FormControlComponent = styled(FormControl)(() => ({
-  display: "flex",
-  margin: "10px",
-  color: "primary",
-}));
+// const OutlinedInputComponent = styled(OutlinedInput)(({ theme }) => ({
+//   "& .MuiOutlinedInput-input": {
+//     "& fieldset": {
+//       borderColor: "white",
+//     },
+//   },
+//   "& .MuiInputBase-formControl": {
+//     "& fieldset": {
+//       borderColor: "white",
+//     },
+//   },
+//   "& .MuiOutlinedInput-multiline": {
+//     "& fieldset": {
+//       borderColor: "white",
+//     },
+//   },
+// }));
 
-const TextFields = (props) => {
+const TextFields = ({ theme, ...otherProps }) => {
   const getCompName = (compName) =>
     compName
       .split()
@@ -54,7 +84,7 @@ const TextFields = (props) => {
         alignItem: "space-between",
       }}
     >
-      {props.components.map((component, index) => (
+      {otherProps.components.map((component, index) => (
         <Grid
           key={index}
           row={"true"}
@@ -63,47 +93,51 @@ const TextFields = (props) => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            columns: 12,
+            columns: 8,
           }}
         >
-          <GridItem xs={2}>
+          <Grid xs={3}>
             <Text text={getCompName(component)} style={{ color: "error" }} />
-          </GridItem>
-          <GridItem xs={4}>
+          </Grid>
+          <Grid xs={6}>
             {component === "password" ? (
-              <FormControlComponent focused={true}>
-                <OutlinedInput
-                  id={`${component}_input_field`}
-                  name={`${component}`}
-                  type={props.showPassword ? "text" : "password"}
-                  endAdornment={
+              <TextFieldComponent
+                name="password"
+                // fullWidth={true}
+                focused={true}
+                type={otherProps.showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        color={"error"}
                         aria-label="toggle password visibility"
-                        onClick={props.handleShowPassword}
-                        onMouseDown={props.handleHidePassword}
+                        onClick={otherProps.handleShowPassword}
+                        onMouseDown={otherProps.handleHidePassword}
                         edge="end"
                       >
-                        {props.showPassword ? <VisibilityOff /> : <Visibility />}
+                        {otherProps.showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
-                  }
-                  label="Password"
-                  notched={false}
-                  autoFocus={true}
-                />
-              </FormControlComponent>
+                  ),
+                }}
+              />
             ) : (
-              <TextFieldComponet id={`${component}_input_field`} name={`${component}`} focused={true} />
+              <TextFieldComponent
+                // fullWidth={true}
+                id={`${component}_input_field`}
+                name={`${component}`}
+                focused={true}
+              />
             )}
-          </GridItem>
+          </Grid>
         </Grid>
       ))}
     </Grid>
   );
 };
 
-const LoginComponent = styled(Grid)(() => ({
+const LoginComponent = styled(Grid)(({ theme }) => ({
   height: "100vh",
   width: "80%",
   margin: "auto",
@@ -125,26 +159,36 @@ const Buttons = styled(Grid)(() => ({
   alignItems: "center",
 }));
 
-const LoginButton = (props) => {
-  const buttonTextColor = "error";
+const LoginButton = ({ onClick, theme }) => {
+  const color = theme.palette.primary.light.main;
+
   return (
-    <GridItem xs={3} onClickCallback={props.onClick}>
-      <Button text="Login" color={buttonTextColor} />
+    <GridItem xs={3} onClickCallback={onClick}>
+      <Button height={"100%"}>
+        <Text text={"Login"} color={color} />
+      </Button>
     </GridItem>
   );
 };
 
-const SignUpButton = (props) => {
-  const buttonTextColor = "error";
+// const LoginButton = styled(Button)(({ theme }) => ({
+
+// }))
+
+const SignUpButton = ({ onClick, theme }) => {
+  const color = theme.palette.primary.light.main;
   return (
-    <GridItem xs={3} onClickCallback={props.onClick}>
-      <Button text="SignUp" color={buttonTextColor} />
+    <GridItem xs={3} onClickCallback={onClick}>
+      <Button height={"100%"}>
+        <Text text={"Signup"} color={color} />
+      </Button>
     </GridItem>
   );
 };
 
 const Login = (props) => {
   console.log("login page");
+  const theme = useTheme();
   const [formState, setFormState] = useState({
     email: "",
     firstname: "",
@@ -180,7 +224,7 @@ const Login = (props) => {
       res = await API.Users.getAllRestaurantPreferencesForUser({
         email: formState.email,
       });
-      const preferences = API.apiResHandling(res, messageDispatch, res.message);
+      const preferences = await API.apiResHandling(res, messageDispatch, res.message);
       userDispatch({
         type: "LOGIN",
         email: formState.email,
@@ -203,7 +247,10 @@ const Login = (props) => {
     const res = await API.Users.signup({ ...formState });
     if (res.status === "Already Signed Up") {
       // TODO: modal message
-      console.log("Account already exists. Please Log In");
+      messageDispatch({
+        type: UPDATE_MESSAGE,
+        message: "Account already exists. Please Log In",
+      });
     } else if (res.status === "OK") {
       // TODO: modal message
       console.log("Signed Up");
@@ -223,14 +270,16 @@ const Login = (props) => {
     setShowPassword(false);
   };
 
-  // useNavigation("/", authenticated === true);
   useNavigator({ dest: "/Profile", cond: authenticated === true });
+
+  console.log("theme", theme);
 
   return (
     <LoginComponent data_id="login-component">
       <GridRow>
         <FormComponent onChange={handleChange} data_id="login-form">
           <TextFields
+            theme={theme}
             components={components}
             showPassword={showPassword}
             handleShowPassword={handleShowPassword}
@@ -240,8 +289,8 @@ const Login = (props) => {
       </GridRow>
       <GridRow>
         <Buttons data_id="interactive-buttons">
-          <LoginButton onClick={handleLogin} />
-          <SignUpButton onClick={handleSignup} />
+          <LoginButton onClick={handleLogin} theme={theme} />
+          <SignUpButton onClick={handleSignup} theme={theme} />
         </Buttons>
       </GridRow>
     </LoginComponent>
