@@ -76,7 +76,7 @@ const sumUpReviews = (reviews) => {
 
 const useGetSummary = (props) => {
   // const summary = useMemo(() => (!ready ? {} : writeSummary(reviews, preferences)), [ready, reviews, preferences]);
-  const [summary, setSummary] = useState({});
+  const [summary, setSummary] = useState(undefined);
   const reviews = useMemo(() => (props.reviews ? [...props.reviews] : []), [props.reviews]);
   const preferences = useMemo(() => (props.preferences ? { ...props.preferences } : {}), [props.preferences]);
   // const reviewSummary = useMemo(

@@ -25,6 +25,7 @@ import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 
 import Stars from "../../components/Stars";
 import { useTheme } from "styled-components";
+import Modal from "../modal";
 
 const calcCellWidth = (addon = 0) => {
   const cellBorderWidth = 3;
@@ -229,6 +230,8 @@ const Feedback = (props) => {
   const [comments, setComments] = useState("");
   const [reviewed, setReviewed] = useState(false);
   const [exit, setExit] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -279,82 +282,80 @@ const Feedback = (props) => {
     });
   };
 
-  useEffect(() => {
-    // const handleReviewEndNavigate = () => {
-    //   navigationDispatch({
-    //     type: NAVIGATE,
-    //     payload: {
-    //       destination: "/Profile",
-    //     },
-    //   });
-    // };
+  const handleModalClick = () => {
+    setModalOpen(false);
+    navigate("/Profile");
+  };
 
+  useEffect(() => {
     if (reviewed) {
       setReviewed(false);
-      messageDispatch({
-        type: UPDATE_MESSAGE,
-        message: `Thank you for the review.`,
-        onModalClick: () => navigate("/Profile"),
-      });
+      setModalOpen(true);
+      setMessage(`Thank you for the review`);
+      // messageDispatch({
+      //   type: UPDATE_MESSAGE,
+      //   message: `Thank you for the review.`,
+      //   onModalClick: () => navigate("/Profile"),
+      // });
     }
   }, [messageDispatch, navigate, reviewed]);
 
-  const handleAddOrUpdatePreference = (wouldGoAgain) => {
-    return new Promise(async (resolve, reject) => {
-      let params = {
-        restaurantID: restaurantState.restaurant.id,
-        email: userState.email,
-        review: comments,
-      };
+  // const handleAddOrUpdatePreference = (wouldGoAgain) => {
+  //   return new Promise(async (resolve, reject) => {
+  //     let params = {
+  //       restaurantID: restaurantState.restaurant.id,
+  //       email: userState.email,
+  //       review: comments,
+  //     };
 
-      // let preference = getFoodPreferences(restaurantState.restaurant.preference);
-      // let like = wouldGoAgain ? "YES" : "NO";
-      const like = wouldGoAgain;
-      const location = restaurantState.location;
-      const preference = restaurantState.restaurant.categories;
+  //     // let preference = getFoodPreferences(restaurantState.restaurant.preference);
+  //     // let like = wouldGoAgain ? "YES" : "NO";
+  //     const like = wouldGoAgain;
+  //     const location = restaurantState.location;
+  //     const preference = restaurantState.restaurant.categories;
 
-      params = {
-        restaurantID: restaurantState.restaurant.id,
-        email: userState.email,
-        preference,
-        location,
-        like,
-      };
-      // let res = await API.Users.getRestaurantPreferences({
-      //   restaurantID: params.restaurantID,
-      //   email: params.email,
-      // });
-      // const preference_db = API.apiResHandling(res, messageDispatch, res.message);
-      // if (preference_db != null) {
-      //   // Merge the new preference with the preference from local database for the current user
-      //   // If the user would go again add the current preference to the previous preferences for the restaurant
-      //   if (preference !== preference_db && wouldGoAgain) {
-      //     let mergedPreferenceArray = (preference + ", " + preference_db).split(", ");
-      //     mergedPreferenceArray = Object.values(
-      //       Object.fromEntries(mergedPreferenceArray.map((element) => [element, element]))
-      //     );
-      //     preference = getFoodPreferences(mergedPreferenceArray);
-      //   }
-      //   // If not, remove the current preferences from the preferences for the restaurant
-      //   else if (!wouldGoAgain) {
-      //     const preferenceArray = preference.split(",");
-      //     preference = getFoodPreferences(preferenceArray);
-      //   }
-      //   params = {
-      //     ...params,
-      //     preference: preference,
-      //   };
+  //     params = {
+  //       restaurantID: restaurantState.restaurant.id,
+  //       email: userState.email,
+  //       preference,
+  //       location,
+  //       like,
+  //     };
+  // let res = await API.Users.getRestaurantPreferences({
+  //   restaurantID: params.restaurantID,
+  //   email: params.email,
+  // });
+  // const preference_db = API.apiResHandling(res, messageDispatch, res.message);
+  // if (preference_db != null) {
+  //   // Merge the new preference with the preference from local database for the current user
+  //   // If the user would go again add the current preference to the previous preferences for the restaurant
+  //   if (preference !== preference_db && wouldGoAgain) {
+  //     let mergedPreferenceArray = (preference + ", " + preference_db).split(", ");
+  //     mergedPreferenceArray = Object.values(
+  //       Object.fromEntries(mergedPreferenceArray.map((element) => [element, element]))
+  //     );
+  //     preference = getFoodPreferences(mergedPreferenceArray);
+  //   }
+  //   // If not, remove the current preferences from the preferences for the restaurant
+  //   else if (!wouldGoAgain) {
+  //     const preferenceArray = preference.split(",");
+  //     preference = getFoodPreferences(preferenceArray);
+  //   }
+  //   params = {
+  //     ...params,
+  //     preference: preference,
+  //   };
 
-      //   // res = await API.Users.addRestaurantPreference(Object.values(params));
-      //   res = await API.Users.updateRestaurantPreference(params);
-      //   API.apiResHandling(res, messageDispatch, res.message);
-      // } else {
-      //   res = await API.Users.addRestaurantPreference(Object.values(params));
-      //   API.apiResHandling(res, messageDispatch, res.message);
-      // }
-      return resolve();
-    });
-  };
+  //   // res = await API.Users.addRestaurantPreference(Object.values(params));
+  //   res = await API.Users.updateRestaurantPreference(params);
+  //   API.apiResHandling(res, messageDispatch, res.message);
+  // } else {
+  //   res = await API.Users.addRestaurantPreference(Object.values(params));
+  //   API.apiResHandling(res, messageDispatch, res.message);
+  // }
+  //     return resolve();
+  //   });
+  // };
 
   const getCurrentRating = (cellIndex) => {
     return cellIndex * 2;
@@ -421,6 +422,7 @@ const Feedback = (props) => {
           </RoundButton>
         </ButtonsComponent>
       </DecisionComponent>
+      <Modal open={modalOpen} interactive={true} message={message} onClickCallback={handleModalClick} />
     </FeedbackComponent>
   );
 };
