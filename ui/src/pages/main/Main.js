@@ -350,7 +350,7 @@ function Main(props) {
         <CuisineSliders
           cuisines={cuisines}
           cuisine={cuisines[cuisineIdx]}
-          handleCuisinesChange={() => handleCuisinesChange()}
+          handleCuisinesChange={handleCuisinesChange}
         />
         <MultipleIdeas
           games={games}
