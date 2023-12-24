@@ -13,10 +13,13 @@ const cors = async (ctx, next) => {
   console.log('in cors middleware');
   // Restrict origin to request origin to work with the withCredential attribute
   // Otherwise set to wildcard for deployment on vercel
-  // const allowedOrigin = development() ? ctx.req.headers.origin : "*";
+  const origin =
+    process.env.NODE_ENV.trim() === 'development'
+      ? ctx.req.headers.origin
+      : 'https://deployment-imfinewithwhatever-client.vercel.app';
 
   // const origin = ctx.req.headers.origin == null ? '*' : ctx.req.headers.origin;
-  const origin = '*';
+  // const origin = '*';
   // const origin = ctx.req.headers.origin == null ? '*' : ctx.req.headers.origin;
   console.log('request origin: ', origin);
   ctx.res.setHeader('Access-Control-Allow-Origin', origin);
