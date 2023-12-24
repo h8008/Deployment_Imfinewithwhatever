@@ -249,7 +249,8 @@ const Profile = (props) => {
 
   const [backdrop] = useGetBackdropOfTheDay(assets);
   const [reviews] = useGetReviews(userState.email);
-  const [preferences] = useGetPreferences(userState.email);
+  // const [preferences] = useGetPreferences(userState.email);
+  const [preferences] = useMemo(() => [], []);
   const [sortedPreferences] = useSortPreferences(preferences);
   const [summary] = useGetSummary({ reviews, preferences: sortedPreferences });
   const [componentProps] = useGetComponentProps([summary, sortedPreferences, reviews]);

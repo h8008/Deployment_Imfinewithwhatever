@@ -17,7 +17,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { UPDATE_CUISINE, UPDATE_LOCATION } from "../../reducer/Main/actions";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, FormControl, Typography, useTheme } from "@mui/material";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 import { GameContext } from "../../providers/GameProvider";
@@ -239,6 +239,7 @@ function Main(props) {
 
   const handleLocationChange = (event) => {
     const location = event.target.value;
+    console.log("location", location);
     setLocation(location);
   };
 
