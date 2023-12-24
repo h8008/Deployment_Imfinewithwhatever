@@ -17,7 +17,7 @@ const ModalComponent = styled(MUIModal)(({ theme }) => ({
   borderRadius: `20px`,
 }));
 
-const Modal = (props) => {
+const SimpleModal = (props) => {
   const { messageState } = useContext(MessageContext);
   const open = messageState.modalOpen;
   const interactive = messageState.interactive;
@@ -25,4 +25,4 @@ const Modal = (props) => {
   return <>{!interactive && <ModalComponent open={open}>{messageState.message}</ModalComponent>}</>;
 };
 
-export default Modal;
+export default SimpleModal;

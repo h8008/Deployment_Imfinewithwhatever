@@ -13,8 +13,8 @@ const data = Array.from({ length: 1000 }, () => ({
 const posFactors = [
   [0, 1, 0],
   [0, -3, 0],
-  [0, -4, 0],
-  [0, -4, 0],
+  [0, -6, 0],
+  [0, -2, 0],
 ];
 const counts = [50, 50, 100, 100];
 

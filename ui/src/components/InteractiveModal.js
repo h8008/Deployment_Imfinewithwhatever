@@ -29,7 +29,7 @@ const ButtonComponent = styled(Button)(({ theme }) => ({
   width: "50px",
 }));
 
-const InteractiveModel = (props) => {
+const InteractiveModal = (props) => {
   const { messageState, messageDispatch } = useContext(MessageContext);
   const interactive = messageState.interactive;
   const onModalClickCallback = messageState.onModalClick;
@@ -78,4 +78,4 @@ const InteractiveModel = (props) => {
   );
 };
 
-export default InteractiveModel;
+export default InteractiveModal;

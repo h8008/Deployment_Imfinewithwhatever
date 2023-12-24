@@ -34,7 +34,7 @@ import GlobalTheme from "./providers/ThemeProvider";
 import BackgroundDispatcher from "./wrappers/BackgroundDispatcher";
 import Backdrop from "./components/Backdrop";
 import InteractiveModel from "./components/InteractiveModal";
-import Modal from "./components/Modal";
+import Modal from "./pages/modal";
 
 function App() {
   return (
@@ -50,9 +50,7 @@ function App() {
                     <div className="App">
                       <Router>
                         <Menu />
-                        {/* <SpringModal /> */}
-                        <InteractiveModel />
-                        {/* <Modal /> */}
+                        <Modal />
                         <BackgroundDispatcher />
                         <Routes>
                           <Route exact path="/" element={<Home />} />

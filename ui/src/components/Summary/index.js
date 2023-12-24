@@ -91,8 +91,8 @@ const LikeComponent = ({ likes }) => {
   const mainText = `You swiped left on these tastes`;
 
   const bubbleSx = likes.map((dislike, i) => ({
-    width: dislike[1] * 1.5 * 25,
-    height: dislike[1] * 1.5 * 25,
+    width: dislike[1] * 1.5 * 20,
+    height: dislike[1] * 1.5 * 20,
     transform: `translateY(${i % 2 === 0 ? 2 * dislike[1] : -2 * dislike[1]}%)`,
   }));
 
@@ -102,7 +102,17 @@ const LikeComponent = ({ likes }) => {
       <BubblesComponent>
         {bubbleSx.map((sx, i) => (
           <BubbleComponent key={`bubble ${i}`} sx={sx}>
-            <Text text={likes[i]} color="red" />
+            <Text
+              text={likes[i]}
+              color="red"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
+            />
           </BubbleComponent>
         ))}
       </BubblesComponent>
@@ -164,7 +174,7 @@ const Summary = ({ summary, ...otherProps }) => {
     <SummaryComponent {...otherProps}>
       <TitlesComponent>
         {items.map((item, i) => (
-          <Button sx={{ width: "30%" }} onClick={() => handleRenderActiveComponent(i)}>
+          <Button sx={{ width: "fit-content", padding: "10px" }} onClick={() => handleRenderActiveComponent(i)}>
             <BorderedBox style={{ borderRadius: "8px", border: "8px solid white" }}>
               <Text text={item} color="white" key={`Summary Item ${i}`} />
             </BorderedBox>

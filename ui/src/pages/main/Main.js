@@ -17,7 +17,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { UPDATE_CUISINE, UPDATE_LOCATION } from "../../reducer/Main/actions";
 
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
-import { Box, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 import { GameContext } from "../../providers/GameProvider";
@@ -89,7 +89,8 @@ const MultipleIdeas = (props) => {
   return (
     <GridRow style={rowStyle}>
       <GameInputComponent color={theme.palette.primary.light.main}>
-        <Text text={"Decide for me"} />
+        {/* <Text text={"Decide for me"} /> */}
+        <Typography>Decide for me</Typography>
         <ArrowForwardIcon onClick={() => props.onMultipleIdeasCallback()} />
       </GameInputComponent>
     </GridRow>
@@ -116,6 +117,7 @@ const Components = (props) => {
         border: `8px solid ${borderColor}`,
         borderRadius: 2,
         height: "50px",
+        minWidth: "150px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -173,7 +175,7 @@ const ContentComponent = styled(Grid)(({ theme }) => ({
   // backgroundColor: theme.palette.warning.main,
   backgroundColor: "transparent",
   height: "90%",
-  width: "75vw",
+  width: "50vw",
   margin: "auto",
   display: "flex",
   flexDirection: "column",
@@ -197,12 +199,14 @@ const GameInputComponent = styled(Box)(({ theme, color, children, ...otherProps 
   border: `8px solid ${color}`,
   borderRadius: "5px",
   height: "50px",
+  minWidth: "150px",
   ...otherProps,
 }));
 
 function Main(props) {
   console.log("Main Page");
-
+  const theme = useTheme();
+  const borderColor = theme.palette.primary.light.main;
   const components = ["Location", "What kind of food?", "Multiple Ideas ?"];
   const cuisines = [
     "Mexican",
@@ -294,7 +298,7 @@ function Main(props) {
     <MainComponent>
       <EggYolk zIndex={1} />
       <ContentComponent data_id="main-page">
-        {
+        {/* {
           <Components
             components={components}
             cuisines={cuisines}
@@ -305,7 +309,53 @@ function Main(props) {
             onMultipleIdeasCallback={handleDecideForMeButtonClick}
             restaurantDispatch={restaurantDispatch}
           />
-        }
+        } */}
+        <Grid
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row " },
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+          container
+          // columns={12}
+        >
+          <Grid>
+            <Typography textAlign={"left"} color={"white"}>
+              {"Location"}
+            </Typography>
+          </Grid>
+          <Grid width={"100%"}>
+            <TextField
+              fullWidth={true}
+              focused
+              onChange={(e) => handleLocationChange(e)}
+              sx={{
+                "& .MuiInputLabel-root": { color: theme.palette.error.light.main },
+                border: `8px solid ${borderColor}`,
+                borderRadius: 2,
+                height: "50px",
+                minWidth: "150px",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              InputProps={{ disableUnderline: true }}
+              variant="standard"
+            />
+          </Grid>
+        </Grid>
+        <CuisineSliders
+          cuisines={cuisines}
+          cuisine={cuisines[cuisineIdx]}
+          handleCuisinesChange={() => handleCuisinesChange()}
+        />
+        <MultipleIdeas
+          games={games}
+          onMultipleIdeasCallback={() => handleDecideForMeButtonClick()}
+          restaurantDispatch={restaurantDispatch}
+        />
         <RoundButton onClick={handleGoButtonClick} border={`6px white solid`}>
           <Text text="GO" />
         </RoundButton>

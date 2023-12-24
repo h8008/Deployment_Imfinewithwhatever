@@ -85,7 +85,7 @@ const Plinko = ({ children, ...otherProps }) => {
   };
 
   // useHandleDispatchChoice(choice, setChoice);
-  useHandleDispatchMessage(message);
+  // useHandleDispatchMessage(message);
   useHandleNavigate(shouldNavigate, next);
 
   const theme = useTheme();
@@ -144,7 +144,7 @@ class PlinkoComponent extends Component {
     this.world = this.engine.world;
     this.particle();
     this.pegs();
-    this.bound("white", 4);
+    this.bound("white", this.state.slots.length + 1);
     this.floor();
     this.setState({
       ...this.state,
@@ -170,7 +170,9 @@ class PlinkoComponent extends Component {
     const promises = Array(num)
       .fill()
       .map((_, i) => {
-        const x = i * bucketSize + config.barWidth;
+        // if (i > 0 && i < num - 1) {
+        const offset = i === 0 ? 10 : 0;
+        const x = i * (bucketSize + config.barWidth) + offset;
         const y = 800;
         const w = config.barWidth;
         const h = 100;
@@ -182,7 +184,10 @@ class PlinkoComponent extends Component {
         });
         World.add(this.world, bound);
         return bound;
-      });
+        // }
+        // return undefined;
+      })
+      .filter((bound) => bound != null);
     const bounds = await Promise.all(promises);
     this.bounds = bounds;
   }

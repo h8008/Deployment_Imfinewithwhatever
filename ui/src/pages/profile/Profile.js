@@ -32,6 +32,7 @@ const ProfileComponent = styled(Grid)({
 const DefaultComponent = ({ summary, active }) => {
   const style = {
     height: "90vh",
+    width: "100vw",
     backgroundColor: "red",
   };
 
