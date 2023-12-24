@@ -1,20 +1,20 @@
 import { useEffect, useState, useMemo } from "react";
 import API_Interface from "../../API_Interface";
 
-export const useGetRestaurantReviews = (params) => {
-  const [reviews, setReviews] = useState([]);
+export const useGetRestaurantReviews = (params, reviews, setReviews) => {
+  // const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    const fetch = async () => {
-      // setTimeout(async () => {
-      const res = await API_Interface.YelpAPI.getRestaurantReviews(params);
-      if (res.status === "OK") {
-        setReviews(res.restaurantsData.reviews);
-      }
-      // }, [2500]);
+    const fetch = () => {
+      setTimeout(async () => {
+        const res = await API_Interface.YelpAPI.getRestaurantReviews(params);
+        if (res.status === "OK") {
+          setReviews(res.restaurantsData.reviews);
+        }
+      }, [1200]);
     };
-    fetch();
-  }, [params]);
+    if (reviews.length === 0) fetch();
+  }, [params, reviews.length, setReviews]);
 
   return [reviews];
 };

@@ -1,4 +1,4 @@
-import { CardContent, CardMedia, Card, Grid, styled, Typography } from "@mui/material";
+import { CardContent, CardMedia, Card, Grid, styled, Typography, Box } from "@mui/material";
 import Icon from "@mui/material/Icon";
 import { useEffect, useState, Fragment } from "react";
 
@@ -17,6 +17,11 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { MdLocalDining } from "react-icons/md";
 import { useTheme } from "@emotion/react";
+
+const WhatOthersSayComponent = styled(Grid)((props) => ({
+  display: "flex",
+  flexWrap: "wrap",
+}));
 
 const CardContainer = styled(Card)({
   display: "flex",
@@ -41,14 +46,16 @@ const MapComponent = styled(Grid)((props) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  height: "50%",
+  height: "100%",
   width: "60%",
 }));
 
 const PlaceHolderMapComponent = (props) => {
   const style = {
-    width: "750px",
-    height: "400px",
+    width: "90%",
+    minWidth: "90%",
+    height: "100%",
+
     borderRadius: "20px",
   };
 
@@ -76,6 +83,18 @@ const TopComponent = styled(Grid)((props) => ({
   flex: props.flex,
   flexDirection: props.flexDirection,
   justifyContent: props.justifyContent,
+  alignItems: "center",
+}));
+
+const BodyComponent = styled(Grid)((props) => ({
+  width: "100%",
+  height: "60%",
+  display: "flex",
+  // flexDirection: { sm: "column", md: "row" },
+  flexDirection: "column",
+  gap: "20px",
+  padding: "20px",
+  justifyContent: "center",
   alignItems: "center",
 }));
 
@@ -249,6 +268,7 @@ const extractOtherData = (restaurant, showLocation) => ({
 
 const Restaurant = (props) => {
   const {
+    viewingSingle,
     restaurantData,
     onDecisionCallback,
     onShowRestaurantLocationCallback,
@@ -264,11 +284,12 @@ const Restaurant = (props) => {
   const [otherDetails, setOtherDetails] = useState({
     location: "",
   });
-
-  // const [reviews] = useGetRestaurantReviews({ id: restaurantData._id });
   const [reviews, setReviews] = useState([]);
 
-  // console.log("reviews", reviews);
+  useGetRestaurantReviews({ id: restaurantData.id }, reviews, setReviews);
+  // const [reviews, setReviews] = useState([]);
+
+  console.log("reviews", reviews);
 
   // useEffect(() => {
   //   const getPreference = async () => {
@@ -309,7 +330,14 @@ const Restaurant = (props) => {
     <Fragment>
       {data != null && (
         <CardContainer>
-          {reviews.length > 0 && <SwipeableDrawer items={reviews.map((r) => r.text)} />}
+          {/* {reviews.length > 0 && (
+            <Grid width={"100%"} display={"flex"} justifyContent={"flex-start"} alignItems={"center"}>
+              <SwipeableDrawer items={reviews.map((r) => r.text)} />
+              <Typography fontFamily={"monospace"} fontWeight={"bolder"}>
+                {"See what others are saying"}
+              </Typography>
+            </Grid>
+          )} */}
           <TopComponent flexDirection={"row"} justifyContent={"center"}>
             {/* <CardMediaComponent flex={"55%"}> */}
             <CardMedia
@@ -322,35 +350,62 @@ const Restaurant = (props) => {
             {/* </CardMediaComponent> */}
             <MainDetailsComponent flex={"1/2"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
-          <MapComponent>
-            {otherDetails !== "" && otherDetails.location !== LOCATION_MASK_MESSAGE ? (
-              <BusinessLocator address={otherDetails.location} />
-            ) : (
-              <PlaceHolderMapComponent />
-            )}
-            <CardContent>
-              <Text text={otherDetails.location} />
-            </CardContent>
-          </MapComponent>
+          <BodyComponent>
+            {/* <WhatOthersSayComponent>
+              {reviews.map((review, i) => (
+                <Box key={`their review ${i}`} xs={6}>
+                  <Typography>{review.text}</Typography>
+                  <Typography>{review.rating}</Typography>
+                </Box>
+              ))}
+            </WhatOthersSayComponent> */}
+            <WhatOthersSayComponent>
+              {reviews.length > 0 && (
+                <Grid width={"100%"} display={"flex"} justifyContent={"flex-start"} alignItems={"center"} container>
+                  <SwipeableDrawer items={reviews.map((r) => r.text)} xs={2} />
+                  <Typography xs={10} fontFamily={"monospace"} fontWeight={"bolder"} display={"flex"} flexWrap={"wrap"}>
+                    {"See what others are saying"}
+                  </Typography>
+                </Grid>
+              )}
+            </WhatOthersSayComponent>
+            <MapComponent xs={12}>
+              {otherDetails !== "" && otherDetails.location !== LOCATION_MASK_MESSAGE ? (
+                <BusinessLocator address={otherDetails.location} />
+              ) : (
+                <PlaceHolderMapComponent />
+              )}
+              <CardContent>
+                <Text text={otherDetails.location} />
+              </CardContent>
+            </MapComponent>
+          </BodyComponent>
           <ButtonsComponent flexDirection={"row"} justifyContent={"space-evenly"}>
-            <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={onViewPrevCallback}>
-              <KeyboardDoubleArrowLeftIcon />
-            </Icon>
-            <RoundButton onClick={() => onDecisionCallback(false)}>
-              <Text text={"no"} />
-            </RoundButton>
-            <RoundButton onClick={() => onShowRestaurantLocationCallback()}>
-              <Text text={"hmm.."} />
-            </RoundButton>
-            <RoundButton onClick={() => onDecisionCallback(true)}>
-              <Text text={"yes"} />
-            </RoundButton>
-            <RoundButton onClick={() => onDoneSettingPreferenceCallback()}>
-              <MdLocalDining size={"large"} color={theme.palette.primary.main} />
-            </RoundButton>
-            <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={onViewNextCallback}>
-              <KeyboardDoubleArrowRightIcon />
-            </Icon>
+            <>
+              {!viewingSingle && (
+                <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={onViewPrevCallback}>
+                  <KeyboardDoubleArrowLeftIcon />
+                </Icon>
+              )}
+
+              <RoundButton onClick={() => onDecisionCallback(false)}>
+                <Text text={"no"} />
+              </RoundButton>
+              <RoundButton onClick={() => onShowRestaurantLocationCallback()}>
+                <Text text={"hmm.."} />
+              </RoundButton>
+              <RoundButton onClick={() => onDecisionCallback(true)}>
+                <Text text={"yes"} />
+              </RoundButton>
+              <RoundButton onClick={() => onDoneSettingPreferenceCallback()}>
+                <MdLocalDining size={"large"} color={theme.palette.primary.main} />
+              </RoundButton>
+              {!viewingSingle && (
+                <Icon fontSize="large" color={theme.palette.primary.contrastText} onClick={onViewNextCallback}>
+                  <KeyboardDoubleArrowRightIcon />
+                </Icon>
+              )}
+            </>
           </ButtonsComponent>
         </CardContainer>
       )}

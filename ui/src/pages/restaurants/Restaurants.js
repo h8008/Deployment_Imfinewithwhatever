@@ -230,13 +230,11 @@ const Restaurants = (props) => {
 
   const handleViewPrevRestaurant = () => {
     const newActiveRestaurantIdx = activeRestaurantIdx - 1 <= -1 ? restaurants.length - 1 : activeRestaurantIdx - 1;
-    // updateActiveRestaurant(newActiveRestaurantIdx);
     setActiveRestaurantIdx(newActiveRestaurantIdx);
   };
 
   const handleViewNextRestaurant = () => {
     const newActiveRestaurantIdx = (activeRestaurantIdx + 1) % restaurants.length;
-    // updateActiveRestaurant(newActiveRestaurantIdx);
     setActiveRestaurantIdx(newActiveRestaurantIdx);
   };
 
@@ -252,6 +250,7 @@ const Restaurants = (props) => {
     <RestaurantsComponent backdrop={assets[5]}>
       {activeRestaurant != null && (
         <Restaurant
+          viewingSingle={restaurants.length === 1}
           index={activeRestaurantIdx}
           restaurantData={{ ...activeRestaurant }}
           onShowRestaurantLocationCallback={onShowRestaurantLocationCallback}
