@@ -1,4 +1,4 @@
-import { CardContent, CardMedia, Card, Grid, styled } from "@mui/material";
+import { CardContent, CardMedia, Card, Grid, styled, Typography } from "@mui/material";
 import Icon from "@mui/material/Icon";
 import { useEffect, useState, Fragment } from "react";
 
@@ -23,7 +23,7 @@ const CardContainer = styled(Card)({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  width: "60%",
+  width: "80%",
   height: "90vh",
   backgroundColor: "white",
   id: "restaurant-container",
@@ -79,8 +79,12 @@ const TopComponent = styled(Grid)((props) => ({
   alignItems: "center",
 }));
 
-const TextComponent = styled(GridRow)((children, ...otherProps) => ({
-  gridRow: true,
+const TextComponent = styled(Typography)((children, ...otherProps) => ({
+  // gridRow: true,
+  display: "flex",
+  flexDirection: { xs: "column", sm: "row" },
+  justifyContent: "flex-start",
+  alignItems: "center",
   ...otherProps,
 }));
 
@@ -181,9 +185,15 @@ const getDescription = async (description) => {
     })
   ).then((comps) => {
     return comps.map((comp, index) => (
-      <TextComponent width={"100%"} height={"15%"}>
-        <Text key={index} style={TextStyle} text={comp} />
-      </TextComponent>
+      // <TextComponent width={"100%"} height={"15%"}>
+      //   <Text key={index} style={TextStyle} text={comp} />
+      // </TextComponent>
+      <Grid width={"100%"} borderBottom={`1px solid black`}>
+        <TextComponent key={index} sx={TextStyle} width={"100%"} height={"15%"}>
+          {/* <Text key={index} style={TextStyle} text={data[attribute]} /> */}
+          {comp}
+        </TextComponent>
+      </Grid>
     ));
   });
 
@@ -199,16 +209,19 @@ const getAttributes = (attributes, data) => {
           return component;
         } else {
           const component = (
-            <TextComponent width={"100%"} height={"15%"}>
-              <Text key={index} style={TextStyle} text={data[attribute]} />
-            </TextComponent>
+            <Grid width={"100%"} borderBottom={`1px solid black`}>
+              <TextComponent key={index} sx={TextStyle} width={"100%"} height={"15%"}>
+                {/* <Text key={index} style={TextStyle} text={data[attribute]} /> */}
+                {data[attribute]}
+              </TextComponent>
+            </Grid>
           );
           return component;
         }
       })
     ).then((result) => result);
 
-    return resolve(<Grid width={"60%"}>{attributesComponent}</Grid>);
+    return resolve(<Grid width={"90%"}>{attributesComponent}</Grid>);
   });
 };
 
@@ -300,14 +313,14 @@ const Restaurant = (props) => {
           <TopComponent flexDirection={"row"} justifyContent={"center"}>
             {/* <CardMediaComponent flex={"55%"}> */}
             <CardMedia
-              sx={{ flex: "55%", border: `8px black solid`, borderRadius: "20px" }}
+              sx={{ flex: "1/2", border: `8px black solid`, borderRadius: "20px" }}
               image={data.image_url}
               component={"img"}
               src={"img"}
               height={"250px"}
             />
             {/* </CardMediaComponent> */}
-            <MainDetailsComponent flex={"45%"}>{mainDetails}</MainDetailsComponent>
+            <MainDetailsComponent flex={"1/2"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
           <MapComponent>
             {otherDetails !== "" && otherDetails.location !== LOCATION_MASK_MESSAGE ? (
