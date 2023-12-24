@@ -1,6 +1,6 @@
 import { useContext, useState, useMemo, useEffect } from "react";
-import MUIModal from "@mui/material/Modal";
-import { Box, Button, List, styled, Grid, Typography } from "@mui/material";
+
+import { Box, Modal, Button, List, styled, Grid, Typography } from "@mui/material";
 import { MessageContext } from "../providers/MessageProvider";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -10,7 +10,7 @@ import Text from "../ui_components/Text";
 import { UPDATE_MESSAGE, UPDATE_MODAL_OPEN } from "../reducer/Message/MessageAction";
 import { useTheme } from "@emotion/react";
 
-const ModalComponent = styled(MUIModal)(({ theme }) => ({
+const ModalComponent = styled(Modal)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -48,21 +48,37 @@ const InteractiveModal = ({ open, message, onClickCallback }) => {
   //   }
   // }, [global.open, local]);
 
-  const onClose = () => {
-    // setLocal({ ...local, open: false });
-    // messageDispatch({
-    //   type: UPDATE_MODAL_OPEN,
-    //   modalOpen: false,
-    // });
+  // const onClose = () => {
+  //   // setLocal({ ...local, open: false });
+  //   // messageDispatch({
+  //   //   type: UPDATE_MODAL_OPEN,
+  //   //   modalOpen: false,
+  //   // });
 
-    onClickCallback();
-  };
+  //   onClickCallback();
+  // };
 
   return (
-    <ModalComponent>
+    <Modal
+      open={open}
+      onClose={() => onClickCallback()}
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 300,
+        height: 300,
+        // backgroundColor: theme.palette.primary.light.main,
+        boxShadow: 24,
+        p: 4,
+        border: `8px solid white`,
+        borderRadius: `20px`,
+      }}
+    >
       {/* <List> */}
       {/* <div> */}
-      <Grid sx={{ justifyContent: "space-evenly", alignItems: "center" }}>
+      {/* <Grid sx={{ justifyContent: "space-evenly", alignItems: "center" }}>
         <ButtonComponent onClick={() => onClickCallback()}>
           <CheckIcon />
         </ButtonComponent>
@@ -71,11 +87,13 @@ const InteractiveModal = ({ open, message, onClickCallback }) => {
         <ButtonComponent onClick={() => onClickCallback()}>
           <CloseIcon />
         </ButtonComponent>
-      </Grid>
+      </Grid> */}
       {/* </div> */}
       {/* </List> */}
-      <Typography color={"white"}>{message}</Typography>
-    </ModalComponent>
+      {/* <Grid onClick={() => onClickCallback()}> */}
+      <Typography>{message}</Typography>
+      {/* </Grid> */}
+    </Modal>
   );
 };
 

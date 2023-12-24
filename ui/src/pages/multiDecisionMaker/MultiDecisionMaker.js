@@ -1,24 +1,26 @@
 import { useState, useContext, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FormControl, Grid, Tabs, Tab } from "@mui/material";
+import { FormControl, Grid, Tabs, Tab, styled } from "@mui/material";
 import { Scrollbar } from "react-scrollbars-custom";
 
 import Text from "../../ui_components/Text";
 import TextField from "../../ui_components/TextField";
-import styled from "@emotion/styled";
-import GridRow from "../../ui_components/GridRow";
+// import styled from "@emotion/styled";
+// import GridRow from "../../ui_components/GridRow";
 import RoundButton from "../../ui_components/RoundButton";
-import attributes from "../../config";
 import Checkboxes from "../../ui_components/Checkbox";
 import Dropdown from "../../ui_components/Dropdown";
+
+import Modal from "../modal";
+import attributes from "../../config";
 
 import { MessageContext } from "../../providers/MessageProvider";
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { GameContext } from "../../providers/GameProvider";
 
-import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
-import { UPDATE_RESTAURANTS_FOR_GAMES } from "../../reducer/Game/GameActions";
-import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
+// import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
+// import { UPDATE_RESTAURANTS_FOR_GAMES } from "../../reducer/Game/GameActions";
+// import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/actions";
 import { useFetchYelpRestaurants } from "../../hooks/API/Restaurants";
 
 const GridRowStyle = (display) => {
@@ -195,7 +197,8 @@ const useInitializeRestaurants = (sources) => {
 const MultiDecisionMaker = (props) => {
   const games = attributes.games.names;
   const navigate = useNavigate();
-  // const location = useLocation();
+  const [message, setMessage] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const { messageState, messageDispatch } = useContext(MessageContext);
   const { restaurantState, restaurantDispatch } = useContext(RestaurantsContext);
@@ -247,41 +250,41 @@ const MultiDecisionMaker = (props) => {
     // });
   };
 
-  const handleGameStart = (gameStart = true) => {
-    if (gameStart) {
-      if (restaurantInputs.every((restaurant) => restaurant === "")) return;
-      if (selectedGame === "") return;
+  // const handleGameStart = (gameStart = true) => {
+  //   if (gameStart) {
+  //     if (restaurantInputs.every((restaurant) => restaurant === "")) return;
+  //     if (selectedGame === "") return;
 
-      const filteredRestaurantInputs = restaurantInputs.filter((restaurant) => Object.keys(restaurant).length !== 0);
+  //     const filteredRestaurantInputs = restaurantInputs.filter((restaurant) => Object.keys(restaurant).length !== 0);
 
-      const handleGameEndCallback = (selectedItem) => {
-        // Note the selectedItem returned by the games is a restaurant data object
-        restaurantDispatch({
-          type: UPDATE_RESTAURANTS,
-          payload: {
-            restaurantsData: [selectedItem],
-          },
-        });
+  //     const handleGameEndCallback = (selectedItem) => {
+  //       // Note the selectedItem returned by the games is a restaurant data object
+  //       restaurantDispatch({
+  //         type: UPDATE_RESTAURANTS,
+  //         payload: {
+  //           restaurantsData: [selectedItem],
+  //         },
+  //       });
 
-        messageDispatch({
-          type: UPDATE_MESSAGE,
-          message: `you selected ${selectedItem.name}`,
-          onModalClick: () => navigate("/Restaurants"),
-        });
-      };
+  //       messageDispatch({
+  //         type: UPDATE_MESSAGE,
+  //         message: `you selected ${selectedItem.name}`,
+  //         onModalClick: () => navigate("/Restaurants"),
+  //       });
+  //     };
 
-      gameDispatch({
-        type: UPDATE_RESTAURANTS_FOR_GAMES,
-        payload: {
-          restaurants: filteredRestaurantInputs,
-          onGameEndCallback: handleGameEndCallback,
-        },
-      });
+  //     gameDispatch({
+  //       type: UPDATE_RESTAURANTS_FOR_GAMES,
+  //       payload: {
+  //         restaurants: filteredRestaurantInputs,
+  //         onGameEndCallback: handleGameEndCallback,
+  //       },
+  //     });
 
-      console.log("game started");
-      navigate(`/Games/${selectedGame}`, { replace: true });
-    }
-  };
+  //     console.log("game started");
+  //     navigate(`/Games/${selectedGame}`, { replace: true });
+  //   }
+  // };
 
   const handleRestaurantChange = (index, restaurant) => {
     const newRestaurantInputs = [...restaurantInputs];
@@ -325,6 +328,7 @@ const MultiDecisionMaker = (props) => {
           </RowComponent>
         </RowComponent>
       </ContentComponent>
+      {/* <Modal open={modalOpen} message={message} interactive={true} /> */}
     </MultiDecisionMakerComponent>
   );
 };
