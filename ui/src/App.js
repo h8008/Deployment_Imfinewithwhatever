@@ -50,7 +50,7 @@ function App() {
                     <div className="App">
                       <Router>
                         <Menu />
-                        <Modal />
+                        {/* <Modal /> */}
                         <BackgroundDispatcher />
                         <Routes>
                           <Route exact path="/" element={<Home />} />

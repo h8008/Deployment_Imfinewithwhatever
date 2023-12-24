@@ -1,6 +1,6 @@
 import { useContext, useState, useMemo, useEffect } from "react";
 import MUIModal from "@mui/material/Modal";
-import { Box, Button, List, styled } from "@mui/material";
+import { Box, Button, List, styled, Grid, Typography } from "@mui/material";
 import { MessageContext } from "../providers/MessageProvider";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import RowComponent from "../ui_components/RowComponent";
 import Text from "../ui_components/Text";
 import { UPDATE_MESSAGE, UPDATE_MODAL_OPEN } from "../reducer/Message/MessageAction";
+import { useTheme } from "@emotion/react";
 
 const ModalComponent = styled(MUIModal)(({ theme }) => ({
   position: "absolute",
@@ -29,13 +30,14 @@ const ButtonComponent = styled(Button)(({ theme }) => ({
   width: "50px",
 }));
 
-const InteractiveModal = (props) => {
-  const { messageState, messageDispatch } = useContext(MessageContext);
-  const interactive = messageState.interactive;
-  const onModalClickCallback = messageState.onModalClick;
-  // const global = useMemo(() => ({ open: messageState.modalOpen }), [messageState.modalOpen]);
-  // const [local, setLocal] = useState({ ...global });
-  const open = useMemo(() => messageState.modalOpen);
+const InteractiveModal = ({ open, message, onClickCallback }) => {
+  const theme = useTheme();
+  // onst { messageState, messageDispatch } = useContext(MessageContext);
+  // const interactive = messageState.interactive;
+  // const onModalClickCallback = messageState.onModalClick;
+  // const open = useMemo(() => messageState.modalOpen, [messageState.modalOpen]);
+
+  // const { open, message, onClickCallback } = props;
 
   // console.log("local", local);
   // console.log("global", global);
@@ -48,33 +50,32 @@ const InteractiveModal = (props) => {
 
   const onClose = () => {
     // setLocal({ ...local, open: false });
-    messageDispatch({
-      type: UPDATE_MODAL_OPEN,
-      modalOpen: false,
-    });
-    onModalClickCallback();
+    // messageDispatch({
+    //   type: UPDATE_MODAL_OPEN,
+    //   modalOpen: false,
+    // });
+
+    onClickCallback();
   };
 
   return (
-    <>
-      {interactive && (
-        <ModalComponent open={open}>
-          <>
-            <List>
-              <RowComponent theme={{ justifyContent: "space-evenly", alignItems: "center" }}>
-                <ButtonComponent onClick={onClose}>
-                  <CheckIcon />
-                </ButtonComponent>
-                <ButtonComponent onClick={onClose}>
-                  <CloseIcon />
-                </ButtonComponent>
-              </RowComponent>
-            </List>
-            <Text text={messageState.message} />
-          </>
-        </ModalComponent>
-      )}
-    </>
+    <ModalComponent>
+      {/* <List> */}
+      {/* <div> */}
+      <Grid sx={{ justifyContent: "space-evenly", alignItems: "center" }}>
+        <ButtonComponent onClick={() => onClickCallback()}>
+          <CheckIcon />
+        </ButtonComponent>
+      </Grid>
+      <Grid sx={{ justifyContent: "space-evenly", alignItems: "center" }}>
+        <ButtonComponent onClick={() => onClickCallback()}>
+          <CloseIcon />
+        </ButtonComponent>
+      </Grid>
+      {/* </div> */}
+      {/* </List> */}
+      <Typography color={"white"}>{message}</Typography>
+    </ModalComponent>
   );
 };
 

@@ -1,10 +1,11 @@
-import MUIModal from "@mui/material/Modal";
-import { Box, styled } from "@mui/material";
+// import MUIModal from "@mui/material/Modal";
+import { Box, Modal as MUIModal, Typography, styled, Grid } from "@mui/material";
 import { useContext } from "react";
 import { MessageContext } from "../providers/MessageProvider";
+import { useTheme } from "@mui/material";
 
 const ModalComponent = styled(MUIModal)(({ theme }) => ({
-  position: "absolute",
+  // position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -17,12 +18,22 @@ const ModalComponent = styled(MUIModal)(({ theme }) => ({
   borderRadius: `20px`,
 }));
 
-const SimpleModal = (props) => {
-  const { messageState } = useContext(MessageContext);
-  const open = messageState.modalOpen;
-  const interactive = messageState.interactive;
+const SimpleModal = ({ open, message, onClickCallback }) => {
+  // const { messageState } = useContext(MessageContext);
+  // const open = messageState.modalOpen;
+  // const interactive = messageState.interactive;
 
-  return <>{!interactive && <ModalComponent open={open}>{messageState.message}</ModalComponent>}</>;
+  const theme = useTheme();
+
+  return (
+    <ModalComponent open={open}>
+      <Grid width={"100%"} height={"100%"} onClick={() => onClickCallback()}>
+        <Typography height={"100%"} text={theme.palette.primary.light.main}>
+          {message}
+        </Typography>
+      </Grid>
+    </ModalComponent>
+  );
 };
 
 export default SimpleModal;

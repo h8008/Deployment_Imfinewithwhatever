@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-const Text = ({ children, style, text, ...otherProps }) => {
+const Text = ({ style, text, ...otherProps }) => {
   return (
     <Typography sx={style} {...otherProps}>
       {text}

@@ -233,13 +233,18 @@ const MultiDecisionMaker = (props) => {
     if (restaurantInputs.length < 3 && restaurantInputs.some((input) => input !== "")) {
       return;
     }
+    if (restaurantInputs.every((restaurant) => restaurant === "")) return;
+    if (selectedGame === "") return;
 
-    messageDispatch({
-      type: UPDATE_MESSAGE,
-      message: "Start game ?",
-      interactive: true,
-      onModalClick: handleGameStart,
-    });
+    const gameData = restaurantInputs.filter((restaurant) => Object.keys(restaurant).length !== 0);
+    navigate(`/Games/${selectedGame}`, { state: { data: gameData } });
+
+    // messageDispatch({
+    //   type: UPDATE_MESSAGE,
+    //   message: "Start game ?",
+    //   interactive: true,
+    //   onModalClick: handleGameStart,
+    // });
   };
 
   const handleGameStart = (gameStart = true) => {

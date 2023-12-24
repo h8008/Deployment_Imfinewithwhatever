@@ -1,5 +1,5 @@
 import { Component, useContext, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Matter from "matter-js";
 import { useTheme } from "@mui/material";
 
@@ -9,6 +9,8 @@ import { RestaurantsContext } from "../../../providers/RestaurantsProvider";
 import { MessageContext } from "../../../providers/MessageProvider";
 import { UPDATE_RESTAURANTS } from "../../../reducer/Main/actions";
 import { UPDATE_MESSAGE } from "../../../reducer/Message/MessageAction";
+
+import Modal from "../../../pages/modal";
 
 var Engine = Matter.Engine,
   Events = Matter.Events,
@@ -54,52 +56,54 @@ const useHandleNavigate = (shouldNavigate, next, message, messageDispatch) => {
 };
 
 const Plinko = ({ children, ...otherProps }) => {
-  const [message, setMessage] = useState(null);
   const [choice, setChoice] = useState(null);
   const [next, setNext] = useState(null);
-  const [shouldNavigate, setShouldNavigate] = useState(false);
   const { restaurantDispatch } = useContext(RestaurantsContext);
-  const { messageDispatch } = useContext(MessageContext);
+  // const { messageDispatch } = useContext(MessageContext);
   const [run, setRun] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { data } = location?.state || [];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [shouldNavigate, setShouldNavigate] = useState(false);
 
   const handleGameEnd = async (selected) => {
-    const choice = restaurants[selected];
+    const choice = data[selected];
     const message = `You selected: ${choice.name}`;
-    restaurantDispatch({
+    setChoice(choice);
+    setRun(false);
+    setShouldNavigate(true);
+    setNext("/Restaurants");
+    setMessage(message);
+    setModalOpen(true);
+  };
+
+  const handleModalClick = async () => {
+    setModalOpen(false);
+    await restaurantDispatch({
       type: UPDATE_RESTAURANTS,
       payload: {
         restaurants: [choice],
       },
     });
-    // messageDispatch({
-    //   type: UPDATE_MESSAGE,
-    //   message: message,
-    //   onModalClick: () => navigate("/Restaurants"),
-    // });
-    // setRun(false);
-    setRun(false);
-    setShouldNavigate(true);
-    setNext("/Restaurants");
-    setMessage(message);
+    navigate(next);
   };
 
   // useHandleDispatchChoice(choice, setChoice);
   // useHandleDispatchMessage(message);
-  useHandleNavigate(shouldNavigate, next);
+  // useHandleNavigate(shouldNavigate, next);
 
   const theme = useTheme();
   const canvasRef = useRef(null);
   const boxRef = useRef(null);
-  const { gameState } = useContext(GameContext);
-  const restaurants = gameState.restaurants;
 
   return (
     <>
       {run && (
         <PlinkoComponent
           handleGameEnd={handleGameEnd}
-          slots={restaurants}
+          slots={data}
           theme={theme}
           box={boxRef}
           run={run}
@@ -107,6 +111,7 @@ const Plinko = ({ children, ...otherProps }) => {
           {...otherProps}
         />
       )}
+      <Modal open={modalOpen} onClickCallback={handleModalClick} interactive={false} message={message} />
     </>
   );
 };
