@@ -287,24 +287,6 @@ const Restaurant = (props) => {
   const [reviews, setReviews] = useState([]);
 
   useGetRestaurantReviews({ id: restaurantData.id }, reviews, setReviews);
-  // const [reviews, setReviews] = useState([]);
-
-  console.log("reviews", reviews);
-
-  // useEffect(() => {
-  //   const getPreference = async () => {
-  //     const params = {
-  //       restaurantID: restaurantData.id,
-  //       email: email,
-  //     };
-  //     const preferenceData = await API.Users.getRestaurantPreferences(params);
-  //     if (preferenceData.status === "OK") {
-  //       const preference = [...preferenceData.preference];
-  //       updateActiveRestaurant(index, "preference", preference);
-  //     }
-  //   };
-  //   if (restaurantData.preference == null) getPreference();
-  // }, [email, index, restaurantData.id, restaurantData.preference, updateActiveRestaurant]);
 
   useEffect(() => {
     const data = extractData(restaurantData);
@@ -330,16 +312,7 @@ const Restaurant = (props) => {
     <Fragment>
       {data != null && (
         <CardContainer>
-          {/* {reviews.length > 0 && (
-            <Grid width={"100%"} display={"flex"} justifyContent={"flex-start"} alignItems={"center"}>
-              <SwipeableDrawer items={reviews.map((r) => r.text)} />
-              <Typography fontFamily={"monospace"} fontWeight={"bolder"}>
-                {"See what others are saying"}
-              </Typography>
-            </Grid>
-          )} */}
           <TopComponent flexDirection={"row"} justifyContent={"center"}>
-            {/* <CardMediaComponent flex={"55%"}> */}
             <CardMedia
               sx={{ flex: "1/2", border: `8px black solid`, borderRadius: "20px" }}
               image={data.image_url}
@@ -347,18 +320,9 @@ const Restaurant = (props) => {
               src={"img"}
               height={"250px"}
             />
-            {/* </CardMediaComponent> */}
             <MainDetailsComponent flex={"1/2"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
           <BodyComponent>
-            {/* <WhatOthersSayComponent>
-              {reviews.map((review, i) => (
-                <Box key={`their review ${i}`} xs={6}>
-                  <Typography>{review.text}</Typography>
-                  <Typography>{review.rating}</Typography>
-                </Box>
-              ))}
-            </WhatOthersSayComponent> */}
             <WhatOthersSayComponent>
               {reviews.length > 0 && (
                 <Grid width={"100%"} display={"flex"} justifyContent={"flex-start"} alignItems={"center"} container>
