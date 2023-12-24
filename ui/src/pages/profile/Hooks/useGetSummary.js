@@ -75,29 +75,24 @@ const sumUpReviews = (reviews) => {
 };
 
 const useGetSummary = (props) => {
-  //   const summary = useMemo(() => (!ready ? {} : writeSummary(reviews, preferences)), [ready, reviews, preferences]);
-  const [summary, setSummary] = useState(undefined);
+  // const summary = useMemo(() => (!ready ? {} : writeSummary(reviews, preferences)), [ready, reviews, preferences]);
+  const [summary, setSummary] = useState({});
   const reviews = useMemo(() => (props.reviews ? [...props.reviews] : []), [props.reviews]);
   const preferences = useMemo(() => (props.preferences ? { ...props.preferences } : {}), [props.preferences]);
+  // const reviewSummary = useMemo(
+  //   async () => await sumUpReviews(props.reviews ? [...props.reviews] : []),
+  //   [props.reviews]
+  // );
+  // const preferenceSummary = useMemo(
+  //   async () => await sumUpPreferences(props.preferences ? { ...props.preferences } : { dislikes: [], likes: [] }),
+  //   [props.preferences]
+  // );
 
-  console.log("reviews", reviews, "preferences", preferences);
+  // console.log("reviews", reviews, "preferences", preferences);
 
-  // useEffect(() => {
-  //   if (reviews && reviews.length > 0) {
-  //     const summary = sumUpReviews(reviews);
-  //     setReviews(summary);
-  //   }
-  // }, [reviews]);
-
-  // useEffect(() => {
-  //   const getSummary = async () => {
-  //     const summary = await sumUpPreferences(preferences);
-  //     setPreferences(summary);
-  //   };
-  //   if (preferences) {
-  //     getSummary();
-  //   }
-  // }, [preferences]);
+  // const summary = useMemo(async () => {
+  //   return { reviewSummary, preferenceSummary };
+  // }, [reviewSummary, preferenceSummary]);
 
   useEffect(() => {
     const getSummary = async () => {
@@ -110,7 +105,7 @@ const useGetSummary = (props) => {
     }
   }, [preferences, reviews]);
 
-  return [summary];
+  return summary;
 };
 
 export default useGetSummary;

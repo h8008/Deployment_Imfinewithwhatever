@@ -87,8 +87,9 @@ const PreferencesComponent = ({ preferences, active }) => {
   return <>{active && <Preferences preferences={preferences} />}</>;
 };
 
-const useGetPreferences = (email) => {
-  const [preferences, setPreferences] = useState([]);
+const useGetPreferences = (email, preferences, setPreferences) => {
+  // const [preferences, setPreferences] = useState([]);
+
   useEffect(() => {
     const getPreferences = async () => {
       const res = await API.Preference.getAllForCurrentUser({ email: email });
@@ -97,16 +98,26 @@ const useGetPreferences = (email) => {
         setPreferences([...res.data]);
       }
     };
-    if (email) {
+    if (email && preferences.length === 0) {
+      console.log("fetching preferences");
       getPreferences();
     }
-  }, [email]);
+  }, [email, preferences.length, setPreferences]);
 
-  return [preferences];
+  return preferences;
 };
 
-const useGetReviews = (email) => {
-  const [reviews, setReviews] = useState(null);
+// const useGetPreferences = (email) => {
+//   const preferences = useMemo(async () => {
+//     const res = await API.Preference.getAllForCurrentUser({ email });
+//     return res.status === "OK" ? [...res.data] : [];
+//   }, [email]);
+
+//   return preferences;
+// };
+
+const useGetReviews = (email, reviews, setReviews) => {
+  // const [reviews, setReviews] = useState(null);
   useEffect(() => {
     const getReviews = async () => {
       const res = await API.UserReviews.getReviews({ email: email });
@@ -114,10 +125,11 @@ const useGetReviews = (email) => {
         setReviews([...res.data]);
       }
     };
-    if (email) {
+    if (email && reviews.length === 0) {
+      console.log("fetching reviews");
       getReviews();
     }
-  }, [email]);
+  }, [email, reviews.length, setReviews]);
 
   return [reviews];
 };
@@ -168,7 +180,7 @@ const useSortPreferences = (preferences) => {
       sort();
     }
   }, [preferences]);
-  return [sorted];
+  return sorted;
 };
 
 // const getActiveComponent = (activeComponentIdx, components) => {
@@ -208,7 +220,6 @@ const useGetComponentProps = (props) => {
     props.forEach((p, i) => {
       if (p != null && cp[i] == null) {
         cp[i] = p;
-        // cp[i] = { ...p };
       }
     });
     const update = cp.filter((p, i) => p !== componentProps[i]).length > 0;
@@ -217,18 +228,20 @@ const useGetComponentProps = (props) => {
     }
   }, [componentProps, props]);
 
-  return [componentProps];
+  return componentProps;
 };
 
 const useGetReadyState = (props) => {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const condition = props.every((p) => p != null);
-    if (condition) {
-      setReady(true);
-    }
-  }, [props]);
-  return [ready];
+  // const [ready, setReady] = useState(false);
+  // useEffect(() => {
+  //   const condition = props.every((p) => p != null);
+  //   if (condition) {
+  //     setReady(true);
+  //   }
+  // }, [props]);
+  // return [ready];
+
+  return useMemo(() => props.every((p) => p != null), [props]);
 };
 
 const useGetBackdropOfTheDay = (assets) => {
@@ -248,14 +261,16 @@ const Profile = (props) => {
   const { userState, userDispatch } = useContext(UserContext);
 
   const [backdrop] = useGetBackdropOfTheDay(assets);
-  const [reviews] = useGetReviews(userState.email);
-  // const [preferences] = useGetPreferences(userState.email);
-  const [preferences] = useMemo(() => [], []);
-  const [sortedPreferences] = useSortPreferences(preferences);
-  const [summary] = useGetSummary({ reviews, preferences: sortedPreferences });
-  const [componentProps] = useGetComponentProps([summary, sortedPreferences, reviews]);
-  const [ready] = useGetReadyState(componentProps);
-  // const [summary] = useGetSummary(ready, reviews, preferences);
+  const [preferences, setPreferences] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
+  useGetReviews(userState.email, reviews, setReviews);
+  useGetPreferences(userState.email, preferences, setPreferences);
+
+  const sortedPreferences = useSortPreferences(preferences);
+  const summary = useGetSummary({ reviews, preferences: sortedPreferences });
+  const componentProps = useGetComponentProps([summary, sortedPreferences, reviews]);
+  const ready = useGetReadyState(componentProps);
 
   const [componentNames, setComponentNames] = useState(["summary", "preferences", "reviews"]);
   const [components] = useGetComponents(
