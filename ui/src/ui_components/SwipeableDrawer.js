@@ -70,7 +70,6 @@ export default function SwipeableDrawer({
   const buttonColor = slideOutButtonColor ? slideOutButtonColor : theme.palette.error.main;
 
   // console.log("slide out button color", otherProps.slideOutButtonColor);
-  console.log("other props", otherProps);
 
   const [state, setState] = useState({
     top: false,

@@ -1,8 +1,11 @@
 const destroyCookies = require('../../config/destroyCookies');
 
 module.exports = (min_type) => {
-  return (ctx, next) => {
-    destroyCookies(ctx);
-    return next();
+  return async (ctx, next) => {
+    // destroyCookies(ctx);
+    ctx.cookies.set('access_token', null);
+    ctx.cookies.set('email', null);
+    ctx.cookies.set('loggedIn', null);
+    return await next();
   };
 };
