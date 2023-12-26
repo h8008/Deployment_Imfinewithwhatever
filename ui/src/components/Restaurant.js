@@ -53,14 +53,21 @@ const MapComponent = styled(Grid)((props) => ({
 
 const PlaceHolderMapComponent = (props) => {
   const style = {
-    width: "90%",
-    minWidth: "90%",
-    height: "100%",
-
+    // width: "90%",
+    // minWidth: "90%",
+    width: "750px",
+    height: "400px",
     borderRadius: "20px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
-  return <BorderedBox style={style} />;
+  return (
+    <BorderedBox style={style}>
+      <Text text={LOCATION_MASK_MESSAGE} color={"black"} />
+    </BorderedBox>
+  );
 };
 
 const CardMediaComponent = ({ children, ...otherProps }) => {
@@ -342,9 +349,9 @@ const Restaurant = (props) => {
               ) : (
                 <PlaceHolderMapComponent />
               )}
-              <CardContent>
+              {/* <CardContent>
                 <Text text={otherDetails.location} />
-              </CardContent>
+              </CardContent> */}
             </MapComponent>
           </BodyComponent>
           <ButtonsComponent flexDirection={"row"} justifyContent={"space-evenly"}>
