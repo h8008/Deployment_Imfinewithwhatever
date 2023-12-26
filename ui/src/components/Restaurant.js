@@ -26,10 +26,10 @@ const WhatOthersSayComponent = styled(Grid)((props) => ({
 const CardContainer = styled(Card)({
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
+  justifyContent: "space-between",
   alignItems: "center",
-  width: "80%",
-  height: "90vh",
+  width: "90%",
+  // height: "90vh",
   backgroundColor: "white",
   id: "restaurant-container",
   borderLeft: "8px solid black",
@@ -39,6 +39,7 @@ const CardContainer = styled(Card)({
   borderBottomRightRadius: "20px",
   padding: "20px",
   margin: "20px",
+  overflow: "scroll",
 });
 
 const MapComponent = styled(Grid)((props) => ({
@@ -79,11 +80,13 @@ const TopComponent = styled(Grid)((props) => ({
   height: "40%",
   padding: "20px",
   gridRow: true,
-  display: "flex",
-  flex: props.flex,
-  flexDirection: props.flexDirection,
-  justifyContent: props.justifyContent,
-  alignItems: "center",
+  sx: {
+    display: "flex",
+    flex: props.flex,
+    flexDirection: { xs: "column", sm: "row" },
+    justifyContent: props.justifyContent,
+    alignItems: "center",
+  },
 }));
 
 const BodyComponent = styled(Grid)((props) => ({

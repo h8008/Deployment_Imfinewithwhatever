@@ -299,18 +299,6 @@ function Main(props) {
     <MainComponent>
       <EggYolk zIndex={1} />
       <ContentComponent data_id="main-page">
-        {/* {
-          <Components
-            components={components}
-            cuisines={cuisines}
-            cuisine={cuisines[cuisineIdx]}
-            handleLocationChange={handleLocationChange}
-            handleCuisinesChange={handleCuisinesChange}
-            games={games}
-            onMultipleIdeasCallback={handleDecideForMeButtonClick}
-            restaurantDispatch={restaurantDispatch}
-          />
-        } */}
         <Grid
           sx={{
             display: "flex",
@@ -319,7 +307,6 @@ function Main(props) {
             width: "100%",
           }}
           container
-          // columns={12}
         >
           <Grid>
             <Typography textAlign={"left"} color={"white"}>
