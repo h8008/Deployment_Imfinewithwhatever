@@ -21,15 +21,15 @@ import useGetSummary from "./Hooks/useGetSummary";
 
 const ProfileComponent = styled(Grid)({
   // marginTop: "10vh",
-  height: "100vh",
-  // height: "fit-content",
+  // height: "100vh",
+  height: "fit-content",
   width: "100vw",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
   // backgroundColor: "#ffffff",
-  outline: "16px solid white",
+  // outline: "16px solid white",
 });
 
 const DefaultComponent = ({ summary, active }) => {

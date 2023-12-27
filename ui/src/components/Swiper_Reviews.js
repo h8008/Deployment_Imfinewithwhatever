@@ -21,29 +21,25 @@ const ArrowsComponent = styled(Grid)(({ theme }) => ({
 }));
 
 const ReviewsContainerComponent = styled(Grid)(({ theme }) => ({
-  width: "80vw",
-  height: "50%",
-  gap: "5px",
-  backgroundColor: "#ffffff",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
+  // width: "80vw",
+  // height: "50%",
+  // gap: "5px",
+  // overflow: "scroll",
+  // backgroundColor: "#ffffff",
 }));
 
 const ReviewsComponent = styled(Grid)(({ theme }) => ({
-  contianer: true,
+  container: true,
   display: "flex",
   flexDirection: "column",
+  gap: "100px",
   justifyContent: "center",
   alignItems: "center",
-  height: "100vh",
+  height: "90vh",
   width: "80vw",
 }));
 
 const ReviewComponent = styled(Grid)(({ theme }) => ({
-  height: `200px`,
-  width: `200px`,
   padding: "8px",
   border: `8px solid black`,
   borderRadius: "20px",
@@ -72,24 +68,55 @@ const Reviews = ({ reviews }) => {
   };
 
   return (
-    <ReviewsComponent data_id={"reviews-component"}>
+    <ReviewsComponent data_id={"reviews-component"} mt={30}>
       <ArrowsComponent>
         <FaArrowLeft onClick={() => getPreviousSet()} />
         <FaArrowRight onClick={() => getNextSet()} />
       </ArrowsComponent>
-      <ReviewsContainerComponent container>
+      <ReviewsContainerComponent
+        container
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row", md: "row" },
+          flexWrap: "wrap",
+          gap: "20px",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+        // mt={35}
+      >
         {reviews
           .slice(active[0], active[1])
           .filter((review) => review != null)
           .map((review, i) => (
-            <ReviewComponent item xs={4}>
+            <ReviewComponent
+              item
+              sx={{
+                width: {
+                  xs: "200px",
+                  sm: "400px",
+                },
+                height: {
+                  xs: "200px",
+                  sm: "400px",
+                },
+              }}
+            >
               <div style={{ width: "100%" }}>
                 <Grid
-                  display={"flex"}
-                  flex={1}
-                  flexDirection={"row"}
-                  alignItems={"center"}
-                  justifyContent={"flex-start"}
+                  // display={"flex"}
+                  // flex={1}
+                  // flexDirection={"row"}
+                  // alignItems={"center"}
+                  // justifyContent={"flex-start"}
+                  margin="auto"
+                  sx={{
+                    display: "flex",
+                    width: { sm: "100%", md: "50%" },
+                    flexDirection: { xs: "column", sm: "row" },
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                 >
                   <Grid mr={5}>
                     <Text text={review.email} />
@@ -104,7 +131,7 @@ const Reviews = ({ reviews }) => {
                   flexDirection={"row"}
                   justifyContent={"flex-start"}
                   alignItems={"center"}
-                  flexWrap={"wrap"}
+                  // flexWrap={"wrap"}
                   borderTop={`2px black solid`}
                   borderRadius={`1px`}
                 >
