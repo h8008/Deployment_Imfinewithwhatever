@@ -20,6 +20,8 @@ const IconComponent = styled(TiThMenuOutline)(({ children, theme, ...otherProps 
 const MenuComponent = styled(Grid)((props) => ({
   width: "100%",
   height: "5vh",
+  top: "0",
+  left: "0",
   display: "flex",
   flexDirection: "row",
   justifyContent: "flex-start",

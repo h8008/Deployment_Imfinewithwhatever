@@ -93,30 +93,41 @@ const getData = (chartData) => {
   };
 };
 
-const getOptions = (props) => ({
+const getOptions = (width, height, hovered) => ({
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: true,
+      display: hovered ? true : false,
     },
     title: {
-      display: false,
+      display: true,
     },
   },
-  scales: {
-    height: props.height,
-    width: props.width,
-  },
+  // scales: {
+  //   height: "100%",
+  //   width: "100%",
+  // },
 });
 
 const PieChart = ({ chartData, title, ...otherProps }) => {
   // console.log("chart data", chartData);
   const [data, setData] = useState(getData(chartData));
+  const [hovered, setHovered] = useState(false);
   const { width, height } = otherProps;
   // useDrawPieChart(width, height, radius, data, options)
 
   return (
-    <Fragment>{data && <Pie style={{ height, width }} data={data} options={getOptions({ width, height })} />}</Fragment>
+    <Fragment>
+      {data && (
+        <Pie
+          style={{ height, width }}
+          data={data}
+          options={getOptions(width, height, hovered)}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        />
+      )}
+    </Fragment>
   );
 };
 

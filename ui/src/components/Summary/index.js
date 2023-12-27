@@ -7,38 +7,38 @@ import BarChart from "../BarChart/A_Better_Barchart";
 
 const SummaryComponent = styled(Grid)(({ children, ...otherProps }) => ({
   container: true,
-  width: "100%",
+  width: "80%",
+  height: "fit-content",
+  // outline: "1px solid black",
+  gap: "80px",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "space-between",
+  justifyContent: "center",
   alignItems: "center",
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: `translate(-50%, -50%)`,
-  // border: "8px black solid",
-  // borderRadius: "20px",
-  padding: "20px",
+  padding: "10px",
   ...otherProps,
-  zIndex: 3,
 }));
 
 const TitlesComponent = styled(Grid)(() => ({
   gridRow: true,
-  display: "flex",
   width: "100%",
-  flexDirection: "row",
-  justifyContent: "space-evenly",
-  alignItems: "center",
   flexWrap: "wrap",
 }));
 
 const ContentComponent = styled(Grid)(() => ({
   gridRow: true,
-  width: "100%",
-  height: "60%",
-  border: "8px white solid",
-  borderRadius: "8px",
+  width: "60%",
+  height: "fit-content",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  // border: "8px white solid",
+  // borderRadius: "8px",
 }));
 
 const ReviewComponent = ({ reviews }) => {
@@ -60,10 +60,10 @@ const ReviewComponent = ({ reviews }) => {
   };
 
   return (
-    <Fragment>
-      <Text text={mainText} />
-      <BarChart {...chartProps} />
-    </Fragment>
+    <Grid sx={{ width: "80%", height: "fit-content", padding: "10px" }}>
+      {/* <Text text={mainText} /> */}
+      <BarChart {...chartProps} width={"100%"} height={"80%"} />
+    </Grid>
   );
 };
 
@@ -80,26 +80,33 @@ const BubbleComponent = styled(Box)(({ children, theme, ...otherProps }) => ({
 
 const BubblesComponent = styled(Grid)((props) => ({
   width: "100%",
-  height: "90%",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-evenly",
-  alignItems: "center",
+  height: "fit-content",
+  // display: "flex",
+  // flexDirection: "row",
+  // justifyContent: "space-evenly",
+  // alignItems: "center",
 }));
 
 const LikeComponent = ({ likes }) => {
   const mainText = `You swiped left on these tastes`;
 
-  const bubbleSx = likes.map((dislike, i) => ({
-    width: dislike[1] * 1.5 * 20,
-    height: dislike[1] * 1.5 * 20,
-    transform: `translateY(${i % 2 === 0 ? 2 * dislike[1] : -2 * dislike[1]}%)`,
+  const bubbleSx = likes.map((like, i) => ({
+    width: like[1] * 40,
+    height: like[1] * 40,
+    // transform: `translateY(${i % 2 === 0 ? 2 * dislike[1] : -2 * dislike[1]}%)`,
   }));
 
   return (
     <Fragment>
-      <Text text={mainText} />
-      <BubblesComponent>
+      {/* <Text text={mainText} /> */}
+      <BubblesComponent
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row " },
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        }}
+      >
         {bubbleSx.map((sx, i) => (
           <BubbleComponent key={`bubble ${i}`} sx={sx}>
             <Text
@@ -123,21 +130,28 @@ const LikeComponent = ({ likes }) => {
 const DislikeComponent = ({ dislikes }) => {
   const mainText = `You swiped right on these tastes`;
   const bubbleSx = dislikes.map((dislike, i) => ({
-    width: dislike[1] * 1.5 * 20,
-    height: dislike[1] * 1.5 * 20,
+    width: dislike[1] * 40,
+    height: dislike[1] * 40,
     transform: `translateY(${i % 2 === 0 ? 2 * dislike[1] : -2 * dislike[1]}%)`,
   }));
   return (
-    <Grid>
-      <Text text={mainText} />
-      <BubblesComponent>
+    <Fragment>
+      {/* <Text text={mainText} /> */}
+      <BubblesComponent
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row " },
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        }}
+      >
         {bubbleSx.map((sx, i) => (
           <BubbleComponent key={`bubble ${i}`} sx={sx}>
             <Text text={dislikes[i]} color="red" />
           </BubbleComponent>
         ))}
       </BubblesComponent>
-    </Grid>
+    </Fragment>
   );
 };
 
@@ -157,8 +171,6 @@ const Summary = ({ summary, ...otherProps }) => {
   console.log("summary", summary);
   const { reviewSummary, preferenceSummary } = summary;
 
-  console.log("review summaries", reviewSummary);
-
   const items = ["Your Most Liked", "Your Least Favorite", "Based On Your Reviews"];
   const components = useMemo(
     () => getComponents(preferenceSummary.whitelist, preferenceSummary.blacklist, reviewSummary),
@@ -171,8 +183,22 @@ const Summary = ({ summary, ...otherProps }) => {
   };
 
   return (
-    <SummaryComponent {...otherProps}>
-      <TitlesComponent>
+    <SummaryComponent
+      {...otherProps}
+      sx={{
+        overflow: { sm: "hidden", xs: "scroll" },
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+      }}
+    >
+      <TitlesComponent
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        }}
+      >
         {items.map((item, i) => (
           <Button sx={{ width: "fit-content", padding: "10px" }} onClick={() => handleRenderActiveComponent(i)}>
             <BorderedBox style={{ borderRadius: "8px", border: "8px solid white" }}>

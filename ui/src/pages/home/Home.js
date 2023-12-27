@@ -15,7 +15,7 @@ import FoodWalls from "../../components/Three/FoodWalls";
 
 const HomeComponent = styled(Grid)(({ theme }) => ({
   container: true,
-  height: "90vh",
+  height: "100vh",
   width: "80vw",
   display: "flex",
   margin: "auto",

@@ -20,18 +20,21 @@ import EggYolks from "../../components/Three/TomatoEggs";
 import useGetSummary from "./Hooks/useGetSummary";
 
 const ProfileComponent = styled(Grid)({
+  // marginTop: "10vh",
   height: "100vh",
+  // height: "fit-content",
   width: "100vw",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "#ffffff",
+  // backgroundColor: "#ffffff",
+  outline: "16px solid white",
 });
 
 const DefaultComponent = ({ summary, active }) => {
   const style = {
-    height: "90vh",
+    height: "100vh",
     width: "100vw",
     backgroundColor: "red",
   };
@@ -41,7 +44,13 @@ const DefaultComponent = ({ summary, active }) => {
       {active && (
         <Grid sx={style}>
           <EggYolks zIndex={1} />
-          <Summary width="50%" height="50%" summary={summary} zIndex={1} />
+          <Summary
+            // width="50%"
+            height="100%"
+            sx={{ width: { xs: "100%", sm: "50%" }, marginTop: "20vh" }}
+            summary={summary}
+            zIndex={2}
+          />
         </Grid>
       )}
     </>
@@ -232,15 +241,6 @@ const useGetComponentProps = (props) => {
 };
 
 const useGetReadyState = (props) => {
-  // const [ready, setReady] = useState(false);
-  // useEffect(() => {
-  //   const condition = props.every((p) => p != null);
-  //   if (condition) {
-  //     setReady(true);
-  //   }
-  // }, [props]);
-  // return [ready];
-
   return useMemo(() => props.every((p) => p != null), [props]);
 };
 

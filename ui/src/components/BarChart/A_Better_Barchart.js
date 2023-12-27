@@ -1,51 +1,59 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
+import "./BarChart.css";
+
+import useGetWindowSize from "../../hooks/useGetWindowSize";
 
 const Barchart = (props) => {
-  const { chartData: data } = props;
+  const { chartData: data, height, width } = props;
   const ref = useRef();
+  const windowSize = useGetWindowSize();
 
   console.log("bar chart data", data);
 
   useEffect(() => {
+    const windowWidth = window.innerWidth / 2;
+
     // set the dimensions and margins of the graph
-    const margin = { top: 30, right: 150, bottom: 70, left: 150 },
-      width = 900 - margin.left - margin.right,
+    const margin = { top: 30, right: 30, bottom: 70, left: 30 },
+      width = windowWidth - margin.left - margin.right,
       height = 250 - margin.top - margin.bottom;
 
-    console.log("width", width, "height", height);
+    d3.forceCenter(0, 0);
 
     // append the svg object to the body of the page
     const svg = d3
       .select(ref.current)
       .append("svg")
-      .attr("width", width + margin.left + margin.right)
+      .classed("svg-content-responsive", true)
+      .attr("transform", `translate(${0} , ${margin.top * 3})`)
+      // .attr("width", width + margin.left + margin.right)
+      .attr("width", width)
       .attr("height", height + margin.top + margin.bottom)
       .attr("color", "white")
       .append("g")
-      .attr("transform", `translate(${margin.left * 2},${margin.top})`);
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // Parse the Data
-    // d3.csv(
-    //   "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv"
-    // ).then(function (data) {
-    // X axis
     const x = d3
       .scaleBand()
-      .range([0, width])
+      .range([0, width - 50])
       .domain(data.map((d) => d.name))
       .padding(0.2);
+
+    console.log("width", width);
+
     svg
       .append("g")
       .attr("transform", `translate(0, ${height})`)
+      .attr("width", "80%")
       .call(d3.axisBottom(x))
       .selectAll("text")
-      .attr("transform", "translate(-10,0)")
-      .style("text-anchor", "end");
+      .style("text-anchor", "end")
+      .attr("transform", `translate(${x.bandwidth() / 12}, ${20})rotate(45)`);
 
     // Add Y axis
     const y = d3.scaleLinear().domain([0, data[0].data]).range([height, 0]);
-    svg.append("g").call(d3.axisLeft(y));
+    svg.append("g").call(d3.axisLeft(y)).selectAll("text").attr("color", "black");
 
     // Bars
     svg
@@ -56,16 +64,23 @@ const Barchart = (props) => {
       .attr("y", (d) => y(d.data))
       .attr("width", x.bandwidth() / 2)
       .attr("height", (d) => height - y(d.data))
-      .attr("fill", "white");
+      .attr("fill", "white")
+      .attr("transform", `translate(${x.bandwidth() / 4}, 0)`);
   }, [data]);
 
   return (
-    <svg
-      width={"90%"}
-      height={"90%"}
+    <div
       id="barchart"
       ref={ref}
-      style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "auto" }}
+      style={{
+        height: "fit-content",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "auto",
+        position: "relative",
+      }}
+      // style={{ display: "inline-block", position: "relative", height: height, width: width }}
     />
   );
 };
