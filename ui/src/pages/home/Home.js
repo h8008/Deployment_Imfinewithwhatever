@@ -30,9 +30,13 @@ const HomeComponent = styled(Grid)(({ theme }) => ({
 
 const LogoComponent = styled(CardMedia)({
   backgroundImage: `url(${Logo})`,
+  backgroundSize: "contain",
   alt: "logo",
-  height: "600px",
-  width: "600px",
+  // height: "500px",
+  // maxHeight: "500px",
+  // minHeight: "200px",
+  // minWidth: "200px",
+  // maxWidth: "500px",
 });
 
 const Home = (props) => {
@@ -40,7 +44,21 @@ const Home = (props) => {
 
   return (
     <HomeComponent data_id="home-container">
-      <LogoComponent src={Logo} />
+      <LogoComponent
+        src={Logo}
+        sx={{
+          width: {
+            xs: "300px",
+            sm: "500px",
+            lg: "700px",
+          },
+          height: {
+            xs: "800px",
+            sm: "800px",
+            lg: "800px",
+          },
+        }}
+      />
       {/* <Developers
         style={{s
           height: "50px",

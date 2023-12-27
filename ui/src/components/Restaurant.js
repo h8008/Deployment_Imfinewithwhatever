@@ -28,7 +28,7 @@ const CardContainer = styled(Card)({
   flexDirection: "column",
   justifyContent: "space-between",
   alignItems: "center",
-  width: "90%",
+  width: "fit-content",
   // height: "90vh",
   backgroundColor: "white",
   id: "restaurant-container",
@@ -53,12 +53,12 @@ const MapComponent = styled(Grid)((props) => ({
 
 const PlaceHolderMapComponent = (props) => {
   const style = {
-    // width: "90%",
-    // minWidth: "90%",
-    width: "750px",
+    width: "fit-content",
+    padding: "20px",
     height: "400px",
     borderRadius: "20px",
     display: "flex",
+    flexDirection: { xs: "column", sm: "row" },
     justifyContent: "center",
     alignItems: "center",
   };
