@@ -107,11 +107,11 @@ const useGetPreferences = (email, preferences, setPreferences) => {
         setPreferences([...res.data]);
       }
     };
-    if (email && preferences.length === 0) {
+    if (email && preferences == null) {
       console.log("fetching preferences");
       getPreferences();
     }
-  }, [email, preferences.length, setPreferences]);
+  }, [email, preferences, setPreferences]);
 
   return preferences;
 };
@@ -134,11 +134,12 @@ const useGetReviews = (email, reviews, setReviews) => {
         setReviews([...res.data]);
       }
     };
-    if (email && reviews.length === 0) {
+    // if (email && reviews.length === 0) {
+    if (email && reviews == null) {
       console.log("fetching reviews");
       getReviews();
     }
-  }, [email, reviews.length, setReviews]);
+  }, [email, reviews, setReviews]);
 
   return [reviews];
 };
@@ -185,7 +186,8 @@ const useSortPreferences = (preferences) => {
       dislikes = await sortObject(dislikes);
       setSorted({ likes, dislikes, totalDataLength: likes.length + dislikes.length });
     };
-    if (preferences.length > 0) {
+    // if (preferences.length > 0) {
+    if (preferences != null && preferences.length > 0) {
       sort();
     }
   }, [preferences]);
@@ -261,8 +263,8 @@ const Profile = (props) => {
   const { userState, userDispatch } = useContext(UserContext);
 
   const [backdrop] = useGetBackdropOfTheDay(assets);
-  const [preferences, setPreferences] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [preferences, setPreferences] = useState(undefined);
+  const [reviews, setReviews] = useState(undefined);
 
   useGetReviews(userState.email, reviews, setReviews);
   useGetPreferences(userState.email, preferences, setPreferences);

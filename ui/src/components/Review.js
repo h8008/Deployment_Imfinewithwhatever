@@ -60,6 +60,7 @@ const ReviewComponent = styled(Grid)(({ theme, ...otherProps }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
+  ...otherProps,
 }));
 
 const Review = (props) => {

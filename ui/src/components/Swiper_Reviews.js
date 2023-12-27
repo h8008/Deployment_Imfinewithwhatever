@@ -58,11 +58,13 @@ const Reviews = ({ reviews }) => {
   //   console.log("active", active);
 
   const getNextSet = () => {
+    if (reviews.length <= 4) return;
     const nextSet = activeSet === Math.floor(reviews.length / 4) - 1 ? 0 : activeSet + 1;
     setActiveSet(nextSet);
   };
 
   const getPreviousSet = () => {
+    if (reviews.length <= 4) return;
     const prevSet = activeSet === 0 ? Math.floor(reviews.length / 4) - 1 : activeSet - 1;
     setActiveSet(prevSet);
   };
@@ -80,10 +82,9 @@ const Reviews = ({ reviews }) => {
           flexDirection: { xs: "column", sm: "row", md: "row" },
           flexWrap: "wrap",
           gap: "20px",
-          justifyContent: "space-between",
+          justifyContent: "center",
           alignItems: "center",
         }}
-        // mt={35}
       >
         {reviews
           .slice(active[0], active[1])
