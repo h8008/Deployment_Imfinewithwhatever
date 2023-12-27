@@ -61,8 +61,7 @@ const ReviewComponent = ({ reviews }) => {
 
   return (
     <Grid sx={{ width: "80%", height: "fit-content", padding: "10px" }}>
-      {/* <Text text={mainText} /> */}
-      <BarChart {...chartProps} width={"100%"} height={"80%"} />
+      {data.length > 0 && <BarChart {...chartProps} width={"100%"} height={"80%"} />}
     </Grid>
   );
 };
@@ -107,21 +106,22 @@ const LikeComponent = ({ likes }) => {
           alignItems: "center",
         }}
       >
-        {bubbleSx.map((sx, i) => (
-          <BubbleComponent key={`bubble ${i}`} sx={sx}>
-            <Text
-              text={likes[i]}
-              color="red"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            />
-          </BubbleComponent>
-        ))}
+        {bubbleSx.length > 0 &&
+          bubbleSx.map((sx, i) => (
+            <BubbleComponent key={`bubble ${i}`} sx={sx}>
+              <Text
+                text={likes[i]}
+                color="red"
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
+              />
+            </BubbleComponent>
+          ))}
       </BubblesComponent>
     </Fragment>
   );
@@ -145,11 +145,12 @@ const DislikeComponent = ({ dislikes }) => {
           alignItems: "center",
         }}
       >
-        {bubbleSx.map((sx, i) => (
-          <BubbleComponent key={`bubble ${i}`} sx={sx}>
-            <Text text={dislikes[i]} color="red" />
-          </BubbleComponent>
-        ))}
+        {bubbleSx.length > 0 &&
+          bubbleSx.map((sx, i) => (
+            <BubbleComponent key={`bubble ${i}`} sx={sx}>
+              <Text text={dislikes[i]} color="red" />
+            </BubbleComponent>
+          ))}
       </BubblesComponent>
     </Fragment>
   );
@@ -173,7 +174,7 @@ const Summary = ({ summary, ...otherProps }) => {
 
   const items = ["Your Most Liked", "Your Least Favorite", "Based On Your Reviews"];
   const components = useMemo(
-    () => getComponents(preferenceSummary.whitelist, preferenceSummary.blacklist, reviewSummary),
+    () => getComponents(preferenceSummary.whitelist || [], preferenceSummary.blacklist || [], reviewSummary),
     [preferenceSummary.blacklist, preferenceSummary.whitelist, reviewSummary]
   );
 

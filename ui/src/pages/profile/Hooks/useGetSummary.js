@@ -96,14 +96,59 @@ const useGetSummary = (props) => {
 
   useEffect(() => {
     const getSummary = async () => {
-      const reviewSummary = await sumUpReviews(reviews);
-      const preferenceSummary = await sumUpPreferences(preferences);
-      setSummary({ reviewSummary, preferenceSummary });
+      let reviewSummary = {};
+      let preferenceSummary = {};
+      if (reviews.length > 0) reviewSummary = await sumUpReviews(reviews);
+      if (Object.keys(preferences).length > 0) preferenceSummary = await sumUpPreferences(preferences);
+      if (Object.keys(reviewSummary).length > 0 || Object.keys(preferences).length > 0)
+        setSummary({ reviewSummary, preferenceSummary });
     };
-    if (reviews.length > 0 && Object.keys(preferences).length > 0) {
-      getSummary();
-    }
+    // if (reviews.length > 0 || Object.keys(preferences).length > 0) {
+    getSummary();
+    // }
   }, [preferences, reviews]);
+
+  // const reviews = useMemo(() => (props.reviews ? [...props.reviews] : []), [props.reviews]);
+  // const preferences = useMemo(() => (props.preferences ? { ...props.preferences } : {}), [props.preferences]);
+
+  // useMemo(() => {
+  //   if (reviews.length > 0) {
+  //     return sumUpReviews(reviews);
+  //   }
+  //   return {};
+  // }, [reviews]);
+
+  // const preferenceSummary = useMemo(async () => {
+
+  //   if (Object.keys(preferences).length > 0) {
+  //     return await sumUpPreferences(preferences);
+  //   }
+  //   return {};
+
+  //   // const getSummary = (async (resolve, reject) => {
+  //   //   const summary = await sumUpPreferences(preferences)
+  //   //   return resolve(summary)
+  //   // })
+  //   // return getSummary()
+  // }, [preferences]);
+
+  // const summary = useMemo(() => {
+  //   // if (reviews.length > 0 && Object.keys(preferences).length > 0) {
+  //   //   const reviewSummary = sumUpReviews(reviews);
+  //   //   const preferenceSummary = sumUpPreferences(preferences);
+  //   //   return { reviewSummary, preferenceSummary };
+  //   // }
+  //   // if (reviews.length > 0) {
+  //   //   const reviewSummary = sumUpReviews(reviews);
+  //   //   return { reviewSummary, preferenceSummary: {} };
+  //   // }
+  //   // if (Object.keys(preferences).length > 0) {
+  //   //   const preferenceSummary = sumUpPreferences(preferences);
+  //   //   return { reviewSummary: {}, preferenceSummary };
+  //   // }
+  //   // return undefined;
+  //   return { reviewSummary, preferenceSummary };
+  // }, [reviewSummary, preferenceSummary]);
 
   return summary;
 };

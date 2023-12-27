@@ -127,31 +127,25 @@ const Preferences = (props) => {
             alignItems: "center",
           }}
         >
-          {likes.length > 0 && (
-            <PieChartComponentTopLeft mt={2} mb={2}>
-              <PieChart
-                chartData={likes}
-                // sx={{
-                //   width: { xs: "150px", sm: "350px", md: "350px" },
-                //   height: { xs: "150px", sm: "350px", md: "350px" },
-                // }}
-                height={"300px"}
-                width={"300px"}
-              />
-            </PieChartComponentTopLeft>
-          )}
+          <PieChartComponentTopLeft mt={2} mb={2}>
+            <PieChart chartData={likes} height={"300px"} width={"300px"} />
+          </PieChartComponentTopLeft>
           <PieChartTitleComponent sx={{ width: { xs: "100%", sm: "40%" } }} mb={2}>
-            <Text
-              text={titles[0]}
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: { sm: "row", md: "column" },
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: "200%",
-              }}
-            />
+            {likes.length > 0 ? (
+              <Text
+                text={titles[0]}
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: { sm: "row", md: "column" },
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "200%",
+                }}
+              />
+            ) : (
+              <Text text={titles[0]} fontSize={"400%"} />
+            )}
           </PieChartTitleComponent>
         </Grid>
         {/* </RowComponent>
@@ -166,21 +160,15 @@ const Preferences = (props) => {
             alignItems: "center",
           }}
         >
-          {dislikes.length > 0 && (
-            <PieChartTitleComponent sx={{ width: { xs: "100%", sm: "40%" } }} mb={2}>
+          <PieChartTitleComponent sx={{ width: { xs: "100%", sm: "40%" } }} mb={2}>
+            {dislikes.length > 0 ? (
               <Text text={titles[1]} fontSize={"200%"} />
-            </PieChartTitleComponent>
-          )}
+            ) : (
+              <Text text={titles[3]} fontSize={"400%"} />
+            )}
+          </PieChartTitleComponent>
           <PieChartComponentBottomRight mt={2} mb={2}>
-            <PieChart
-              chartData={dislikes}
-              // sx={{
-              //   width: { xs: "250px", sm: "350px", md: "350px" },
-              //   height: { xs: "250px", sm: "350px", md: "350px" },
-              // }}
-              height={"300px"}
-              width={"300px"}
-            />
+            <PieChart chartData={dislikes} height={"300px"} width={"300px"} />
           </PieChartComponentBottomRight>
         </Grid>
       </Grid>

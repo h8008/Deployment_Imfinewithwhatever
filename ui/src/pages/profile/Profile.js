@@ -4,6 +4,7 @@ import { Grid, styled, useTheme } from "@mui/material";
 import Preferences from "../../components/Preferences";
 import SideMenu from "../../components/SideMenu";
 import Box from "../../ui_components/Box";
+import Text from "../../ui_components/Text";
 
 import API from "../../API_Interface";
 
@@ -41,16 +42,17 @@ const DefaultComponent = ({ summary, active }) => {
 
   return (
     <>
-      {active && (
+      {active && summary && (
         <Grid sx={style}>
-          <EggYolks zIndex={1} />
-          <Summary
-            // width="50%"
-            height="100%"
-            sx={{ width: { xs: "100%", sm: "50%" }, marginTop: "20vh" }}
-            summary={summary}
-            zIndex={2}
-          />
+          <>
+            <EggYolks zIndex={1} />
+            <Summary
+              height="100%"
+              sx={{ width: { xs: "100%", sm: "50%" }, marginTop: "20vh" }}
+              summary={summary}
+              zIndex={2}
+            />
+          </>
         </Grid>
       )}
     </>
@@ -84,16 +86,30 @@ const ReviewsComponent = ({ reviews, active }) => {
   return (
     <>
       {active && (
-        <ReviewsStyledComponent>
-          <Reviews reviews={reviews} />
-        </ReviewsStyledComponent>
+        <>
+          {reviews.length > 0 ? (
+            <ReviewsStyledComponent>
+              <Reviews reviews={reviews} />
+            </ReviewsStyledComponent>
+          ) : (
+            <Text text={"Go explore foods and tell us what you think!"} />
+          )}
+        </>
       )}
     </>
   );
 };
 
 const PreferencesComponent = ({ preferences, active }) => {
-  return <>{active && <Preferences preferences={preferences} />}</>;
+  return (
+    <>
+      {active && Object.values(preferences).length > 0 ? (
+        <Preferences preferences={preferences} />
+      ) : (
+        <Text text={"Go to some restaurants and tell us your preferences!"} />
+      )}
+    </>
+  );
 };
 
 const useGetPreferences = (email, preferences, setPreferences) => {
@@ -290,14 +306,13 @@ const Profile = (props) => {
       {/* <BodyComponent data_id={"profile body component"}>
         {components.length > 0 && components[activeComponentIdx]}
       </BodyComponent> */}
-      {ready && (
-        <>
-          <DefaultComponent summary={summary} active={activeComponentIdx === 0} />
-          <PreferencesComponent preferences={sortedPreferences} active={activeComponentIdx === 1} />
-          <ReviewsComponent reviews={reviews} active={activeComponentIdx === 2} />
-        </>
-      )}
-
+      {/* {ready && (
+        <> */}
+      {summary && <DefaultComponent summary={summary} active={activeComponentIdx === 0} />}
+      {preferences && <PreferencesComponent preferences={sortedPreferences} active={activeComponentIdx === 1} />}
+      {reviews && <ReviewsComponent reviews={reviews} active={activeComponentIdx === 2} />}
+      {/* </> */}
+      {/* )} */}
       <SideMenu
         position={"absolute"}
         sx={{ zIndex: 1 }}
