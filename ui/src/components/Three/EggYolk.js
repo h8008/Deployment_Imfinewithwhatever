@@ -19,90 +19,15 @@ const data = Array.from({ length: 1000 }, () => ({
 // ];
 const posFactors = [
   [1, 1, 1],
-  [1, -1, 1],
+  [1, -2, 1],
   [1, 1, 1],
   [1, 1, 1],
 ];
-const counts = [50, 50, 100, 100];
+const counts = [80, 80, 100, 100];
 const tempObject = new THREE.Object3D();
 
 export const EggYolk = (props) => {
   return (
-    // <div
-    //   style={{
-    //     height: "100vh",
-    //     display: "flex",
-    //     flexDirection: "row",
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //   }}
-    // >
-    //   <div style={{ width: "20vw", height: "100vh" }}>
-    //     <Canvas
-    //       orthographic
-    //       camera={{ position: [0, 0, 100], zoom: 100 }}
-    //       style={{
-    //         width: "100%",
-    //         height: "100%",
-    //         backgroundColor: "red",
-    //         zIndex: -1,
-    //         position: "relative",
-    //       }}
-    //     >
-    //       <Wall
-    //         posFactors={posFactors[2]}
-    //         boundFactor={6}
-    //         count={counts[2]}
-    //         style={{ zIndex: "1", position: "absolute" }}
-    //         layout={"vertical"}
-    //       />
-    //     </Canvas>
-    //   </div>
-    //   <div style={{ height: "100vh", width: "60%" }}>
-    //     <Canvas
-    //       orthographic
-    //       camera={{ position: [0, 0, 100], zoom: 100 }}
-    //       style={{
-    //         width: "100%",
-    //         height: "50%",
-    //         backgroundColor: "red",
-    //       }}
-    //     >
-    //       <Wall posFactors={posFactors[0]} boundFactor={1} count={counts[0]} layout={"horizontal"} location={"top"} />
-    //     </Canvas>
-    //     <Canvas
-    //       orthographic
-    //       camera={{ position: [0, 0, 100], zoom: 100 }}
-    //       style={{
-    //         width: "100%",
-    //         height: "50%",
-    //         backgroundColor: "red",
-    //       }}
-    //     >
-    //       <Wall
-    //         posFactors={posFactors[1]}
-    //         boundFactor={1}
-    //         count={counts[1]}
-    //         layout={"horizontal"}
-    //         location={"bottom"}
-    //       />
-    //     </Canvas>
-    //   </div>
-    //   <div style={{ width: "20vw", height: "100vh" }}>
-    //     <Canvas
-    //       orthographic
-    //       camera={{ position: [0, 0, 100], zoom: 100 }}
-    //       style={{
-    //         width: "100%",
-    //         height: "100%",
-    //         backgroundColor: "red",
-    //       }}
-    //     >
-    //       <Wall posFactors={posFactors[3]} boundFactor={6} count={counts[3]} layout={"vertical"} />
-    //     </Canvas>
-    //   </div>
-    // </div>
-
     <div
       style={{
         height: "100vh",
@@ -123,29 +48,7 @@ export const EggYolk = (props) => {
           }}
         >
           <Wall posFactors={posFactors[2]} boundFactor={2} count={counts[2]} layout={"vertical"} location={"left"} />
-          {/* </Canvas>
-    </div> */}
-          {/* <div style={{ height: "100vh", width: "60%" }}>
-      <Canvas
-        orthographic
-        camera={{ position: [0, 0, 100], zoom: 100 }}
-        style={{
-          width: "100%",
-          height: "50%",
-          backgroundColor: "red",
-        }}
-      > */}
           <Wall posFactors={posFactors[1]} boundFactor={1} count={counts[0]} layout={"horizontal"} location={"top"} />
-          {/* </Canvas> */}
-          {/* <Canvas
-        orthographic
-        camera={{ position: [0, 0, 100], zoom: 100 }}
-        style={{
-          width: "100%",
-          height: "50%",
-          backgroundColor: "red",
-        }}
-      > */}
           <Wall
             posFactors={posFactors[2]}
             boundFactor={2}
@@ -153,18 +56,6 @@ export const EggYolk = (props) => {
             layout={"horizontal"}
             location={"bottom"}
           />
-          {/* </Canvas>
-    </div>
-    <div style={{ width: "20vw", height: "100vh" }}>
-      <Canvas
-        orthographic
-        camera={{ position: [0, 0, 100], zoom: 100 }}
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "red",
-        }}
-      > */}
           <Wall posFactors={posFactors[3]} boundFactor={2} count={counts[3]} layout={"vertical"} location={"right"} />
           <OrbitControls position={[0, 0, 100]} />
         </Canvas>
@@ -223,7 +114,7 @@ function SolidBoxes({ count = 50, layout, location, position }) {
         const positions = {
           left: [-x + 2, y, 0],
           right: [x - 2, y, 0],
-          top: [Math.abs(x) - 6, y, 0],
+          top: [Math.abs(x) - 4, y, 0],
           bottom: [-1 * Math.abs(x) + 13, y, 0],
         };
 

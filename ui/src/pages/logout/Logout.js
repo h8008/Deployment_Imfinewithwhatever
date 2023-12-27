@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Text from "../../ui_components/Text";
 import API_Interface from "../../API_Interface";
@@ -8,7 +9,8 @@ import useNavigator from "../../hooks/useNavigator";
 
 const useLogout = () => {
   const { userDispatch } = useContext(UserContext);
-  const [loggedOut, setLoggedOut] = useState(false);
+  // const [loggedOut, setLoggedOut] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const logout = async () => {
@@ -17,19 +19,17 @@ const useLogout = () => {
         userDispatch({
           type: LOGOUT,
         });
-        setLoggedOut(true);
+        navigate("/");
       }
     };
     logout();
-  }, [userDispatch]);
+  }, [navigate, userDispatch]);
 
-  return [loggedOut, setLoggedOut];
+  // return [loggedOut, setLoggedOut];
 };
 
 const Logout = (props) => {
-  const [loggedOut, setLoggedOut] = useLogout();
-
-  useNavigator({ dest: "/", cond: loggedOut });
+  useLogout();
 
   return (
     <Grid>

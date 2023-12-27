@@ -26,10 +26,10 @@ const WhatOthersSayComponent = styled(Grid)((props) => ({
 const CardContainer = styled(Card)({
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
+  justifyContent: "space-between",
   alignItems: "center",
-  width: "80%",
-  height: "90vh",
+  width: "fit-content",
+  // height: "90vh",
   backgroundColor: "white",
   id: "restaurant-container",
   borderLeft: "8px solid black",
@@ -39,6 +39,7 @@ const CardContainer = styled(Card)({
   borderBottomRightRadius: "20px",
   padding: "20px",
   margin: "20px",
+  overflow: "scroll",
 });
 
 const MapComponent = styled(Grid)((props) => ({
@@ -52,14 +53,21 @@ const MapComponent = styled(Grid)((props) => ({
 
 const PlaceHolderMapComponent = (props) => {
   const style = {
-    width: "90%",
-    minWidth: "90%",
-    height: "100%",
-
+    width: "fit-content",
+    padding: "20px",
+    height: "400px",
     borderRadius: "20px",
+    display: "flex",
+    flexDirection: { xs: "column", sm: "row" },
+    justifyContent: "center",
+    alignItems: "center",
   };
 
-  return <BorderedBox style={style} />;
+  return (
+    <BorderedBox style={style}>
+      <Text text={LOCATION_MASK_MESSAGE} color={"black"} />
+    </BorderedBox>
+  );
 };
 
 const CardMediaComponent = ({ children, ...otherProps }) => {
@@ -79,11 +87,13 @@ const TopComponent = styled(Grid)((props) => ({
   height: "40%",
   padding: "20px",
   gridRow: true,
-  display: "flex",
-  flex: props.flex,
-  flexDirection: props.flexDirection,
-  justifyContent: props.justifyContent,
-  alignItems: "center",
+  sx: {
+    display: "flex",
+    flex: props.flex,
+    flexDirection: { xs: "column", sm: "row" },
+    justifyContent: props.justifyContent,
+    alignItems: "center",
+  },
 }));
 
 const BodyComponent = styled(Grid)((props) => ({
@@ -339,9 +349,9 @@ const Restaurant = (props) => {
               ) : (
                 <PlaceHolderMapComponent />
               )}
-              <CardContent>
+              {/* <CardContent>
                 <Text text={otherDetails.location} />
-              </CardContent>
+              </CardContent> */}
             </MapComponent>
           </BodyComponent>
           <ButtonsComponent flexDirection={"row"} justifyContent={"space-evenly"}>
