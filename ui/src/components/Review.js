@@ -60,6 +60,7 @@ const ReviewComponent = styled(Grid)(({ theme, ...otherProps }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
+  border: `8xp white solid`,
   ...otherProps,
 }));
 
@@ -69,7 +70,7 @@ const Review = (props) => {
   const [restaurant, setRestaurant] = useState({});
 
   return (
-    <Fragment>
+    // <Fragment>
       <ReviewComponent>
         <RowComponent style={{ width: "100%", justifyContent: "space-between" }}>
           <RowComponent>
@@ -93,7 +94,7 @@ const Review = (props) => {
           <Text text={` ${review.review} `} style={{ textDecoration: "none" }} />
         </ReviewContentComponent>
       </ReviewComponent>
-    </Fragment>
+    // </Fragment>
   );
 };
 

@@ -29,14 +29,23 @@ const ReviewsContainerComponent = styled(Grid)(({ theme }) => ({
 }));
 
 const ReviewsComponent = styled(Grid)(({ theme }) => ({
+  // container: true,
+  // display: "flex",
+  // flexDirection: "column",
+  // gap: "100px",
+  // justifyContent: "center",
+  // alignItems: "center",
+  // height: "100vh",
+  // width: "80vw",
   container: true,
+  width: "85%",
+  minHeight: "100vh",
+  margin: "auto",
   display: "flex",
+  rowGap: 25,
   flexDirection: "column",
-  gap: "100px",
   justifyContent: "center",
   alignItems: "center",
-  height: "90vh",
-  width: "80vw",
 }));
 
 const ReviewComponent = styled(Grid)(({ theme }) => ({
@@ -70,7 +79,20 @@ const Reviews = ({ reviews }) => {
   };
 
   return (
-    <ReviewsComponent data_id={"reviews-component"} mt={30}>
+    <ReviewsComponent data_id={"reviews-component"}>
+      <Grid         
+        sx={{
+          width: { xs: "100%", sm: "50%"},
+          height: "fit-content",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          border: `8px solid white`,
+          borderRadius: "20px"
+        }}
+        gap={5}
+        p={3}> 
       <ArrowsComponent>
         <FaArrowLeft onClick={() => getPreviousSet()} />
         <FaArrowRight onClick={() => getNextSet()} />
@@ -105,26 +127,24 @@ const Reviews = ({ reviews }) => {
             >
               <div style={{ width: "100%" }}>
                 <Grid
-                  // display={"flex"}
-                  // flex={1}
-                  // flexDirection={"row"}
-                  // alignItems={"center"}
-                  // justifyContent={"flex-start"}
-                  margin="auto"
+                  // margin="auto"
                   sx={{
+                    width: "fit-content",
                     display: "flex",
                     width: { sm: "100%", md: "50%" },
                     flexDirection: { xs: "column", sm: "row" },
-                    justifyContent: "center",
+                    justifyContent: "flex-start",
                     alignItems: "center",
+                    color:"white"
                   }}
+                  gap={2}
                 >
-                  <Grid mr={5}>
+                  {/* <Grid mr={3}> */}
                     <Text text={review.email} />
-                  </Grid>
-                  <Grid mr={5}>
+                  {/* </Grid> */}
+                  {/* <Grid mr={3}> */}
                     <Text text={`Rating: ${review.rating}`} />
-                  </Grid>
+                  {/* </Grid> */}
                 </Grid>
                 <Grid
                   height={"fit-content"}
@@ -142,6 +162,7 @@ const Reviews = ({ reviews }) => {
             </ReviewComponent>
           ))}
       </ReviewsContainerComponent>
+      </Grid>
     </ReviewsComponent>
   );
 };
