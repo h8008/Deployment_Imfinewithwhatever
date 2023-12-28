@@ -17,7 +17,7 @@ const PreferenceComponent = styled(Grid)(({ children, theme, ...otherProps }) =>
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: theme.palette.primary.dark.main,
+  // backgroundColor: theme.palette.primary.dark.main,
   ...otherProps,
 }));
 
@@ -104,18 +104,20 @@ const Preferences = (props) => {
 
   return (
     <PreferenceComponent>
-      {/* <RowComponent theme={theme}> */}
       <Grid
         sx={{
-          width: "100%",
-          height: "100%",
-          // border: "8px solid black",
+          width: { xs: "100%", sm: "50%"},
+          height: "fit-content",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          border: `8px solid white`
         }}
-        pt={10}
+        // pt={3}
+        p={1}
+        // pl={1}
+        // pr={1}
       >
         <Grid
           sx={{
@@ -126,9 +128,10 @@ const Preferences = (props) => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          pt={2}
         >
-          <PieChartComponentTopLeft mt={2} mb={2}>
-            <PieChart chartData={likes} height={"300px"} width={"300px"} />
+          <PieChartComponentTopLeft sx={{ width: { xs: "100%", sm: "60%" } }} mt={2} mb={2} >
+            <PieChart chartData={likes} height={"100%"} width={"100%"} />
           </PieChartComponentTopLeft>
           <PieChartTitleComponent sx={{ width: { xs: "100%", sm: "40%" } }} mb={2}>
             {likes.length > 0 ? (
@@ -167,8 +170,8 @@ const Preferences = (props) => {
               <Text text={titles[3]} fontSize={"400%"} />
             )}
           </PieChartTitleComponent>
-          <PieChartComponentBottomRight mt={2} mb={2}>
-            <PieChart chartData={dislikes} height={"300px"} width={"300px"} />
+          <PieChartComponentBottomRight sx={{ width: { xs: "100%", sm: "60%" } }} mt={2} mb={2}>
+            <PieChart chartData={dislikes}  height={"100%"} width={"100%"} />
           </PieChartComponentBottomRight>
         </Grid>
       </Grid>

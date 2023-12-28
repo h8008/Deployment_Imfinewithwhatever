@@ -25,10 +25,6 @@ const ModalComponent = styled(MUIModal)(({ theme }) => ({
 }));
 
 const SimpleModal = ({ open, message, onClickCallback }) => {
-  // const { messageState } = useContext(MessageContext);
-  // const open = messageState.modalOpen;
-  // const interactive = messageState.interactive;
-
   const theme = useTheme();
 
   return (
