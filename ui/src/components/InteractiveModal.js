@@ -18,10 +18,16 @@ const ModalComponent = styled(Modal)(({ theme }) => ({
   width: 300,
   height: 300,
   backgroundColor: theme.palette.primary.light.main,
+  // backgroundColor: 'white',
   boxShadow: 24,
   p: 4,
   border: `8px solid white`,
   borderRadius: `20px`,
+  color: "white",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center"
 }));
 
 const ButtonComponent = styled(Button)(({ theme }) => ({
@@ -59,7 +65,7 @@ const InteractiveModal = ({ open, message, onClickCallback }) => {
   // };
 
   return (
-    <Modal
+    <ModalComponent
       open={open}
       onClose={() => onClickCallback()}
       sx={{
@@ -93,7 +99,7 @@ const InteractiveModal = ({ open, message, onClickCallback }) => {
       {/* <Grid onClick={() => onClickCallback()}> */}
       <Typography>{message}</Typography>
       {/* </Grid> */}
-    </Modal>
+    </ModalComponent>
   );
 };
 
