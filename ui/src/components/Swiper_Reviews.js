@@ -116,14 +116,15 @@ const Reviews = ({ reviews }) => {
               item
               sx={{
                 width: {
-                  xs: "200px",
+                  xs: "fit-content",
                   sm: "400px",
                 },
                 height: {
-                  xs: "200px",
+                  xs: "fit-content",
                   sm: "400px",
                 },
               }}
+              // sx={{ width: "fit-content", height:"fit-content"}}
             >
               <div style={{ width: "100%" }}>
                 <Grid

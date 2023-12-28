@@ -103,11 +103,14 @@ const ReviewsComponent = ({ reviews, active }) => {
 const PreferencesComponent = ({ preferences, active }) => {
   return (
     <>
-      {active && Object.values(preferences).length > 0 ? (
+    {active && <>
+      {Object.values(preferences).length > 0 ? (
         <Preferences preferences={preferences} />
       ) : (
         <Text text={"Go to some restaurants and tell us your preferences!"} />
       )}
+      </>
+    }
     </>
   );
 };
