@@ -20,6 +20,8 @@ module.exports = async (ctx, next) => {
 
     const token = ctx.cookie.access_token
 
+    console.log("token", token[0])
+
     
 
     return jwt.verify(token, process.env.JWT_KEY, async function(err, decoded) {

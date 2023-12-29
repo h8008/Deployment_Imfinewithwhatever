@@ -25,26 +25,25 @@ function setAccessToken(ctx, email) {
     httpOnly: true,
     secure: getDevEnvironment() ? false : true,
     expires: new Date(exp_date),
-    //domain: process.env.APP_DOMAIN
   });
+
+
   // ctx.cookies.set("email", email)
   // ctx.cookies.set("loggedIn", true)
-  if (ctx && ctx.res && ctx.res.headers['set-cookie'] == null)
-      ctx.res.setHeader("set-cookie", `access_token=${access_token}`, {
-        httpOnly: true,
-        secure: getDevEnvironment() ? false : true,
-        expires: new Date(exp_date),
-        //domain: process.env.APP_DOMAIN
-      })
+
+  
+
+  // if (ctx && ctx.res && ctx.res.headers['set-cookie'] == null)
+      // ctx.res.setHeader("set-cookie", `access_token=${access_token}`, {
+      //   httpOnly: true,
+      //   // secure: getDevEnvironment() ? false : true,
+      //   secure: true,
+      //   expires: new Date(exp_date),
+      //   //domain: process.env.APP_DOMAIN
+      // })
 
   // ctx.res.cookies("email", email)
 
-  ctx.res.cookies("access_token2", access_token, {
-    httpOnly: true,
-    secure: getDevEnvironment() ? false : true,
-    expires: new Date(exp_date),
-    //domain: process.env.APP_DOMAIN
-  })
 
   return access_token
 }
