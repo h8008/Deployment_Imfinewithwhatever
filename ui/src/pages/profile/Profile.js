@@ -157,6 +157,9 @@ const useGetPreferences = (email, preferences, setPreferences) => {
   useEffect(() => {
     const getPreferences = async () => {
       const res = await API.Preference.getAllForCurrentUser({ email: email });
+
+      console.log("res", res)
+
       if (res.status === "OK") {
         console.log("preferences", res.data);
         setPreferences([...res.data]);
@@ -168,7 +171,7 @@ const useGetPreferences = (email, preferences, setPreferences) => {
     }
   }, [email, preferences, setPreferences]);
 
-  return preferences;
+  // return preferences;
 };
 
 // const useGetPreferences = (email) => {
@@ -196,7 +199,7 @@ const useGetReviews = (email, reviews, setReviews) => {
     }
   }, [email, reviews, setReviews]);
 
-  return [reviews];
+  // return [reviews];
 };
 
 const sortObject = async (dict) => {

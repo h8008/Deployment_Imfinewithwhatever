@@ -39,6 +39,9 @@ const getAllForCurrentUser = async (ctx) => {
   ctx.body = res
     ? { data: res, status: 'OK' }
     : { data: undefined, status: 'NOT FOUND' };
+
+  console.log(ctx.body)
+  return ctx.body
 };
 
 const getAllForOtherUsers = async (ctx) => {

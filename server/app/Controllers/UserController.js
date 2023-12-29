@@ -90,24 +90,29 @@ const signup = async (ctx) => {
   }
 };
 
-const login = async (ctx) => {
+const login = async (ctx, next) => {
   try {
     console.log('user login called');
     let params = ctx.request.body;
-    const res = await FIND_USER(params);
-    console.log('res', res);
-    if (res) {
-      bcrypt.compare(params.password, res.password, function (err, result) {
+    const user = await FIND_USER(params);
+    if (user) {
+      bcrypt.compare(params.password, user.password, function (err, result) {
         if (err) {
           console.log('Error while logging in');
           return;
         }
       });
+      // ctx.body = {
+      //   status: 'OK',
+      //   message: LOGGED_IN,
+      //   data: res.email,
+      // };
+
       ctx.body = {
-        status: 'OK',
+        status: "OK",
         message: LOGGED_IN,
-        data: res.email,
-      };
+        data: user
+      }
 
       console.log('from user record. About to return ', ctx.body);
     }
@@ -116,7 +121,7 @@ const login = async (ctx) => {
     throw err;
   }
 
-  // return await next();
+  return await next();
 };
 
 const logout = async (ctx) => {

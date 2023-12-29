@@ -3,11 +3,14 @@ const preferenceRouter = require('koa-router')({
 });
 
 const PreferenceController = require('../app/Controllers/PreferenceController');
+const VerifyJWT = require('../app/Middleware/VerifyJWT');
 
 preferenceRouter.get('/', (ctx) => {
   console.log('default user preference router');
   ctx.body = 'default user preference router';
 });
+
+preferenceRouter.use(VerifyJWT)
 
 preferenceRouter.post('/add', PreferenceController.add);
 

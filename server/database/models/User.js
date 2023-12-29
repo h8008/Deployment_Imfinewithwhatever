@@ -26,6 +26,9 @@ const userSchema = new Schema({
     type: [mongoose.Types.ObjectId],
     ref: 'Preference',
   },
+  access_token: {
+    type: String
+  }
 });
 
 module.exports = mongoose.model('User', userSchema);

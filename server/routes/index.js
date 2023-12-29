@@ -19,6 +19,14 @@ router.get('/', function (ctx) {
 
 router.use(errorHandler);
 router.use(cors);
+
+// router.use(
+//   '',
+//   userRouter.routes(),
+// )
+
+router.use(VerifyJWT)
+
 router.use(
   '',
   userRouter.routes(),
