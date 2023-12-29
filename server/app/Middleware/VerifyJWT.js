@@ -13,12 +13,14 @@ module.exports = async (ctx, next) => {
     
     // const email = ctx.cookies.get("email")
     // const email = ctx.state.email
-    const email = ctx.req.headers
+    // const email = ctx.req.headers
     // const email = cookies.get("email")
     // const user = await User.findOne().where("email").equals(email)
     // const token = user.access_token
 
     const token = ctx.cookie.access_token
+
+    
 
     return jwt.verify(token, process.env.JWT_KEY, async function(err, decoded) {
         if (err) return;
