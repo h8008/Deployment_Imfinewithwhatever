@@ -10,7 +10,7 @@ preferenceRouter.get('/', (ctx) => {
   ctx.body = 'default user preference router';
 });
 
-preferenceRouter.use(VerifyJWT)
+// preferenceRouter.use(VerifyJWT)
 
 preferenceRouter.post('/add', PreferenceController.add);
 
