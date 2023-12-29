@@ -1,5 +1,6 @@
 // const jwt = require('koa-jwt');
 const jwt = require("jsonwebtoken")
+const cookies = require('js-cookie')
 const { User } = require("../../database/models")
 const destroyCookies = require("../../config/destroyCookies")
 
@@ -10,9 +11,14 @@ module.exports = async (ctx, next) => {
     const requestOrigin = ctx.request.originalUrl.split("/").filter((endpoint) => endpoint !== "")[0]
     if (requestOrigin === "users") return await next()
     
-    const email = ctx.cookies.get("email")
-    const user = await User.findOne().where("email").equals(email)
-    const token = user.access_token
+    // const email = ctx.cookies.get("email")
+    // const email = ctx.state.email
+    const email = ctx.req.headers
+    // const email = cookies.get("email")
+    // const user = await User.findOne().where("email").equals(email)
+    // const token = user.access_token
+
+    const token = ctx.cookie.access_token
 
     return jwt.verify(token, process.env.JWT_KEY, async function(err, decoded) {
         if (err) return;

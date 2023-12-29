@@ -9,12 +9,15 @@ const mongoose = require('mongoose');
 const cors = require('kcors');
 const corsOptions = require('./app/Middleware/corsOptions.js');
 const getDevEnvironment = require('./utils/GetDevEnvironment.js');
+const { default: cookie } = require('koa-cookie');
+
 
 const app = new Koa();
 const port = process.env.APP_PORT;
 
 app.use(bodyParser());
 app.use(cors(corsOptions));
+app.use(cookie());
 
 router(app);
 catchJWTErrors(app);

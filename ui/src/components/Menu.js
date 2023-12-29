@@ -79,7 +79,6 @@ const getLinkComponents = (props) =>
       height={"100px"}
     >
       <LinkNameComponent width={"100%"} fontSize={"200%"}>
-        {/* {getName(option)} */}
         {option.name}
       </LinkNameComponent>
     </LinkComponent>

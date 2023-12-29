@@ -19,6 +19,8 @@ import { MessageContext } from "../../providers/MessageProvider";
 import { UPDATE_PREFERENCES } from "../../reducer/User/UserActions";
 import useNavigator from "../../hooks/useNavigator";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
+import { useCookies } from "react-cookie";
+import cookies from 'js-cookie'
 
 import Modal from "../modal"
 
@@ -202,6 +204,7 @@ const Login = (props) => {
   const [message, setMessage] = useState('')
   const { userDispatch } = useContext(UserContext);
   const { messageDispatch } = useContext(MessageContext);
+  // const [cookies, setCookie, removeCookie] = useCookies(['email', 'loggedIn']);
 
   const components = ["email", "firstname", "lastname", "password"];
 
@@ -237,6 +240,10 @@ const Login = (props) => {
         preferences: preferences,
       });
       console.log("Signed In");
+      // setCookie("email", formState.email)
+      // setCookie("loggedIn", true)
+      cookies.set("email", formState.email)
+      cookies.set("loggedIn", true)
       setAuthenticated(true);
     } else {
       setMessage("Please sign up to continue.")

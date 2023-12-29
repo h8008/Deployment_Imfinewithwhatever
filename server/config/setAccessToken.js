@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const getDevEnvironment = require('../utils/GetDevEnvironment.js');
+const { createIndexes } = require('../database/models/User.js');
 
 function setAccessToken(ctx, email) {
   // console.log('setAccessToken:: cookie = ', ctx.cookies.get('access_token'));
@@ -26,8 +27,18 @@ function setAccessToken(ctx, email) {
     expires: new Date(exp_date),
     //domain: process.env.APP_DOMAIN
   });
-  ctx.cookies.set("email", email)
-  ctx.cookies.set("loggedIn", true)
+  // ctx.cookies.set("email", email)
+  // ctx.cookies.set("loggedIn", true)
+  // if (ctx && ctx.res && ctx.res.headers['set-cookie'] == null)
+  //   ctx.res.setHeader("set-cookie", `email=${email}`)
+
+  // ctx.res.cookies("email", email)
+  ctx.res.cookies("access_token", access_token, {
+    httpOnly: true,
+    secure: getDevEnvironment() ? false : true,
+    expires: new Date(exp_date),
+    //domain: process.env.APP_DOMAIN
+  })
 
   return access_token
 }

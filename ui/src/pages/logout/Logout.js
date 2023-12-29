@@ -6,11 +6,14 @@ import API_Interface from "../../API_Interface";
 import { UserContext } from "../../providers/UserProvider";
 import { LOGOUT } from "../../reducer/User/UserActions";
 import useNavigator from "../../hooks/useNavigator";
+import { useCookies } from "react-cookie";
+import cookies from 'js-cookie'
 
 const useLogout = () => {
   const { userDispatch } = useContext(UserContext);
   // const [loggedOut, setLoggedOut] = useState(false);
   const navigate = useNavigate();
+  // const [cookies, setCookie, removeCookie] = useCookies(['loggedIn', "email"]);
 
   useEffect(() => {
     const logout = async () => {
@@ -19,6 +22,8 @@ const useLogout = () => {
         userDispatch({
           type: LOGOUT,
         });
+        cookies.remove("email")
+        cookies.remove("loggedIn")
         navigate("/");
       }
     };
