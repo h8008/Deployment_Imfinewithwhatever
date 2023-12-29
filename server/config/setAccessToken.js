@@ -25,6 +25,7 @@ function setAccessToken(ctx, email) {
     httpOnly: true,
     secure: getDevEnvironment() ? false : true,
     expires: new Date(exp_date),
+    domain: getDevEnvironment() ? `http://localhost:3000` : process.env.APP_DOMAIN
   });
 
 
