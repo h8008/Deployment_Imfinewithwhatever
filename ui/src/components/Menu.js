@@ -60,8 +60,11 @@ const getName = (option) => {
 };
 
 const getDest = (to, loggedIn) => {
-  let dest = getOptions(loggedIn, to);
-  return dest === "Home" ? "/" : "/" + dest;
+  let dest = getOptions(loggedIn, to)
+  dest = dest === "Home" ? "/" : "/" + dest;
+  let name = getName(dest)
+  dest = name === "Home" || loggedIn ? dest : "/Login"
+  return { name, dest }
 };
 
 const intializeOptions = (names, loggedIn) => Object.values(names).map((name, idx) => getDest(name, loggedIn));
@@ -70,13 +73,14 @@ const getLinkComponents = (props) =>
   props.options.map((option, index) => (
     <LinkComponent
       key={index}
-      to={option}
+      to={option.dest}
       onClick={() => handleNavigate(option, props.navigate)}
       color={props.palette.primary.contrastText}
       height={"100px"}
     >
       <LinkNameComponent width={"100%"} fontSize={"200%"}>
-        {getName(option)}
+        {/* {getName(option)} */}
+        {option.name}
       </LinkNameComponent>
     </LinkComponent>
   ));

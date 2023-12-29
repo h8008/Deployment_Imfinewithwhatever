@@ -6,9 +6,9 @@ function setAccessToken(ctx, email) {
   // console.log('setAccessToken:: ctx.state contains', ctx.state);
 
   // Create an expiration date 20 minutes in the future for the user's access_token *cookie*
-  // const exp_date = Date.now() + 40 * 60 * 1000;
 
-  const exp_date = Data.now() + 40 * 60
+  const exp_date = Date.now() + 5 * 60 * 1000;
+  // const exp_date = Data.now() + 20 * 60
 
   let token_opts = {
     type: 'web',
@@ -27,6 +27,7 @@ function setAccessToken(ctx, email) {
     //domain: process.env.APP_DOMAIN
   });
   ctx.cookies.set("email", email)
+  ctx.cookies.set("loggedIn", true)
 
   return access_token
 }

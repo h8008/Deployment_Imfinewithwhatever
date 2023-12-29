@@ -9,9 +9,12 @@ const UserProvider = ({ children }) => {
   const [cookies, setCookies] = useCookies();
   const loggedIn = cookies.loggedIn;
   const email = cookies.email;
+
+  const initialArgs = JSON.stringify(loggedIn) !== "undefined" && JSON.stringify(email) !== "undefined" ? { ...initialUserState, loggedIn: false, email: "" } : initialUserState
+
   const [userState, userDispatch] = useReducer(
     UserReducer,
-    loggedIn != null && email != null ? { ...initialUserState, loggedIn: true, email: email } : initialUserState
+    initialArgs
   );
 
   return <UserContext.Provider value={{ userState, userDispatch }}>{children}</UserContext.Provider>;
