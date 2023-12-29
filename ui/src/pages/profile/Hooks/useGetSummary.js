@@ -76,23 +76,10 @@ const sumUpReviews = (reviews) => {
 
 const useGetSummary = (props) => {
   // const summary = useMemo(() => (!ready ? {} : writeSummary(reviews, preferences)), [ready, reviews, preferences]);
-  const [summary, setSummary] = useState(undefined);
+  // const [summary, setSummary] = useState(undefined);
+  const [summary, setSummary] = useState({});
   const reviews = useMemo(() => (props.reviews ? [...props.reviews] : []), [props.reviews]);
   const preferences = useMemo(() => (props.preferences ? { ...props.preferences } : {}), [props.preferences]);
-  // const reviewSummary = useMemo(
-  //   async () => await sumUpReviews(props.reviews ? [...props.reviews] : []),
-  //   [props.reviews]
-  // );
-  // const preferenceSummary = useMemo(
-  //   async () => await sumUpPreferences(props.preferences ? { ...props.preferences } : { dislikes: [], likes: [] }),
-  //   [props.preferences]
-  // );
-
-  // console.log("reviews", reviews, "preferences", preferences);
-
-  // const summary = useMemo(async () => {
-  //   return { reviewSummary, preferenceSummary };
-  // }, [reviewSummary, preferenceSummary]);
 
   useEffect(() => {
     const getSummary = async () => {
@@ -103,52 +90,8 @@ const useGetSummary = (props) => {
       if (Object.keys(reviewSummary).length > 0 || Object.keys(preferences).length > 0)
         setSummary({ reviewSummary, preferenceSummary });
     };
-    // if (reviews.length > 0 || Object.keys(preferences).length > 0) {
     getSummary();
-    // }
   }, [preferences, reviews]);
-
-  // const reviews = useMemo(() => (props.reviews ? [...props.reviews] : []), [props.reviews]);
-  // const preferences = useMemo(() => (props.preferences ? { ...props.preferences } : {}), [props.preferences]);
-
-  // useMemo(() => {
-  //   if (reviews.length > 0) {
-  //     return sumUpReviews(reviews);
-  //   }
-  //   return {};
-  // }, [reviews]);
-
-  // const preferenceSummary = useMemo(async () => {
-
-  //   if (Object.keys(preferences).length > 0) {
-  //     return await sumUpPreferences(preferences);
-  //   }
-  //   return {};
-
-  //   // const getSummary = (async (resolve, reject) => {
-  //   //   const summary = await sumUpPreferences(preferences)
-  //   //   return resolve(summary)
-  //   // })
-  //   // return getSummary()
-  // }, [preferences]);
-
-  // const summary = useMemo(() => {
-  //   // if (reviews.length > 0 && Object.keys(preferences).length > 0) {
-  //   //   const reviewSummary = sumUpReviews(reviews);
-  //   //   const preferenceSummary = sumUpPreferences(preferences);
-  //   //   return { reviewSummary, preferenceSummary };
-  //   // }
-  //   // if (reviews.length > 0) {
-  //   //   const reviewSummary = sumUpReviews(reviews);
-  //   //   return { reviewSummary, preferenceSummary: {} };
-  //   // }
-  //   // if (Object.keys(preferences).length > 0) {
-  //   //   const preferenceSummary = sumUpPreferences(preferences);
-  //   //   return { reviewSummary: {}, preferenceSummary };
-  //   // }
-  //   // return undefined;
-  //   return { reviewSummary, preferenceSummary };
-  // }, [reviewSummary, preferenceSummary]);
 
   return summary;
 };

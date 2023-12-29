@@ -20,6 +20,8 @@ import { UPDATE_PREFERENCES } from "../../reducer/User/UserActions";
 import useNavigator from "../../hooks/useNavigator";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 
+import Modal from "../modal"
+
 const FormComponent = styled("form")(() => ({
   width: "100%",
 }));
@@ -197,6 +199,7 @@ const Login = (props) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+  const [message, setMessage] = useState('')
   const { userDispatch } = useContext(UserContext);
   const { messageDispatch } = useContext(MessageContext);
 
@@ -235,6 +238,8 @@ const Login = (props) => {
       });
       console.log("Signed In");
       setAuthenticated(true);
+    } else {
+      setMessage("Please sign up to continue.")
     }
   };
 
@@ -293,6 +298,7 @@ const Login = (props) => {
           <SignUpButton onClick={handleSignup} theme={theme} />
         </Buttons>
       </GridRow>
+      <Modal interactive={false} open={message !== ''} message={message} onClickCallback={() => setMessage("")}/>
     </LoginComponent>
   );
 };

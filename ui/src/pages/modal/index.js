@@ -14,7 +14,7 @@ const Modal = ({ open, interactive, onClickCallback, message }) => {
       {interactive ? (
         <InteractiveModal open={open} onClickCallback={onClickCallback} message={message} />
       ) : (
-        <SimpleModal open={open} onClickCallback={onClickCallback} message={message} />
+        <SimpleModal open={open} message={message} onClickCallback={onClickCallback}/>
       )}
     </>
   );

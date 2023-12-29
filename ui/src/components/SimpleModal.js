@@ -28,12 +28,12 @@ const SimpleModal = ({ open, message, onClickCallback }) => {
   const theme = useTheme();
 
   return (
-    <ModalComponent open={open}>
-      <Grid width={"100%"} height={"100%"} onClick={() => onClickCallback()}>
-        <Typography height={"100%"} text={theme.palette.primary.light.main}>
+    <ModalComponent open={open} onClick={onClickCallback}>
+      {/* <Grid width={"100%"} height={"100%"}> */}
+        <Typography text={theme.palette.primary.light.main} >
           {message}
         </Typography>
-      </Grid>
+      {/* </Grid> */}
     </ModalComponent>
   );
 };

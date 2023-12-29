@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, cloneElement, useMemo } from "react";
-import { Grid, styled, useTheme } from "@mui/material";
+import { Grid, Typography, styled, useTheme } from "@mui/material";
 
 import Preferences from "../../components/Preferences";
 import SideMenu from "../../components/SideMenu";
@@ -42,7 +42,11 @@ const DefaultComponent = ({ summary, active }) => {
 
   return (
     <>
-      {active && summary && (
+      {active && summary && 
+        (
+        <> {
+          Object.keys(summary).length > 0 ?
+        (
         <Grid sx={style}>
           <>
             <EggYolks zIndex={1} />
@@ -54,23 +58,47 @@ const DefaultComponent = ({ summary, active }) => {
             />
           </>
         </Grid>
+      ) : (
+        <PlaceHolderTextComponent>
+          <Typography fontSize={"150%"}>
+            {'You have no summary to view. Go explore!'}
+          </Typography>
+        </PlaceHolderTextComponent>
+      )
+}</>
       )}
     </>
   );
 };
 
-const BodyComponent = styled(Grid)(({ theme }) => ({
+// const BodyComponent = styled(Grid)(({ theme }) => ({
+//   container: true,
+//   rowGap: 50,
+//   width: "100vw",
+//   height: "100vh",
+//   display: "flex",
+//   flexDirection: "column",
+//   justifyContent: "space-between",
+//   alignItems: "center",
+//   position: "relative",
+//   // backgroundColor: theme.palette.error.dark.main,
+// }));
+
+const PlaceHolderTextComponent = styled(Grid)(({ theme, children, ...otherProps }) => ({
   container: true,
-  rowGap: 50,
-  width: "100vw",
-  height: "100vh",
+  width: "50vw",
+  height: "50vh",
+  margin: "auto",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "space-between",
+  justifyContent: "center",
   alignItems: "center",
-  position: "relative",
-  // backgroundColor: theme.palette.error.dark.main,
-}));
+  color: "white",
+  // backgroundColor: "white",
+  border: `8px solid white`,
+  borderRadius: "20px",
+  ...otherProps,
+}))
 
 const ReviewsStyledComponent = styled(Box)({
   gridRow: true,
@@ -85,14 +113,18 @@ const ReviewsStyledComponent = styled(Box)({
 const ReviewsComponent = ({ reviews, active }) => {
   return (
     <>
-      {active && (
+      {active && reviews && (
         <>
           {reviews.length > 0 ? (
             <ReviewsStyledComponent>
               <Reviews reviews={reviews} />
             </ReviewsStyledComponent>
           ) : (
-            <Text text={"Go explore foods and tell us what you think!"} />
+            <PlaceHolderTextComponent>
+            <Typography fontSize={"150%"}>
+            {"Go explore foods and tell us what you think!"}
+            </Typography>          
+          </PlaceHolderTextComponent>
           )}
         </>
       )}
@@ -103,11 +135,15 @@ const ReviewsComponent = ({ reviews, active }) => {
 const PreferencesComponent = ({ preferences, active }) => {
   return (
     <>
-    {active && <>
+    {active && preferences && <>
       {Object.values(preferences).length > 0 ? (
         <Preferences preferences={preferences} />
       ) : (
-        <Text text={"Go to some restaurants and tell us your preferences!"} />
+        <PlaceHolderTextComponent>
+          <Typography fontSize={"150%"}>
+          {"Go to some restaurants and tell us your preferences!"}
+          </Typography>          
+        </PlaceHolderTextComponent>
       )}
       </>
     }
@@ -196,7 +232,7 @@ const getDislikes = async (preferences) => {
 };
 
 const useSortPreferences = (preferences) => {
-  const [sorted, setSorted] = useState(null);
+  const [sorted, setSorted] = useState(undefined);
   useEffect(() => {
     const sort = async () => {
       let likes = await getFavorites(preferences);
@@ -209,13 +245,13 @@ const useSortPreferences = (preferences) => {
     if (preferences != null && preferences.length > 0) {
       sort();
     }
+    else if (preferences != null) {
+      setSorted({})
+    }
   }, [preferences]);
   return sorted;
 };
 
-// const getActiveComponent = (activeComponentIdx, components) => {
-//   return components[activeComponentIdx];
-// };
 
 const getComponents = () => [<DefaultComponent />, <PreferencesComponent />, <ReviewsComponent />];
 
