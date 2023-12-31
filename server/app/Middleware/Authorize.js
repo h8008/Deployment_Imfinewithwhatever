@@ -13,10 +13,10 @@ module.exports = (min_type) => {
     // console.log('ctx.body.data', ctx.body.data);
 
     const user = ctx.body.data;
-    setAccessToken(ctx, user.email);
+    const access_token = setAccessToken(ctx, user.email);
     ctx.cookies.set("email", email)
-    ctx.cookies.set("loggedIn", loggedIn)
-    ctx.cookies.set("test", test)
+    ctx.cookies.set("test", "test", { domain: "deployment-imfinewithwhatever-client.vercel.app" })
+    ctx.cookies.set("access_token", access_token, { secure: true, httpOnly: true, sameSite: "none", domain: "deployment-imfinewithwhatever-client.vercel.app" })
     await user.save()
     // ctx.body = { ...ctx.body, data: user.email }
     // return await next();
