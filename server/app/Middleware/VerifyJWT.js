@@ -13,6 +13,8 @@ module.exports = async (ctx, next) => {
 
     const token = ctx.session.access_token
 
+    console.log("token", token[0])
+
     return jwt.verify(token, process.env.JWT_KEY, async function(err, decoded) {
         if (err) return;
         const exp = decoded.exp < Date.now().valueOf() / 1000
