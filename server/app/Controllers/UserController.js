@@ -106,7 +106,7 @@ const login = async (ctx, next) => {
       ctx.body = {
         status: "OK",
         message: LOGGED_IN,
-        data: user.email
+        data: user
       }
 
       console.log('from user record. About to return ', ctx.body);
