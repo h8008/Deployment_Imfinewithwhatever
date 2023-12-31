@@ -226,8 +226,8 @@ const Login = (props) => {
       return;
     }
     let res = await API.Users.login({ ...formState });
-    const loginData = API.apiResHandling(res, messageDispatch, res.message);
-    if (loginData) {
+    // const loginData = API.apiResHandling(res, messageDispatch, res.message);
+    if (res.status === "OK") {
       res = await API.Users.getAllRestaurantPreferencesForUser({
         email: formState.email,
       });
