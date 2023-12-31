@@ -5,7 +5,7 @@ const dev = () => {
   return dev.trim() === 'development';
 };
 
-const MONGODB_URI = () => {
+const GET_MONGODB_URI = () => {
   const development = dev();
   development
     ? console.log('Connecting to local database')
@@ -16,6 +16,9 @@ const MONGODB_URI = () => {
     : process.env.MONGODB_ATLAS_URI;
 };
 
+const MONGODB_URI = GET_MONGODB_URI()
+
+
 const getConnectOptions = () => {
   const options = {};
   return dev() ? { ...options, family: 4 } : options;
@@ -23,7 +26,7 @@ const getConnectOptions = () => {
 
 const connect = async () => {
   try {
-    await mongoose.connect(MONGODB_URI(), getConnectOptions());
+    await mongoose.connect(MONGODB_URI, getConnectOptions());
     return;
   } catch (err) {
     console.error(err);

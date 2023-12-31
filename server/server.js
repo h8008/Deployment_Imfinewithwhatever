@@ -3,6 +3,7 @@ const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const connectDB = require('./database/mongodbConnect.js');
 const router = require('./routes/index.js');
+const session = require("./session/index.js")
 const httpsServer = require('./config/ssl/ssl.js');
 const catchJWTErrors = require('./app/Middleware/CatchJWTErrors.js');
 const mongoose = require('mongoose');
@@ -20,6 +21,7 @@ app.use(cors(corsOptions));
 app.use(cookie());
 
 router(app);
+session(app)
 catchJWTErrors(app);
 // httpsServer(app.callback())
 

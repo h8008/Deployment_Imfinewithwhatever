@@ -21,30 +21,16 @@ function setAccessToken(ctx, email) {
   const access_token = jwt.sign(token_opts, process.env.JWT_KEY);
 
   // Provide the access_token to the user via a cookie
-  ctx.cookies.set('access_token', access_token, {
-    httpOnly: true,
-    secure: getDevEnvironment() ? false : true,
-    expires: new Date(exp_date),
-    domain: getDevEnvironment() ? `http://localhost:3000` : process.env.APP_DOMAIN
-  });
+  // ctx.cookies.set('access_token', access_token, {
+  //   httpOnly: true,
+  //   secure: getDevEnvironment() ? false : true,
+  //   expires: new Date(exp_date),
+  //   domain: getDevEnvironment() ? `http://localhost:3000` : process.env.APP_DOMAIN
+  // });
 
-
-  // ctx.cookies.set("email", email)
-  // ctx.cookies.set("loggedIn", true)
-
-  
-
-  // if (ctx && ctx.res && ctx.res.headers['set-cookie'] == null)
-      // ctx.res.setHeader("set-cookie", `access_token=${access_token}`, {
-      //   httpOnly: true,
-      //   // secure: getDevEnvironment() ? false : true,
-      //   secure: true,
-      //   expires: new Date(exp_date),
-      //   //domain: process.env.APP_DOMAIN
-      // })
-
-  // ctx.res.cookies("email", email)
-
+  ctx.session.access_token = access_token
+  ctx.session.user = email
+  ctx.session.save()
 
   return access_token
 }

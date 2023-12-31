@@ -193,6 +193,7 @@ const SignUpButton = ({ onClick, theme }) => {
 const Login = (props) => {
   console.log("login page");
   const theme = useTheme();
+  const navigate = useNavigate()
   const [formState, setFormState] = useState({
     email: "",
     firstname: "",
@@ -239,12 +240,13 @@ const Login = (props) => {
         type: UPDATE_PREFERENCES,
         preferences: preferences,
       });
-      console.log("Signed In");
+      // console.log("Signed In");
       // setCookie("email", formState.email)
       // setCookie("loggedIn", true)
       cookies.set("email", formState.email)
       cookies.set("loggedIn", true)
-      setAuthenticated(true);
+      // setAuthenticated(true);
+      navigate("/Profile")
     } else {
       setMessage("Please sign up to continue.")
     }

@@ -102,16 +102,11 @@ const login = async (ctx, next) => {
           return;
         }
       });
-      // ctx.body = {
-      //   status: 'OK',
-      //   message: LOGGED_IN,
-      //   data: res.email,
-      // };
 
       ctx.body = {
         status: "OK",
         message: LOGGED_IN,
-        data: user
+        data: user.email
       }
 
       console.log('from user record. About to return ', ctx.body);
