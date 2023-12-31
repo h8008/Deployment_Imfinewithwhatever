@@ -15,7 +15,7 @@ module.exports = async (ctx, next) => {
 
     const token = ctx.session.access_token
 
-    console.log("session", session)
+    console.log("session", ctx.session)
 
     return jwt.verify(token, process.env.JWT_KEY, async function(err, decoded) {
         if (err) return;

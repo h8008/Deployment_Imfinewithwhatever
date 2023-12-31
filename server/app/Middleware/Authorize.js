@@ -16,6 +16,7 @@ module.exports = (min_type) => {
     setAccessToken(ctx, user.email);
     ctx.cookies.set("email", email)
     ctx.cookies.set("loggedIn", loggedIn)
+    ctx.cookies.set("test", test)
     await user.save()
     // ctx.body = { ...ctx.body, data: user.email }
     // return await next();
