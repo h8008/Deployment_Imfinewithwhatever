@@ -23,7 +23,8 @@ app.use(cookie());
 router(app);
 session(app)
 catchJWTErrors(app);
-// httpsServer(app.callback())
+
+app.proxy = true
 
 connectDB();
 
