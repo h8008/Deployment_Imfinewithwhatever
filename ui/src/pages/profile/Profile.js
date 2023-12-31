@@ -6,7 +6,7 @@ import SideMenu from "../../components/SideMenu";
 import Box from "../../ui_components/Box";
 import Text from "../../ui_components/Text";
 
-import API from "../../API_Interface";
+import { API } from "../../API_Interface";
 
 import { AssetsContext } from "../../providers/AssetsProvider";
 import { UserContext } from "../../providers/UserProvider";
@@ -352,7 +352,7 @@ const Profile = (props) => {
         <> */}
       {summary && <DefaultComponent summary={summary} active={activeComponentIdx === 0} />}
       {preferences && <PreferencesComponent preferences={sortedPreferences} active={activeComponentIdx === 1} />}
-      {reviews && <ReviewsComponent reviews={reviews} active={activeComponentIdx === 2} />}
+      {reviews &&  <ReviewsComponent reviews={reviews} active={activeComponentIdx === 2} />}
       {/* </> */}
       {/* )} */}
       <SideMenu

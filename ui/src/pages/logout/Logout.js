@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Text from "../../ui_components/Text";
-import API_Interface from "../../API_Interface";
+import {  API  }   from "../../API_Interface";
 import { UserContext } from "../../providers/UserProvider";
 import { LOGOUT } from "../../reducer/User/UserActions";
 import useNavigator from "../../hooks/useNavigator";
@@ -17,7 +17,7 @@ const useLogout = () => {
 
   useEffect(() => {
     const logout = async () => {
-      const res = await API_Interface.Users.logout();
+      const res = await API.Users.logout();
       if (res.status === "OK") {
         userDispatch({
           type: LOGOUT,

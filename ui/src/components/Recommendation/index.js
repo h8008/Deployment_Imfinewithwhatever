@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import API from "../../API_Interface/";
+import { API } from "../../API_Interface/";
 import { UserContext } from "../../providers/UserProvider";
 
 const useGetAllPreferences = async () => {

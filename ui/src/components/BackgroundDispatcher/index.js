@@ -1,5 +1,5 @@
 import { createContext, useContext, Component, Fragment } from "react";
-import API from "../../API_Interface";
+import { API } from "../../API_Interface";
 import { BackgroundDispatchContext } from "../../providers/DeHydrateProvider";
 import contextSelector from "../../utils/ContextSelector";
 import { HYDRATE } from "../../reducer/User/UserActions";

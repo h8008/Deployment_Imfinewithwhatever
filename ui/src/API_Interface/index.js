@@ -1,4 +1,6 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+
 import Users from "./User_Interface";
 import UserReviews from "./User_Review_Interface";
 import Preference from "./Preference_Interface";
@@ -32,8 +34,8 @@ const axiosAgent = AxiosConfigured();
 class APIInterface {
   constructor() {
     this.Users = new Users(axiosAgent);
-    this.UserReviews = new UserReviews(axiosAgent);
-    this.Preference = new Preference(axiosAgent);
+    this.UserReviews = new UserReviews();
+    this.Preference = new Preference();
     this.YelpAPI = new YelpAPI(axiosAgent);
     this.Restaurants = new Restaurants(axiosAgent);
   }
@@ -41,6 +43,7 @@ class APIInterface {
   getInterface(interfaceName) {
     return this[`${interfaceName}`];
   }
+
 
   apiResHandling(res) {
     if (res.status === "OK" || res.status === "NOT FOUND") {
@@ -54,4 +57,4 @@ class APIInterface {
 
 const API = new APIInterface();
 
-export default API;
+export { API, APIInterface }

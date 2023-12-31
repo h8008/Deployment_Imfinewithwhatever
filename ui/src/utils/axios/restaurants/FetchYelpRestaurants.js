@@ -1,4 +1,4 @@
-import API from "../../../API_Interface";
+import { API } from "../../../API_Interface";
 
 const fetchRestaurantsFromYelp = async () => {
   const res = await API.Restaurants.get();

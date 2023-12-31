@@ -1,4 +1,4 @@
-import API from "../../../API_Interface";
+import { API } from "../../../API_Interface";
 
 const getFoodPreferences = (preferences) => {
   const lowercased_categories = preferences.map((preference) => {

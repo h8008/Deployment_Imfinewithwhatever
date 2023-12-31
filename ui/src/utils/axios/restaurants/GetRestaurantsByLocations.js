@@ -1,4 +1,4 @@
-import API from "../../../API_Interface";
+import { API } from "../../../API_Interface";
 
 const getRestaurantsByLocations = async (location) => {
   let params = { term: "restaurant", location: location };

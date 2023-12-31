@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import API_Interface from "../../API_Interface";
+import {  API  }   from "../../API_Interface";
 
 export const useGetRestaurantReviews = (params, reviews, setReviews) => {
   // const [reviews, setReviews] = useState([]);
@@ -7,7 +7,7 @@ export const useGetRestaurantReviews = (params, reviews, setReviews) => {
   useEffect(() => {
     const fetch = () => {
       setTimeout(async () => {
-        const res = await API_Interface.YelpAPI.getRestaurantReviews(params);
+        const res = await API.YelpAPI.getRestaurantReviews(params);
         if (res.status === "OK") {
           setReviews(res.restaurantsData.reviews);
         }

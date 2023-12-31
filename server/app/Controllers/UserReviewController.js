@@ -81,7 +81,8 @@ const deleteReview = async (ctx) => {
 const getReviews = async (ctx) => {
   try {
     console.log('user_review get reviews called');
-    let params = ctx.params;
+    // let params = ctx.params;
+    let params = ctx.request.query
     let res = await GET_REVIEWS(params);
     if (res) {
       ctx.body = {

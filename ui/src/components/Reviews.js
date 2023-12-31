@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import { MessageContext } from "../providers/MessageProvider";
 import { UPDATE_MESSAGE } from "../reducer/Message/MessageAction";
 
-import API from "../API_Interface";
+import { API } from "../API_Interface";
 
 const ReviewComponent = ({ children, theme, ...otherProps }) => {
   const style = {

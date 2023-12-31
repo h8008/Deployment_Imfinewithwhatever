@@ -20,7 +20,7 @@ import { UserContext } from "../../providers/UserProvider";
 import { RestaurantsContext } from "../../providers/RestaurantsProvider";
 import { MessageContext } from "../../providers/MessageProvider";
 
-import API from "../../API_Interface";
+import { API } from "../../API_Interface";
 import { UPDATE_MESSAGE } from "../../reducer/Message/MessageAction";
 
 import Stars from "../../components/Stars";

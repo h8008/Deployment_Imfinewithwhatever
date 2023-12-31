@@ -12,7 +12,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
 
-import API from "../../API_Interface";
+import { API } from "../../API_Interface";
 
 import { UserContext } from "../../providers/UserProvider";
 import { MessageContext } from "../../providers/MessageProvider";

@@ -21,7 +21,7 @@ import {
 
 import { RestaurantsContext } from '../../providers/Restaurants';
 import LocationAutocomplete from '../../ui_components/LocationAuto';
-import API from '../../API_Interface';
+import { API } from '../../API_Interface';
 
 const CuisineDropdown = (props) => {
   return (

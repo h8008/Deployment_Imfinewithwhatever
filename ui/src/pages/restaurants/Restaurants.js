@@ -15,7 +15,7 @@ import { UPDATE_RESTAURANT, UPDATE_RESTAURANTS } from "../../reducer/Main/action
 
 import useDispatchMessage from "../../hooks/useDispatchMessage";
 
-import API from "../../API_Interface";
+import { API } from "../../API_Interface";
 import { AssetsContext } from "../../providers/AssetsProvider";
 
 import { useTheme } from "@mui/material";

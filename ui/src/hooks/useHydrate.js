@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import API from "../API_Interface";
+import { API } from "../API_Interface";
 import { UPDATE_RESTAURANTS } from "../reducer/Main/actions";
 import StringToObject from "../utils/StringToObject";
 

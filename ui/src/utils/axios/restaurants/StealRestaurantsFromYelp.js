@@ -1,4 +1,4 @@
-import API from "../../../API_Interface";
+import { API } from "../../../API_Interface";
 
 const stealRestaurantsFromYelp = async (params) => {
   const res = await API.Restaurants.add(params);

@@ -11,11 +11,18 @@ module.exports = async (ctx, next) => {
     
     const requestOrigin = ctx.originalUrl
     console.log("requestOrigin", requestOrigin)
-    if (requestOrigin.includes("/users/")) return await next()
+    if (requestOrigin.startsWith("/users/")) return await next()
+const email = ctx.request.body?.email || ctx.request.query?.email
 
-    const token = ctx.session.access_token
+    console.log(ctx.request.body, ctx.request.query)
 
-    console.log("session", ctx.session)
+
+    console.log(`verifying ${email}`)
+    let token = ""
+    if (email) {
+        const user = await User.findOne().where("email").equals(email)
+        token = user.access_token
+    }
 
     return jwt.verify(token, process.env.JWT_KEY, async function(err, decoded) {
         if (err) return;

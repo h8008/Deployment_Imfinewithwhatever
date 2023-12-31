@@ -8,7 +8,7 @@ import RoundButton from "../ui_components/RoundButton";
 import SwipeableDrawer from "../ui_components/SwipeableDrawer";
 import BorderedBox from "../ui_components/BorderedBox";
 
-import API from "../API_Interface";
+import { API } from "../API_Interface";
 import { useGetRestaurantReviews } from "../hooks/API/Yelp";
 import { LOCATION_MASK_MESSAGE } from "../constants/Messages";
 import BusinessLocator from "../components/Maps/Google_Maps/BusinessLocator";

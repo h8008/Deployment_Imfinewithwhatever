@@ -1,6 +1,9 @@
-export default class UserReviews {
-  constructor(axiosAgent) {
-    this.axiosAgent = axiosAgent;
+import Methods_Interface from "./Methods_Interface";
+
+export default class UserReviews extends Methods_Interface{
+  constructor() {
+    super()
+    // this.axiosAgent = axiosAgent;
     this.name = "UserReviews";
   }
 
@@ -41,14 +44,22 @@ export default class UserReviews {
       }));
   }
 
+  // async getReviews(params) {
+  //   return this.axiosAgent
+  //     .get(`user_reviews/${params.email}`)
+  //     .then((reviewsInfo) => reviewsInfo.data)
+  //     .catch((error) => ({
+  //       error,
+  //       reviews: undefined,
+  //     }));
+  // }
+
   async getReviews(params) {
-    return this.axiosAgent
-      .get(`user_reviews/${params.email}`)
-      .then((reviewsInfo) => reviewsInfo.data)
-      .catch((error) => ({
-        error,
-        reviews: undefined,
-      }));
+    return await this.get({ url: `user_reviews/currentuser`, params }).then((reviewsInfo) => reviewsInfo.data)
+    .catch((error) => ({
+      error,
+      reviews: [],
+    }));
   }
 
   async deleteReview(params) {

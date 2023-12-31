@@ -17,6 +17,10 @@ userReviewRouter.get('/:email', UserReviewController.getReviews, (err) =>
   console.log('user-review-router get reviews route error', err)
 );
 
+userReviewRouter.get('/currentuser', UserReviewController.getReviews, (err) =>
+  console.log('user-review-router get reviews route error', err)
+);
+
 userReviewRouter.post(
   '/review/update',
   UserReviewController.updateReview,

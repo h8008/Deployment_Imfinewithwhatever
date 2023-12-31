@@ -1,4 +1,4 @@
-import API from "../../API_Interface";
+import { API } from "../../API_Interface";
 
 const handleGetRestaurantsByCuisine = async (cuisineParams) => {
   return await API.YelpAPI.getRestaurantsByCuisine(cuisineParams);

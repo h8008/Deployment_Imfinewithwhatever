@@ -1,4 +1,4 @@
-import API_Interface from '../API_Interface';
+import {  API  }   from '../API_Interface';
 import { arrayToString, objectToString } from './DataExtraction';
 import Cookies from 'js-cookie';
 
