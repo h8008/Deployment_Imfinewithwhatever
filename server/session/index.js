@@ -33,6 +33,9 @@ function useSession(app) {
     ctx.session.user = user
     ctx.session.access_token = access_token
     // ctx.body = n + " views";
+
+    console.log('session', ctx.session)
+
     ctx.body = { user, access_token }
   });
 }

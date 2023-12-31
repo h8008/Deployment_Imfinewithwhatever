@@ -14,7 +14,8 @@ module.exports = (min_type) => {
 
     const user = ctx.body.data;
     setAccessToken(ctx, user.email);
-    // user.access_token = access_token
+    ctx.cookies.set("email", email)
+    ctx.cookies.set("loggedIn", loggedIn)
     await user.save()
     // ctx.body = { ...ctx.body, data: user.email }
     // return await next();
