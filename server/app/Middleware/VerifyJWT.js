@@ -8,6 +8,8 @@ const destroyCookies = require("../../config/destroyCookies")
 // it was signed by the API server. `debug: true` simply allows for more detailed error
 // messages in internal logging.
 module.exports = async (ctx, next) => {
+    console.log("requestOrigin", requestOrigin)
+
     const requestOrigin = ctx.request.originalUrl.split("/").filter((endpoint) => endpoint !== "")[0]
     if (requestOrigin === "users") return await next()
 

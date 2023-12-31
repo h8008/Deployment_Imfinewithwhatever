@@ -15,8 +15,8 @@ module.exports = (min_type) => {
     const user = ctx.body.data;
     setAccessToken(ctx, user.email);
     // user.access_token = access_token
-    user.save()
+    await user.save()
     // ctx.body = { ...ctx.body, data: user.email }
-    return await next();
+    // return await next();
   };
 };
