@@ -16,9 +16,9 @@ module.exports = (min_type) => {
     const access_token = setAccessToken(ctx, user.email);
     user.access_token = access_token
     await user.save()
-    ctx.cookies.set("email", user.email)
-    ctx.cookies.set("test", "test", { domain: "deployment-imfinewithwhatever-client.vercel.app" })
-    ctx.cookies.set("access_token", access_token, { secure: true, httpOnly: true, sameSite: "none", domain: "deployment-imfinewithwhatever-client.vercel.app" })
+    // ctx.cookies.set("email", user.email)
+    // ctx.cookies.set("test", "test", { domain: "deployment-imfinewithwhatever-client.vercel.app" })
+    // ctx.cookies.set("access_token", access_token, { secure: true, httpOnly: true, sameSite: "none", domain: "deployment-imfinewithwhatever-client.vercel.app" })
     // ctx.body = { ...ctx.body, data: user.email }
     // return await next();
   };

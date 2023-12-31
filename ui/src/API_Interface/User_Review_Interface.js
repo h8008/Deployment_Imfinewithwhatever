@@ -7,42 +7,43 @@ export default class UserReviews extends Methods_Interface{
     this.name = "UserReviews";
   }
 
-  async getReview(params) {
-    return (
-      this.axiosAgent
-        .get(`user_reviews/review/${params.restaurantID}/${params.email}`) // passing params as an object here because of the format of queries with multiple parameters
-        // such as select from user_reviews where id = ? and email = ?
-        // because of the keyword and in between cannot conveniently pass in an array
-        .then((reviewInfo) => reviewInfo.data)
-        .catch((error) => ({
-          error,
-          review: undefined,
-        }))
-    );
-  }
+  // async getReview(params) {
+  //   return (
+  //     this.axiosAgent
+  //       .get(`user_reviews/review/${params.restaurantID}/${params.email}`) // passing params as an object here because of the format of queries with multiple parameters
+  //       // such as select from user_reviews where id = ? and email = ?
+  //       // because of the keyword and in between cannot conveniently pass in an array
+  //       .then((reviewInfo) => reviewInfo.data)
+  //       .catch((error) => ({
+  //         error,
+  //         review: undefined,
+  //       }))
+  //   );
+  // }
 
-  async addReview(params) {
-    return (
-      this.axiosAgent
-        .post(`user_reviews/review`, { ...params }) // conveniently passing in an array
-        // like this: insert into user_reviews values (?)
-        .then((reviewInfo) => reviewInfo.data)
-        .catch((error) => ({
-          error,
-          review: undefined,
-        }))
-    );
-  }
 
-  async updateReview(params) {
-    return this.axiosAgent
-      .post(`user_reviews/review/update`, { ...params })
-      .then((reviewInfo) => reviewInfo.data)
-      .catch((error) => ({
-        error,
-        review: undefined,
-      }));
-  }
+  // async addReview(params) {
+  //   return (
+  //     this.axiosAgent
+  //       .post(`user_reviews/review`, { ...params }) // conveniently passing in an array
+  //       // like this: insert into user_reviews values (?)
+  //       .then((reviewInfo) => reviewInfo.data)
+  //       .catch((error) => ({
+  //         error,
+  //         review: undefined,
+  //       }))
+  //   );
+  // }
+
+  // async updateReview(params) {
+  //   return this.axiosAgent
+  //     .post(`user_reviews/review/update`, { ...params })
+  //     .then((reviewInfo) => reviewInfo.data)
+  //     .catch((error) => ({
+  //       error,
+  //       review: undefined,
+  //     }));
+  // }
 
   // async getReviews(params) {
   //   return this.axiosAgent
@@ -53,6 +54,40 @@ export default class UserReviews extends Methods_Interface{
   //       reviews: undefined,
   //     }));
   // }
+
+  async addReview(params) {
+    return (
+      this
+        .post({ url: `user_reviews/review`, params })
+        .then((reviewInfo) => reviewInfo.data)
+        .catch((error) => ({
+          error,
+          review: undefined,
+        }))
+    );
+  }
+
+  async updateReview(params) {
+    return this
+      .post({ url:`user_reviews/review/update`, params })
+      .then((reviewInfo) => reviewInfo.data)
+      .catch((error) => ({
+        error,
+        review: undefined,
+      }));
+  }
+
+  async getReview(params) {
+    return (
+      this
+        .get({ url:`user_reviews/review`, params })
+        .then((reviewInfo) => reviewInfo.data)
+        .catch((error) => ({
+          error,
+          review: [],
+        }))
+    );
+  }
 
   async getReviews(params) {
     return await this.get({ url: `user_reviews/currentuser`, params }).then((reviewsInfo) => reviewsInfo.data)

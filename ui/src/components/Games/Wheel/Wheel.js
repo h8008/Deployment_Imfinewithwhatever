@@ -47,13 +47,13 @@ const Wheel = (props) => {
 
   const handleModalClick = () => {
     setModalOpen(false);
-    restaurantDispatch({
-      type: UPDATE_RESTAURANTS,
-      payload: {
-        restaurants: [choice],
-      },
-    });
-    navigate(next);
+    // restaurantDispatch({
+    //   type: UPDATE_RESTAURANTS,
+    //   payload: {
+    //     restaurants: [choice],
+    //   },
+    // });
+    navigate(next, { state: { restaurants: [choice] }});
   };
 
   return (

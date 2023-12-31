@@ -8,7 +8,7 @@ function setAccessToken(ctx, email) {
 
   // Create an expiration date 20 minutes in the future for the user's access_token *cookie*
 
-  const exp_date = Date.now() + 20 * 60 * 1000;
+  const exp_date = Date.now() + 40 * 60 * 1000;
   // const exp_date = Data.now() + 20 * 60
 
   let token_opts = {

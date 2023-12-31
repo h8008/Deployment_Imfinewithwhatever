@@ -15,8 +15,10 @@ import Cookies from "js-cookie";
 // };
 
 const initialUserState = {
-  loggedIn: Cookies.get("loggedIn") == null ? false : Cookies.get("loggedIn"),
-  email: Cookies.get("email") == null ? "" : Cookies.get("email"),
+  // loggedIn: Cookies.get("loggedIn") == null ? false : Cookies.get("loggedIn"),
+  // email: Cookies.get("email") == null ? "" : Cookies.get("email"),
+  loggedIn: false,
+  email: "",
   preferences: [],
   data: null,
 };
@@ -24,12 +26,12 @@ const initialUserState = {
 const UserReducer = (state = initialUserState, action) => {
   switch (action.type) {
     case LOGIN:
-      // Cookies.set("email", action.email);
-      // Cookies.set("loggedIn", true);
+      Cookies.set("email", action.email);
+      Cookies.set("loggedIn", true);
       return { ...state, loggedIn: true, email: action.email };
     case LOGOUT:
-      // Cookies.remove("loggedIn");
-      // Cookies.remove("email");
+      Cookies.remove("loggedIn");
+      Cookies.remove("email");
       return initialUserState;
     case UPDATE_PREFERENCES:
       return { ...state, preferences: action.preferences };

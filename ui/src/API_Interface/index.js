@@ -36,7 +36,7 @@ class APIInterface {
     this.Users = new Users(axiosAgent);
     this.UserReviews = new UserReviews();
     this.Preference = new Preference();
-    this.YelpAPI = new YelpAPI(axiosAgent);
+    this.YelpAPI = new YelpAPI();
     this.Restaurants = new Restaurants(axiosAgent);
   }
 

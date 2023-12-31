@@ -25,7 +25,8 @@ const addReview = async (ctx) => {
 const getReview = async (ctx) => {
   try {
     console.log('user_review get review called');
-    let params = ctx.params;
+    // let params = ctx.params;
+    let params = ctx.request.query
     let res = await GET_REVIEW(params);
     if (res) {
       ctx.body = {

@@ -7,15 +7,21 @@ userReviewRouter.post('/review', UserReviewController.addReview, (err) =>
   console.log('user-review-router post review route error: ', err)
 );
 
+// userReviewRouter.get(
+//   '/review/:restaurantID/:email',
+//   UserReviewController.getReview,
+//   (err) => console.log('user-review-router get review route error: ', err)
+// );
+
 userReviewRouter.get(
-  '/review/:restaurantID/:email',
+  '/review',
   UserReviewController.getReview,
   (err) => console.log('user-review-router get review route error: ', err)
 );
 
-userReviewRouter.get('/:email', UserReviewController.getReviews, (err) =>
-  console.log('user-review-router get reviews route error', err)
-);
+// userReviewRouter.get('/:email', UserReviewController.getReviews, (err) =>
+//   console.log('user-review-router get reviews route error', err)
+// );
 
 userReviewRouter.get('/currentuser', UserReviewController.getReviews, (err) =>
   console.log('user-review-router get reviews route error', err)

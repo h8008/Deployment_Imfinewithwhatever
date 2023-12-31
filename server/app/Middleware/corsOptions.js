@@ -12,6 +12,7 @@ const corsOptions = {
     'Accept-Language',
     'Access-Control-Request-Headers',
     'Access-Control-Request-Method',
+    "Authorization",
     'Origin',
     'Referer',
     'Sec-Fetch-Dest',

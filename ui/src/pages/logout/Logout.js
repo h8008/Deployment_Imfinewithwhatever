@@ -22,8 +22,8 @@ const useLogout = () => {
         userDispatch({
           type: LOGOUT,
         });
-        cookies.remove("email")
-        cookies.remove("loggedIn")
+        // cookies.remove("email")
+        // cookies.remove("loggedIn")
         navigate("/");
       }
     };

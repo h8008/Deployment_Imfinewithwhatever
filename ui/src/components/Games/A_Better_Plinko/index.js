@@ -73,7 +73,7 @@ const Plinko = ({ children, ...otherProps }) => {
     const message = `You selected: ${choice.name}`;
     setChoice(choice);
     setRun(false);
-    setShouldNavigate(true);
+    // setShouldNavigate(true);
     setNext("/Restaurants");
     setMessage(message);
     setModalOpen(true);
@@ -81,13 +81,13 @@ const Plinko = ({ children, ...otherProps }) => {
 
   const handleModalClick = async () => {
     setModalOpen(false);
-    await restaurantDispatch({
-      type: UPDATE_RESTAURANTS,
-      payload: {
-        restaurants: [choice],
-      },
-    });
-    navigate(next);
+    // await restaurantDispatch({
+    //   type: UPDATE_RESTAURANTS,
+    //   payload: {
+    //     restaurants: [choice],
+    //   },
+    // });
+    navigate(next, { state: { restaurants: [choice]}});
   };
 
   // useHandleDispatchChoice(choice, setChoice);

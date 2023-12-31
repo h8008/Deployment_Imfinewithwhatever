@@ -3,14 +3,26 @@ const yelpRouter = require('koa-router')({
   prefix: '/yelp',
 });
 
-yelpRouter.get(
-  '/restaurants/:term/:location',
-  YelpController.getRestaurantsByLocation,
-  (err) => console.log('yelp-router restaurants by location route called')
-);
+// yelpRouter.get(
+//   '/restaurants/:term/:location',
+//   YelpController.getRestaurantsByLocation,
+//   (err) => console.log('yelp-router restaurants by location route called')
+// );
 
 yelpRouter.get(
-  '/restaurants/:term/:location/:categories',
+  '/restaurantsbylocation',
+  YelpController.getRestaurantsByLocation,
+  (err) => console.log('yelp-router restaurants by location route called')
+)
+
+// yelpRouter.get(
+//   '/restaurants/:term/:location/:categories',
+//   YelpController.getRestaurantsByCuisine,
+//   (err) => console.log('yelp-router restaurants by cuisine route called')
+// );
+
+yelpRouter.get(
+  '/restaurantsbycuisines',
   YelpController.getRestaurantsByCuisine,
   (err) => console.log('yelp-router restaurants by cuisine route called')
 );

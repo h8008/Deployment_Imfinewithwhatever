@@ -267,14 +267,14 @@ const Feedback = (props) => {
         restaurantID: params.restaurantID,
         email: params.email,
       });
-      const review = await API.apiResHandling(res, messageDispatch, res.message);
-      if (review == null) {
-        let res = await API.UserReviews.addReview(params);
-        API.apiResHandling(res, messageDispatch, res.message);
+      // const review = await API.apiResHandling(res, messageDispatch, res.message);
+      if (res.review == null) {
+        await API.UserReviews.addReview(params);
+        // API.apiResHandling(res, messageDispatch, res.message);
       } else {
-        if (review !== comments) {
-          res = await API.UserReviews.updateReview(params);
-          API.apiResHandling(res, messageDispatch, res.message);
+        if (res.review !== comments) {
+          await API.UserReviews.updateReview(params);
+          // API.apiResHandling(res, messageDispatch, res.message);
         }
       }
 

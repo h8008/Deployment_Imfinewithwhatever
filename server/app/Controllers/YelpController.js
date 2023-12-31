@@ -33,7 +33,8 @@ const getRestaurantsByCuisine = async (ctx) => {
   try {
     const endpoint = 'https://api.yelp.com/v3/businesses/search';
     console.log('yelp api get restaurant by cuisine called');
-    let params = ctx.params;
+    // let params = ctx.params;
+    let params = ctx.request.query
     await axios
       .get(endpoint, { params, headers })
       .then((response) => {
@@ -63,7 +64,9 @@ const getRestaurantsByLocation = async (ctx) => {
     const endpoint = 'https://api.yelp.com/v3/businesses/search';
     console.log('yelp api get restaurant by location called');
     // let params = ctx.request.body
-    let params = ctx.params;
+    // let params = ctx.params;
+    let params = ctx.request.query
+    delete params['email']
     await axios
       .get(endpoint, { params, headers })
       .then((response) => {

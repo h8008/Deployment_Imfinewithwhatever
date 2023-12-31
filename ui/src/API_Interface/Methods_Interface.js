@@ -34,11 +34,10 @@ export default class Methods_Interface {
         const params = request.params ? request.params : {} 
         const url = request.url
         const email = params.email ? params.email : Cookies.get("email")
+        const headers = request.headers ? request.headers : {}
         return await this.axiosAgent.get(url, {
           params: { ...params, email},
-          headers: {
-            "Content-Type": "application/json",
-          }
+          headers: { ...headers, 'Content-Type': 'application/json'}
         })
       }
     

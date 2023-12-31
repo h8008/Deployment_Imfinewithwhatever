@@ -10,8 +10,12 @@ const UserProvider = ({ children }) => {
   // const [cookies, setCookies] = useCookies();
   const loggedIn = cookies.get("loggedIn");
   const email = cookies.get("email");
+  // const newUserState = { ...initialUserState }
 
-  const initialArgs = JSON.stringify(loggedIn) !== "undefined" && JSON.stringify(email) !== "undefined" ? { ...initialUserState, loggedIn: false, email: "" } : initialUserState
+  // console.log("logged in ? ", loggedIn == null)
+  // console.log("email", email == null)
+
+  const initialArgs = loggedIn == null && email == null? { ...initialUserState, loggedIn: false, email: "" } : initialUserState
 
   const [userState, userDispatch] = useReducer(
     UserReducer,

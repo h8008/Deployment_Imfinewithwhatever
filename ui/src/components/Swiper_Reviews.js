@@ -68,13 +68,17 @@ const Reviews = ({ reviews }) => {
 
   const getNextSet = () => {
     if (reviews.length <= 4) return;
-    const nextSet = activeSet === Math.floor(reviews.length / 4) - 1 ? 0 : activeSet + 1;
+    if (reviews.slice(active[0], active[1]).some((review) => review == null)) return
+    // const nextSet = activeSet === Math.floor(reviews.length / 4) - 1 ? 0 : activeSet + 1;
+    const nextSet = activeSet === reviews.length % 4 ? 0 : activeSet + 1;
     setActiveSet(nextSet);
   };
 
   const getPreviousSet = () => {
     if (reviews.length <= 4) return;
-    const prevSet = activeSet === 0 ? Math.floor(reviews.length / 4) - 1 : activeSet - 1;
+    // if (reviews.slice(active[0], active[1]).some((review) => review == null)) return
+    // const prevSet = activeSet === 0 ? Math.floor(reviews.length / 4) - 1 : activeSet - 1;
+    const prevSet = activeSet === 0 ? reviews.length % 4 : activeSet - 1;
     setActiveSet(prevSet);
   };
 
@@ -124,13 +128,10 @@ const Reviews = ({ reviews }) => {
                   sm: "400px",
                 },
               }}
-              // sx={{ width: "fit-content", height:"fit-content"}}
             >
               <div style={{ width: "100%" }}>
                 <Grid
-                  // margin="auto"
                   sx={{
-                    width: "fit-content",
                     display: "flex",
                     width: { sm: "100%", md: "50%" },
                     flexDirection: { xs: "column", sm: "row" },
@@ -140,12 +141,21 @@ const Reviews = ({ reviews }) => {
                   }}
                   gap={2}
                 >
-                  {/* <Grid mr={3}> */}
                     <Text text={review.email} />
-                  {/* </Grid> */}
-                  {/* <Grid mr={3}> */}
                     <Text text={`Rating: ${review.rating}`} />
-                  {/* </Grid> */}
+                </Grid>
+                <Grid
+                  sx={{
+                    display: "flex",
+                    width: { sm: "100%", md: "50%" },
+                    flexDirection: { xs: "column", sm: "row" },
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    color:"white"
+                  }}
+                  gap={2}
+                >
+                  <Text text={review.restaurant_name} />
                 </Grid>
                 <Grid
                   height={"fit-content"}

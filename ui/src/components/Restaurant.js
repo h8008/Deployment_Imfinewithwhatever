@@ -18,6 +18,15 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import { MdLocalDining } from "react-icons/md";
 import { useTheme } from "@emotion/react";
 
+const RestaurantComponent = styled(Grid)((props) => ({
+  height: "100vh",
+  // width: "100vw",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-end",
+  alignItems: "center"
+}))
+
 const WhatOthersSayComponent = styled(Grid)((props) => ({
   display: "flex",
   flexWrap: "wrap",
@@ -29,7 +38,7 @@ const CardContainer = styled(Card)({
   justifyContent: "space-between",
   alignItems: "center",
   width: "fit-content",
-  // height: "90vh",
+  height: "95vh",
   backgroundColor: "white",
   id: "restaurant-container",
   borderLeft: "8px solid black",
@@ -38,7 +47,7 @@ const CardContainer = styled(Card)({
   borderBottomLeftRadius: "20px",
   borderBottomRightRadius: "20px",
   padding: "20px",
-  margin: "20px",
+  // margin: "20px",
   overflow: "scroll",
 });
 
@@ -82,23 +91,23 @@ const ButtonsComponent = styled(Grid)((props) => ({
   justifyContent: "space-evenly",
 }));
 
-const TopComponent = styled(Grid)((props) => ({
+const TopComponent = styled(Grid)(({ children, ...otherProps}) => ({
   width: "100%",
-  height: "40%",
+  // height: "40%",
   padding: "20px",
   gridRow: true,
   sx: {
     display: "flex",
-    flex: props.flex,
+    flex: otherProps.flex,
     flexDirection: { xs: "column", sm: "row" },
-    justifyContent: props.justifyContent,
+    justifyContent: otherProps.justifyContent,
     alignItems: "center",
   },
 }));
 
-const BodyComponent = styled(Grid)((props) => ({
+const BodyComponent = styled(Grid)(({ children, ...otherProps}) => ({
   width: "100%",
-  height: "60%",
+  // height: "60%",
   display: "flex",
   // flexDirection: { sm: "column", md: "row" },
   flexDirection: "column",
@@ -106,6 +115,7 @@ const BodyComponent = styled(Grid)((props) => ({
   padding: "20px",
   justifyContent: "center",
   alignItems: "center",
+  ...otherProps
 }));
 
 const TextComponent = styled(Typography)((children, ...otherProps) => ({
@@ -123,7 +133,7 @@ const MainDetailsComponent = styled(CardContent)(({ children, ...otherProps }) =
   width: "100%",
   padding: 0,
   flexDirection: "column",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   alignItems: "center",
   ...otherProps,
 }));
@@ -319,10 +329,10 @@ const Restaurant = (props) => {
   }, [data, props.index, restaurantData, showLocation]);
 
   return (
-    <Fragment>
+    <RestaurantComponent>
       {data != null && (
         <CardContainer>
-          <TopComponent flexDirection={"row"} justifyContent={"center"}>
+          <TopComponent flexDirection={"row"} justifyContent={"center"} flex={ 2 / 5}>
             <CardMedia
               sx={{ flex: "1/2", border: `8px black solid`, borderRadius: "20px" }}
               image={data.image_url}
@@ -332,7 +342,7 @@ const Restaurant = (props) => {
             />
             <MainDetailsComponent flex={"1/2"}>{mainDetails}</MainDetailsComponent>
           </TopComponent>
-          <BodyComponent>
+          <BodyComponent flex={ 3 / 5 }>
             <WhatOthersSayComponent>
               {reviews.length > 0 && (
                 <Grid width={"100%"} display={"flex"} justifyContent={"flex-start"} alignItems={"center"} container>
@@ -383,7 +393,7 @@ const Restaurant = (props) => {
           </ButtonsComponent>
         </CardContainer>
       )}
-    </Fragment>
+    </RestaurantComponent>
   );
 };
 
