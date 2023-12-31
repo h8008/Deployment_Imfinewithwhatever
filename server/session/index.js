@@ -20,6 +20,7 @@ const CONFIG = {
 };
 
 function useSession(app) {
+  app.keys = [process.env.SESSION_KEYS]
   app.use(session(CONFIG, app));
   app.use((ctx) => {
     // ignore favicon

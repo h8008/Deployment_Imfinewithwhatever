@@ -13,7 +13,7 @@ module.exports = (min_type) => {
     // console.log('ctx.body.data', ctx.body.data);
 
     const user = ctx.body.data;
-    const access_token = setAccessToken(ctx, user.email);
+    setAccessToken(ctx, user.email);
     // user.access_token = access_token
     user.save()
     // ctx.body = { ...ctx.body, data: user.email }
