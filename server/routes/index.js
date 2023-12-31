@@ -20,13 +20,14 @@ router.get('/', function (ctx) {
 router.use(errorHandler);
 router.use(cors);
 
+router.use(VerifyJWT)
+
 router.use(
   '',
   userRouter.routes(),
   userReviewRouter.routes(),
   preferenceRouter.routes(),
   restaurantRouter.routes(),
-  // gameRouter.routes(),
   yelpRouter.routes()
 );
 
