@@ -25,7 +25,7 @@ router.use(cors);
 //   userRouter.routes(),
 // )
 
-router.use(VerifyJWT)
+// router.use(VerifyJWT)
 
 router.use(
   '',

@@ -9,7 +9,7 @@
     "debug": "export NODE_ENV=development && nodemon server.js"
   },
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "author": "Ali A. Kooshesh, Trenton Jones, Cody Grimes, Huiran Lin",
   "license": "ISC",
